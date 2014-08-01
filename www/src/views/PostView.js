@@ -3,7 +3,6 @@ define(function(require, exports, module) {
     var Surface = require('famous/core/Surface');
     var StateModifier = require('famous/modifiers/StateModifier');
     var HeaderFooterLayout = require('famous/views/HeaderFooterLayout');
-	var ImageSurface = require('famous/surfaces/ImageSurface');
 
     var mainContext = Engine.createContext();
 		
@@ -46,5 +45,5 @@ define(function(require, exports, module) {
 			}
 		});
 		
-		    
+
 });
