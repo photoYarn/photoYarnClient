@@ -37,9 +37,8 @@ define(function(require, exports, module) {
   //Layout Header
   layout.header.add(new Surface({
     content: 'Photo Yarn',
+    classes: ['customButton'],
     properties: {
-      color: '#FF6138',
-      backgroundColor: '#BEEB9F',
       lineHeight: layout.options.headerSize + 'px',
       textAlign: 'center'
     }

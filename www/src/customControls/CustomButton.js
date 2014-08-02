@@ -4,10 +4,9 @@ define(function(require, exports, module) {
   function CustomButton(name, targetArray, targetLayout, targetRC, targetView){
     var surface = new Surface({
       content: name,
+      classes: ['customButton'],
       properties: {
-        backgroundColor: '#BEEB9F',
         lineHeight: targetLayout.options.footerSize + 'px',
-        color: '#FF6138',
         textAlign: 'center'
       }
     });

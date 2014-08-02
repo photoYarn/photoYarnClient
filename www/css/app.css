@@ -9,21 +9,27 @@ html {
 }
 
 .salmonBG{
-  background-color: #FF6138,
+  background-color: #FF6138;
 }
 
 .yellowBG{
-  background-color: '#FFFF9D', 
+  background-color: #FFFF9D; 
 }
 
 .lightgreenBG{
-  background-color: #BEEB9F,
+  background-color: #BEEB9F;
 }
 
 .medgreenBG{
-  background-color: #79BD8F,
+  background-color: #79BD8F;
 }
 
-.text{
-  color: #00A388,
+.darkgreenBG{
+  background-color: #00A388;
+}
+
+.customButton{
+  color: #FF6138;
+  background-color: #79BD8F;
+  font-weight: bold;
 }
