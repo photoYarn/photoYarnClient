@@ -15,6 +15,7 @@ define(function(require, exports, module) {
   //custom views
   var NewYarnView = require('views/NewYarnView');
   var FeedView = require('views/FeedView');
+  var YarnView = require('views/YarnView');
 
   //Creating Layout
   var layout = new HeaderFooterLayout({
@@ -51,7 +52,7 @@ define(function(require, exports, module) {
   });
 
   layout.content.add(centerModifier).add(renderController);
-  renderController.show(logo);
+  renderController.show(yarnView);
 
   var feedView = new FeedView({
     message: 'custom message'
@@ -61,11 +62,15 @@ define(function(require, exports, module) {
     blah: 'custom blah'
   });
 
+  var yarnView = new YarnView({
+    message: 'Sup Dude'
+  });
+
   //Layout Footer
   var buttons = [];
-  var createButton1 = function(){
-    var button1 = new Surface({
-      content: 'Button',
+  var feedViewButton = function(){
+    var feedViewButtonSurface = new Surface({
+      content: 'FeedView',
       size: [undefined, undefined],
       properties: {
         backgroundColor: 'hsl(' + (buttons.length * 360 / 3) + ', 100%, 50%)',
@@ -75,18 +80,18 @@ define(function(require, exports, module) {
       }
     });
 
-    button1.on('click', function(){   
-      renderController.hide(logo); 
+    feedViewButtonSurface.on('click', function(){   
+      renderController.hide(yarnView); 
       renderController.hide(newYarnView);
       renderController.show(feedView);
-    }.bind(button1)); 
+    }.bind(feedViewButtonSurface)); 
 
-    buttons.push(button1);
+    buttons.push(feedViewButtonSurface);
   };
 
-  var createButton2 = function(){
-    var button2 = new Surface({
-      content: 'Button',
+  var newYarnViewButton = function(){
+    var newYarnViewButtonSurface = new Surface({
+      content: 'newYarnView',
       size: [undefined, undefined],
       properties: {
         backgroundColor: 'hsl(' + (buttons.length * 360 / 3) + ', 100%, 50%)',
@@ -96,18 +101,18 @@ define(function(require, exports, module) {
       }
     });
 
-    button2.on('click', function(){
+    newYarnViewButtonSurface.on('click', function(){
       renderController.hide(feedView);
-      renderController.hide(logo);
+      renderController.hide(yarnView);
       renderController.show(newYarnView);
-    }.bind(button2)); 
+    }.bind(newYarnViewButtonSurface)); 
 
-    buttons.push(button2);
+    buttons.push(newYarnViewButtonSurface);
   };
 
-  var createButton3 = function(){
-    var button3 = new Surface({
-      content: 'Button',
+  var yarnViewButton = function(){
+    var yarnViewButtonSurface = new Surface({
+      content: 'yarnView',
       size: [undefined, undefined],
       properties: {
         backgroundColor: 'hsl(' + (buttons.length * 360 / 3) + ', 100%, 50%)',
@@ -117,19 +122,18 @@ define(function(require, exports, module) {
       }
     });
 
-    button3.on('click', function(){
+    yarnViewButtonSurface.on('click', function(){
       renderController.hide(newYarnView);
       renderController.hide(feedView);
-      renderController.show(logo);
-      // renderController.show(testSurface2);
-    }.bind(button3)); 
+      renderController.show(yarnView);
+    }.bind(yarnViewButtonSurface)); 
 
-    buttons.push(button3);
+    buttons.push(yarnViewButtonSurface);
   };
 
-  createButton1();
-  createButton2();
-  createButton3();
+  feedViewButton();
+  newYarnViewButton();
+  yarnViewButton();
 
   var grid = new GridLayout({
     dimensions: [3,1]
