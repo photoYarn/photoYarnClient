@@ -29,7 +29,7 @@ define(function(require, exports, module) {
   //famo.us logo because famo.us is cool!
   var logo = new ImageSurface({
     size: [200, 200],
-    content: 'http://code.famo.us/assets/famous_logo.svg',
+    content: 'http://img3.wikia.nocookie.net/__cb20130220230859/farmville2/images/a/aa/Super-Fine_Yarn_Ball.png',
   });
 
   var renderController = new RenderController();
