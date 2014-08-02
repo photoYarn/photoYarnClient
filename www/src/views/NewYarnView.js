@@ -2,6 +2,7 @@ define(function(require, exports, module) {
   'use strict';
   var View = require('famous/core/View');
   var Surface = require('famous/core/Surface');
+  var ImageSurface = require('famous/surfaces/ImageSurface');
 
   function NewYarnView(){
     View.apply(this, arguments);
@@ -25,7 +26,13 @@ define(function(require, exports, module) {
       },
     });
 
-    this.add(this.surface);
+    var testImage = new ImageSurface({
+      content: 'http://dreamstop.com/wp-content/uploads/2013/06/Knitting-dreams.jpg'
+    });
+
+    this.add(testImage);
+    
+    // this.add(this.surface);
   };
   
   module.exports = NewYarnView;

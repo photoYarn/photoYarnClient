@@ -36,7 +36,7 @@ define(function(require, exports, module){
     for (var i = 0; i < 10; i++) {
       var logo = new ImageSurface({
         size: [100, 100],
-        content: 'http://code.famo.us/assets/famous_logo.svg',
+        content: 'http://www.saatchistore.com/217-438-thickbox/pretty-polaroid-notes.jpg',
         classes: ['double-sided'],
         transform: function() {
             return Transform.rotateY(0.002 * (Date.now() - initialTime));
