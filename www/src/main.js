@@ -12,6 +12,8 @@ define(function(require, exports, module) {
   var RenderController = require('famous/views/RenderController');
   var View = require('famous/core/View');
 
+  var SpinView = require('views/SpinView');
+
   //Creating Layout
   var layout = new HeaderFooterLayout({
     headerSize: 50,
