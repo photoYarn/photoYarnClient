@@ -81,8 +81,7 @@ define(function(require, exports, module) {
     });
 
     feedViewButtonSurface.on('click', function(){   
-      renderController.hide(yarnView); 
-      renderController.hide(newYarnView);
+      renderController.hide();
       renderController.show(feedView);
     }.bind(feedViewButtonSurface)); 
 
@@ -102,8 +101,7 @@ define(function(require, exports, module) {
     });
 
     newYarnViewButtonSurface.on('click', function(){
-      renderController.hide(feedView);
-      renderController.hide(yarnView);
+      renderController.hide();
       renderController.show(newYarnView);
     }.bind(newYarnViewButtonSurface)); 
 
@@ -123,8 +121,7 @@ define(function(require, exports, module) {
     });
 
     yarnViewButtonSurface.on('click', function(){
-      renderController.hide(newYarnView);
-      renderController.hide(feedView);
+      renderController.hide();
       renderController.show(yarnView);
     }.bind(yarnViewButtonSurface)); 
 
