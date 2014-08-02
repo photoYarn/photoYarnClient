@@ -1,1 +1,3 @@
 platforms/ios
+platforms/android
+plugins/android.json

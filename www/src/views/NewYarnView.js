@@ -6,24 +6,21 @@ define(function(require, exports, module) {
   function NewYarnView(){
     View.apply(this, arguments);
 
-    //creates NewYarnView
-    console.log('Sup Bros');
-
     _createSurface.call(this);
   }
 
   NewYarnView.prototype = Object.create(View.prototype);
   NewYarnView.prototype.constructor = NewYarnView;
   NewYarnView.DEFAULT_OPTIONS = {
-    blah: 'default blah'
+    message: 'Default blah'
   };
 
   function _createSurface() {
     this.surface = new Surface({
       size: [200, 200],
-      content: this.options.blah,
+      content: this.options.message,
       properties: {
-        backgroundColor: 'red',
+        backgroundColor: 'green',
         color: 'white',
       },
     });
