@@ -16,8 +16,6 @@ define(function(require, exports, module) {
   var NewYarnView = require('views/NewYarnView');
   var FeedView = require('views/FeedView');
 
-
-
   //Creating Layout
   var layout = new HeaderFooterLayout({
     headerSize: 50,
@@ -59,25 +57,9 @@ define(function(require, exports, module) {
     message: 'custom message'
   });
 
-  // instantiate newYarnView
-
-  // var testSurface2 = new Surface({
-  //   size: [200, 200],
-  //   content: 'boogers',
-  //   properties: {
-  //     backgroundColor: 'blue',
-  //     color: 'white',
-  //   },
-  // });
-
   var newYarnView = new NewYarnView({
     blah: 'custom blah'
   });
-
-  // var newYarnView = new Surface({
-  //   content: 'test2'
-  // });
-
 
   //Layout Footer
   var buttons = [];
@@ -154,7 +136,7 @@ define(function(require, exports, module) {
   });
   
   grid.sequenceFrom(buttons);
- 
+
   layout.footer.add(grid);
 
   mainContext.add(layout);
