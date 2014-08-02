@@ -2,6 +2,7 @@ define(function(require, exports, module) {
   'use strict';
   var View = require('famous/core/View');
   var Surface = require('famous/core/Surface');
+  var ImageSurface = require('famous/surfaces/ImageSurface');
 
   function YarnView(){
     View.apply(this, arguments);
@@ -16,13 +17,8 @@ define(function(require, exports, module) {
   };
 
   function _createSurface() {
-    this.surface = new Surface({
-      size: [200, 200],
-      content: this.options.message,
-      properties: {
-        backgroundColor: 'blue',
-        color: 'white',
-      },
+    this.surface = new ImageSurface({
+      content: 'mockAssets/yarnView.png',
     });
 
     this.add(this.surface);

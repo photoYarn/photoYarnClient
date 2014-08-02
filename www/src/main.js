@@ -22,7 +22,7 @@ define(function(require, exports, module) {
 
   //Creating Layout
   var layout = new HeaderFooterLayout({
-    headerSize: 50,
+    headerSize: 75,
     footerSize: 50
   });
 
@@ -36,7 +36,7 @@ define(function(require, exports, module) {
 
   //Layout Header
   layout.header.add(new Surface({
-    content: 'Header',
+    content: 'Photo Yarn',
     properties: {
       backgroundColor: 'green',
       lineHeight: layout.options.headerSize + 'px',
