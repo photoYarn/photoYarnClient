@@ -5,9 +5,9 @@ define(function(require, exports, module) {
     var surface = new Surface({
       content: name,
       properties: {
-        backgroundColor: 'hsl(' + (targetArray.length * 360 / 3) + ', 100%, 50%)',
+        backgroundColor: '#BEEB9F',
         lineHeight: targetLayout.options.footerSize + 'px',
-        color: 'white',
+        color: '#FF6138',
         textAlign: 'center'
       }
     });

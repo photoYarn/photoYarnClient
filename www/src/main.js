@@ -38,7 +38,8 @@ define(function(require, exports, module) {
   layout.header.add(new Surface({
     content: 'Photo Yarn',
     properties: {
-      backgroundColor: 'green',
+      color: '#FF6138',
+      backgroundColor: '#BEEB9F',
       lineHeight: layout.options.headerSize + 'px',
       textAlign: 'center'
     }

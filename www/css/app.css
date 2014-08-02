@@ -7,3 +7,23 @@ html {
     -webkit-backface-visibility: visible;
     backface-visibility: visible;
 }
+
+.salmonBG{
+  background-color: #FF6138,
+}
+
+.yellowBG{
+  background-color: '#FFFF9D', 
+}
+
+.lightgreenBG{
+  background-color: #BEEB9F,
+}
+
+.medgreenBG{
+  background-color: #79BD8F,
+}
+
+.text{
+  color: #00A388,
+}
