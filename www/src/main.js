@@ -12,7 +12,11 @@ define(function(require, exports, module) {
   var RenderController = require('famous/views/RenderController');
   var View = require('famous/core/View');
 
-  var SpinView = require('views/SpinView');
+  //custom views
+  var NewYarnView = require('views/NewYarnView');
+  var FeedView = require('views/FeedView');
+
+
 
   //Creating Layout
   var layout = new HeaderFooterLayout({
@@ -51,13 +55,28 @@ define(function(require, exports, module) {
   layout.content.add(centerModifier).add(renderController);
   renderController.show(logo);
 
-  var testSurface1 = new Surface({
-    content: 'test1'
+  var feedView = new FeedView({
+    message: 'custom message'
   });
 
-  var testSurface2 = new Surface({
-    content: 'test2'
+  // instantiate newYarnView
+
+  // var testSurface2 = new Surface({
+  //   size: [200, 200],
+  //   content: 'boogers',
+  //   properties: {
+  //     backgroundColor: 'blue',
+  //     color: 'white',
+  //   },
+  // });
+
+  var newYarnView = new NewYarnView({
+    blah: 'custom blah'
   });
+
+  // var newYarnView = new Surface({
+  //   content: 'test2'
+  // });
 
 
   //Layout Footer
@@ -76,8 +95,8 @@ define(function(require, exports, module) {
 
     button1.on('click', function(){   
       renderController.hide(logo); 
-      renderController.hide(testSurface2);
-      renderController.show(testSurface1);
+      renderController.hide(newYarnView);
+      renderController.show(feedView);
     }.bind(button1)); 
 
     buttons.push(button1);
@@ -96,9 +115,9 @@ define(function(require, exports, module) {
     });
 
     button2.on('click', function(){
-      renderController.hide(testSurface1);
+      renderController.hide(feedView);
       renderController.hide(logo);
-      renderController.show(testSurface2);
+      renderController.show(newYarnView);
     }.bind(button2)); 
 
     buttons.push(button2);
@@ -117,8 +136,8 @@ define(function(require, exports, module) {
     });
 
     button3.on('click', function(){
-      renderController.hide(testSurface2);
-      renderController.hide(testSurface1);
+      renderController.hide(newYarnView);
+      renderController.hide(feedView);
       renderController.show(logo);
       // renderController.show(testSurface2);
     }.bind(button3)); 
