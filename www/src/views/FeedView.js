@@ -1,7 +1,7 @@
 define(function(require, exports, module){
   'use strict';
   var View = require('famous/core/View');
-  var ImageSurface = require('famous/surfaces/ImageSurface');
+  var Surface = require('famous/core/Surface');
 
   function FeedView(){
     View.apply(this, arguments);
@@ -16,12 +16,16 @@ define(function(require, exports, module){
   };
 
   function _createSurface() {
-    this.imageSurface = new ImageSurface({
+    this.surface = new Surface({
       size: [200, 200],
-      content: 'http://code.famo.us/assets/famous_logo.svg'
+      content: this.options.message,
+      properties: {
+        backgroundColor: 'red',
+        color: 'white',
+      },
     });
-    
-    this.add(this.imageSurface);
+
+    this.add(this.surface);
   };
   
   module.exports = FeedView;
