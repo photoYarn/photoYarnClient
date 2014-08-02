@@ -1,6 +1,7 @@
 define(function(require, exports, module){
   'use strict';
   var View = require('famous/core/View');
+  var Surface = require('famous/core/Surface');
   var Modifier = require('famous/core/Modifier');
   var ScrollContainer = require('famous/views/ScrollContainer');
 
@@ -12,12 +13,13 @@ define(function(require, exports, module){
 
     _createRootNode.call(this);
     _createYarns.call(this);
+    _createCaption.call(this);
   }
 
   FeedView.prototype = Object.create(View.prototype);
   FeedView.prototype.constructor = FeedView;
   FeedView.DEFAULT_OPTIONS = {
-    message: 'Default message'
+    message: 'Default message',
   };
 
   // create root modifier node
@@ -49,6 +51,23 @@ define(function(require, exports, module){
     yarnRow.sequenceFrom(this.yarns);
 
     this.rootNode.add(yarnRow);
+  }
+
+  function _createCaption() {
+    var caption = new Surface({
+      size: [200, 100],
+      content: 'crap',
+      properties: {
+
+      }
+    });
+
+    var captionModifier = new Modifier({
+      align: [0.5, 0.5],
+      origin: [0.5, 0.5],
+    });
+
+    this.rootNode.add(captionModifier).add(caption);
   }
   
   module.exports = FeedView;
