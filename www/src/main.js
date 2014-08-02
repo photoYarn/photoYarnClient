@@ -17,10 +17,19 @@ define(function(require, exports, module) {
   var FeedView = require('views/FeedView');
   var YarnView = require('views/YarnView');
 
+  //custom buttons
+  var CustomButton = require('customControls/CustomButton');
+
   //Creating Layout
   var layout = new HeaderFooterLayout({
     headerSize: 50,
     footerSize: 50
+  });
+
+  //famo.us logo because famo.us is cool!
+  var logo = new ImageSurface({
+    size: [200, 200],
+    content: 'http://code.famo.us/assets/famous_logo.svg',
   });
 
   var renderController = new RenderController();
@@ -35,18 +44,8 @@ define(function(require, exports, module) {
     }
   }));
 
-  var initialTime = Date.now();
 
   //Layout Content
-  var logo = new ImageSurface({
-    size: [200, 200],
-    content: 'http://code.famo.us/assets/famous_logo.svg',
-    classes: ['double-sided'],
-    transform: function() {
-        return Transform.rotateY(0.002 * (Date.now() - initialTime));
-    }
-  });
-
   var centerModifier = new Modifier({
     origin: [0.5, 0.5],
   });
@@ -55,82 +54,23 @@ define(function(require, exports, module) {
   renderController.show(yarnView);
 
   var feedView = new FeedView({
-    message: 'custom message'
+    message: 'custom feed view'
   });
 
   var newYarnView = new NewYarnView({
-    blah: 'custom blah'
+    message: 'custom new yarn view'
   });
 
   var yarnView = new YarnView({
-    message: 'Sup Dude'
+    message: 'custom yarn view'
   });
 
   //Layout Footer
   var buttons = [];
-  var feedViewButton = function(){
-    var feedViewButtonSurface = new Surface({
-      content: 'FeedView',
-      size: [undefined, undefined],
-      properties: {
-        backgroundColor: 'hsl(' + (buttons.length * 360 / 3) + ', 100%, 50%)',
-        lineHeight: layout.options.footerSize + 'px',
-        color: 'black',
-        textAlign: 'center'
-      }
-    });
 
-    feedViewButtonSurface.on('click', function(){   
-      renderController.hide();
-      renderController.show(feedView);
-    }.bind(feedViewButtonSurface)); 
-
-    buttons.push(feedViewButtonSurface);
-  };
-
-  var newYarnViewButton = function(){
-    var newYarnViewButtonSurface = new Surface({
-      content: 'newYarnView',
-      size: [undefined, undefined],
-      properties: {
-        backgroundColor: 'hsl(' + (buttons.length * 360 / 3) + ', 100%, 50%)',
-        lineHeight: layout.options.footerSize + 'px',
-        color: 'black',
-        textAlign: 'center'
-      }
-    });
-
-    newYarnViewButtonSurface.on('click', function(){
-      renderController.hide();
-      renderController.show(newYarnView);
-    }.bind(newYarnViewButtonSurface)); 
-
-    buttons.push(newYarnViewButtonSurface);
-  };
-
-  var yarnViewButton = function(){
-    var yarnViewButtonSurface = new Surface({
-      content: 'yarnView',
-      size: [undefined, undefined],
-      properties: {
-        backgroundColor: 'hsl(' + (buttons.length * 360 / 3) + ', 100%, 50%)',
-        lineHeight: layout.options.footerSize + 'px',
-        color: 'black',
-        textAlign: 'center'
-      }
-    });
-
-    yarnViewButtonSurface.on('click', function(){
-      renderController.hide();
-      renderController.show(yarnView);
-    }.bind(yarnViewButtonSurface)); 
-
-    buttons.push(yarnViewButtonSurface);
-  };
-
-  feedViewButton();
-  newYarnViewButton();
-  yarnViewButton();
+  new CustomButton('Feed', buttons, layout, renderController, feedView);
+  new CustomButton('New Yarn', buttons, layout, renderController, newYarnView);
+  new CustomButton('Yarn', buttons, layout, renderController, yarnView);
 
   var grid = new GridLayout({
     dimensions: [3,1]
@@ -142,4 +82,5 @@ define(function(require, exports, module) {
 
   mainContext.add(layout);
 
+  renderController.show(logo);
 });

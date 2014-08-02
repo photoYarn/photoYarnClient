@@ -12,7 +12,7 @@ define(function(require, exports, module) {
   NewYarnView.prototype = Object.create(View.prototype);
   NewYarnView.prototype.constructor = NewYarnView;
   NewYarnView.DEFAULT_OPTIONS = {
-    message: 'Default blah'
+    message: 'default new yarn view'
   };
 
   function _createSurface() {
