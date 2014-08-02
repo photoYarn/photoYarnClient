@@ -1,5 +1,6 @@
 define(function(require, exports, module) {
   // import dependencies
+  'use strict';
   var Engine = require('famous/core/Engine');
   var Modifier = require('famous/core/Modifier');
   var Transform = require('famous/core/Transform');
@@ -8,7 +9,6 @@ define(function(require, exports, module) {
   var HeaderFooterLayout = require('famous/views/HeaderFooterLayout');
   var GridLayout = require('famous/views/GridLayout');
   var mainContext = Engine.createContext();
-  var initialTime = Date.now();
   var RenderController = require('famous/views/RenderController');
   var View = require('famous/core/View');
 
@@ -30,6 +30,7 @@ define(function(require, exports, module) {
     }
   }));
 
+  var initialTime = Date.now();
 
   //Layout Content
   var logo = new ImageSurface({
@@ -46,8 +47,7 @@ define(function(require, exports, module) {
   });
 
   layout.content.add(centerModifier).add(renderController);
-
-  var state = 0;
+  renderController.show(logo);
 
   var testSurface1 = new Surface({
     content: 'test1'
@@ -59,47 +59,80 @@ define(function(require, exports, module) {
 
 
   //Layout Footer
-  var surfaces = [];
-  var createSurface = function(){
-    var surface = new Surface({
+  var buttons = [];
+  var createButton1 = function(){
+    var button1 = new Surface({
       content: 'Button',
       size: [undefined, undefined],
       properties: {
-        backgroundColor: 'hsl(' + (surfaces.length * 360 / 3) + ', 100%, 50%)',
+        backgroundColor: 'hsl(' + (buttons.length * 360 / 3) + ', 100%, 50%)',
         lineHeight: layout.options.footerSize + 'px',
         color: 'black',
         textAlign: 'center'
       }
     });
 
-    surface.on('click', function(){
-      state++;
-      state = state%3;
-      if(state === 2){
-        renderController.hide(testSurface2);
-        renderController.show(testSurface1);
-      } else if(state === 1){
-        renderController.hide(logo);
-        renderController.show(testSurface2);
-      } else if(state === 0){
-        renderController.hide(testSurface1);
-        renderController.show(logo);
-      }
-      // renderController.show(testSurface2);
-    }.bind(surface)); 
+    button1.on('click', function(){   
+      renderController.hide(logo); 
+      renderController.hide(testSurface2);
+      renderController.show(testSurface1);
+    }.bind(button1)); 
 
-    surfaces.push(surface);
+    buttons.push(button1);
   };
 
-  createSurface();
-  createSurface();
-  createSurface();
+  var createButton2 = function(){
+    var button2 = new Surface({
+      content: 'Button',
+      size: [undefined, undefined],
+      properties: {
+        backgroundColor: 'hsl(' + (buttons.length * 360 / 3) + ', 100%, 50%)',
+        lineHeight: layout.options.footerSize + 'px',
+        color: 'black',
+        textAlign: 'center'
+      }
+    });
+
+    button2.on('click', function(){
+      renderController.hide(testSurface1);
+      renderController.hide(logo);
+      renderController.show(testSurface2);
+    }.bind(button2)); 
+
+    buttons.push(button2);
+  };
+
+  var createButton3 = function(){
+    var button3 = new Surface({
+      content: 'Button',
+      size: [undefined, undefined],
+      properties: {
+        backgroundColor: 'hsl(' + (buttons.length * 360 / 3) + ', 100%, 50%)',
+        lineHeight: layout.options.footerSize + 'px',
+        color: 'black',
+        textAlign: 'center'
+      }
+    });
+
+    button3.on('click', function(){
+      renderController.hide(testSurface2);
+      renderController.hide(testSurface1);
+      renderController.show(logo);
+      // renderController.show(testSurface2);
+    }.bind(button3)); 
+
+    buttons.push(button3);
+  };
+
+  createButton1();
+  createButton2();
+  createButton3();
 
   var grid = new GridLayout({
     dimensions: [3,1]
   });
   
-  grid.sequenceFrom(surfaces);
+  grid.sequenceFrom(buttons);
  
   layout.footer.add(grid);
 
