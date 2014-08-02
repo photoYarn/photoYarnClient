@@ -37,13 +37,12 @@ define(function(require, exports, module) {
   //Layout Header
   layout.header.add(new Surface({
     content: 'Photo Yarn',
-    classes: ['customButton'],
+    classes: ['customButton','medgreenBG'],
     properties: {
       lineHeight: layout.options.headerSize + 'px',
       textAlign: 'center'
     }
   }));
-
 
   //Layout Content
   var centerModifier = new Modifier({
@@ -68,9 +67,32 @@ define(function(require, exports, module) {
   //Layout Footer
   var buttons = [];
 
-  new CustomButton('Feed', buttons, layout, renderController, feedView);
-  new CustomButton('New Yarn', buttons, layout, renderController, newYarnView);
-  new CustomButton('Yarn', buttons, layout, renderController, yarnView);
+  // buttons.push(new CustomButton('Feed', layout, renderController, feedView, ['customButton','lightgreenBG']));
+  buttons.push(new CustomButton({
+    name: 'Feed',
+    lineHeight: '50px',
+    classes: ['customButton', 'lightgreenBG'],
+    target: feedView,
+    renderController: renderController
+  }));
+
+  buttons.push(new CustomButton({
+    name: 'New Yarn',
+    lineHeight: '50px',
+    classes: ['customButton', 'lightgreenBG'],
+    target: newYarnView,
+    renderController: renderController
+  }));
+
+  buttons.push(new CustomButton({
+    name: 'Yarn',
+    lineHeight: '50px',
+    classes: ['customButton', 'lightgreenBG'],
+    target: yarnView,
+    renderController: renderController
+  }));
+  // buttons.push(new CustomButton('New Yarn', layout, renderController, newYarnView, ['customButton','medgreenBG']));
+  // buttons.push(new CustomButton('Yarn', layout, renderController, yarnView, ['customButton','lightgreenBG']));
 
   var grid = new GridLayout({
     dimensions: [3,1]
