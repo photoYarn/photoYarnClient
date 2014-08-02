@@ -1,20 +1,16 @@
 define(function(require, exports, module) {
   // import dependencies
   var Engine = require('famous/core/Engine');
-
   var Modifier = require('famous/core/Modifier');
   var Transform = require('famous/core/Transform');
-
   var ImageSurface = require('famous/surfaces/ImageSurface');
   var Surface = require('famous/core/Surface');
-
   var HeaderFooterLayout = require('famous/views/HeaderFooterLayout');
   var GridLayout = require('famous/views/GridLayout');
-
   var mainContext = Engine.createContext();
   var initialTime = Date.now();
-
   var RenderController = require('famous/views/RenderController');
+  var View = require('famous/core/View');
 
   //Creating Layout
   var layout = new HeaderFooterLayout({
@@ -64,12 +60,12 @@ define(function(require, exports, module) {
 
   //Layout Footer
   var surfaces = [];
-  for(var i = 0; i < 3; i++){
+  var createSurface = function(){
     var surface = new Surface({
       content: 'Button',
       size: [undefined, undefined],
       properties: {
-        backgroundColor: 'hsl(' + (i * 360 / 3) + ', 100%, 50%)',
+        backgroundColor: 'hsl(' + (surfaces.length * 360 / 3) + ', 100%, 50%)',
         lineHeight: layout.options.footerSize + 'px',
         color: 'black',
         textAlign: 'center'
@@ -93,8 +89,11 @@ define(function(require, exports, module) {
     }.bind(surface)); 
 
     surfaces.push(surface);
-  }
+  };
 
+  createSurface();
+  createSurface();
+  createSurface();
 
   var grid = new GridLayout({
     dimensions: [3,1]
