@@ -1,12 +1,17 @@
 define(function(require, exports, module){
   'use strict';
   var View = require('famous/core/View');
-  var Surface = require('famous/core/Surface');
+  var Modifier = require('famous/core/Modifier');
+  var ScrollContainer = require('famous/views/ScrollContainer');
+
+  // TODO remove debugging code
+  var ImageSurface = require('famous/surfaces/ImageSurface');
 
   function FeedView(){
     View.apply(this, arguments);
 
-    _createSurface.call(this);
+    _createRootNode.call(this);
+    _createYarns.call(this);
   }
 
   FeedView.prototype = Object.create(View.prototype);
@@ -15,18 +20,36 @@ define(function(require, exports, module){
     message: 'Default message'
   };
 
-  function _createSurface() {
-    this.surface = new Surface({
-      size: [200, 200],
-      content: this.options.message,
-      properties: {
-        backgroundColor: 'red',
-        color: 'white',
-      },
+  // create root modifier node
+  function _createRootNode() {
+    this.rootModifier = new Modifier({
+      align: [0.5, 0.5],
+      origin: [0.5, 0.5],
     });
 
-    this.add(this.surface);
+    this.rootNode = this.add(this.rootModifier);
   };
+
+  function _createYarns() {
+    this.yarns = [];
+
+    for (var i = 0; i < 10; i++) {
+      var logo = new ImageSurface({
+        size: [100, 100],
+        content: 'http://code.famo.us/assets/famous_logo.svg',
+        classes: ['double-sided'],
+        transform: function() {
+            return Transform.rotateY(0.002 * (Date.now() - initialTime));
+        }
+      });
+      this.yarns.push(logo);
+    }
+
+    var yarnRow = new ScrollContainer();
+    yarnRow.sequenceFrom(this.yarns);
+
+    this.rootNode.add(yarnRow);
+  }
   
   module.exports = FeedView;
 });
