@@ -3,18 +3,18 @@ define(function(require, exports, module) {
   var View = require('famous/core/View');
   var Surface = require('famous/core/Surface');
 
-  function NewYarnView(){
+  function YarnView(){
     View.apply(this, arguments);
 
-    //creates NewYarnView
+    //creates YarnView
     console.log('Sup Bros');
 
     _createSurface.call(this);
   }
 
-  NewYarnView.prototype = Object.create(View.prototype);
-  NewYarnView.prototype.constructor = NewYarnView;
-  NewYarnView.DEFAULT_OPTIONS = {
+  YarnView.prototype = Object.create(View.prototype);
+  YarnView.prototype.constructor = YarnView;
+  YarnView.DEFAULT_OPTIONS = {
     blah: 'default blah'
   };
 
@@ -31,5 +31,5 @@ define(function(require, exports, module) {
     this.add(this.surface);
   };
   
-  module.exports = NewYarnView;
+  module.exports = YarnView;
 });

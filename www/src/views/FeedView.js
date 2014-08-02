@@ -20,8 +20,7 @@ define(function(require, exports, module){
       size: [200, 200],
       content: 'http://code.famo.us/assets/famous_logo.svg'
     });
-
-    console.log(this.options.message);
+    
     this.add(this.imageSurface);
   };
   
