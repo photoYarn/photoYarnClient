@@ -16,8 +16,8 @@ define(function(require, exports, module) {
   var YarnView = require('views/YarnView');
 
   //custom tools
-  var CustomButton = require('customComponents/CustomButton');
-  var CustomController = require('customComponents/CustomController');
+  var CustomButton = require('customWidgets/CustomButton');
+  var CustomController = require('customWidgets/CustomController');
 
   //Creating Layout
   var layout = new HeaderFooterLayout({
@@ -25,8 +25,9 @@ define(function(require, exports, module) {
     footerSize: 50
   });
 
-
   //master controller event handler that keeps track of state
+  
+
   var masterController = new CustomController();
   masterController.eventInput.on('FeedClick', function(){
     console.log('hi Feed');
