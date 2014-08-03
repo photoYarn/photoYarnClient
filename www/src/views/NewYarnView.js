@@ -25,14 +25,9 @@ define(function(require, exports, module) {
         color: 'white',
       },
     });
-
-    var testImage = new ImageSurface({
-      content: 'http://dreamstop.com/wp-content/uploads/2013/06/Knitting-dreams.jpg'
-    });
-
-    this.add(testImage);
     
-    // this.add(this.surface);
+    this.add(this.surface);
+    
   };
   
   module.exports = NewYarnView;

@@ -13,13 +13,17 @@ define(function(require, exports, module) {
   CustomButton.prototype = Object.create(View.prototype);
   CustomButton.prototype.constructor = CustomButton;
   CustomButton.DEFAULT_OPTIONS = {
-    textAlign: 'center'
+    textAlign: 'center',
+    align: [0.5, 0.5],
+    origin: [0.5, 0.5],
+    eventTarget: null,
+    lineHeight: '50px'
   };
 
   function _createRootNode(){
     this.rootModifier = new Modifier({
-      align: [0.5, 0.5],
-      origin: [0.5, 0.5]
+      align: this.options.align,
+      origin: this.options.origin
     });
 
     this.rootNode = this.add(this.rootModifier);
@@ -35,9 +39,10 @@ define(function(require, exports, module) {
       }
     });
 
+    this.button.pipe(this.options.eventTarget);
+
     this.button.on('click', function(){
-      this.options.renderController.hide();
-      this.options.renderController.show(this.options.target);
+      this.button.emit(this.options.name +'Click');
     }.bind(this));
 
     this.rootNode.add(this.button);
