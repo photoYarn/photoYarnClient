@@ -15,6 +15,7 @@ define(function(require, exports, module){
     View.apply(this, arguments);
 		
     _createRootNode.call(this);
+		_createBackground.call(this);
     _createFeedEntries.call(this);
   }
 
@@ -25,6 +26,22 @@ define(function(require, exports, module){
     message: 'Default message',
 		entryCount: 4,
 		entryHeight: 175
+  };
+	
+  function _createBackground() {
+    this.background = new Surface({
+			size: [,],
+      properties: {
+        backgroundColor: '#BADA55',
+      }
+    });
+		
+		var bgMod = new Modifier({
+			transform: Transform.translate(0,0,-100)
+		});
+		
+    this.rootNode.add(bgMod).add(this.background);
+
   };
 
   // create root modifier node
@@ -40,7 +57,8 @@ define(function(require, exports, module){
 
   function _createFeedEntries() {
     var feed = new Scrollview({
-    	margin: 10000
+			direction: 1,
+    	margin: 10000 // without this some entries would stop rendering on a hard scroll (fix from https://github.com/Famous/views/issues/11)
     });
 		this.entries = [];
 
@@ -54,7 +72,6 @@ define(function(require, exports, module){
 		}
 		
 		var feedModifier = new Modifier({
-			size: [undefined, 100],
 			transform: Transform.translate(0, 0, -10)
 		});
 		
