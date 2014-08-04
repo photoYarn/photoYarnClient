@@ -14,7 +14,7 @@ define(function(require, exports, module){
     View.apply(this, arguments);
 		
     _createRootNode.call(this);
-		// _createBackground.call(this);
+		_createBackground.call(this);
     _createCaption.call(this);
     _createPhotos.call(this);
 		_setListeners.call(this);
@@ -24,7 +24,7 @@ define(function(require, exports, module){
   FeedEntryView.prototype.constructor = FeedEntryView;
 	
   FeedEntryView.DEFAULT_OPTIONS = {
-		entrySize: [undefined, 190],
+		entrySize: [undefined, 175],
 		defaultCaption: 'This is the default caption',
 		captionSize: [undefined, 25],
 		photoSize: [150, 150],
@@ -45,14 +45,14 @@ define(function(require, exports, module){
   };
 	
   function _createBackground() {
-    var background = new Surface({
+    this.background = new Surface({
 			size: [this.options.entrySize[0], this.options.entrySize[1]],
       properties: {
         backgroundColor: '#789'
       }
     });
 
-    this.rootNode.add(background);
+    this.rootNode.add(this.background);
   };
 	
   function _createCaption() {
@@ -79,11 +79,8 @@ define(function(require, exports, module){
 
     for (var i = 0; i < 10; i++) {
 	    var dummyPhoto = new ImageSurface({
-	      size: [150, 125],
-	      content: 'http://www.saatchistore.com/217-438-thickbox/pretty-polaroid-notes.jpg',
-	      transform: function() {
-	          return Transform.rotateY(0.002 * (Date.now() - initialTime));
-	      }.bind(this)
+	      size: [150, 150],
+	      content: 'http://www.saatchistore.com/217-438-thickbox/pretty-polaroid-notes.jpg'
 	    });
 			
       this.photos.push(dummyPhoto);
@@ -99,6 +96,11 @@ define(function(require, exports, module){
 		});
 
     var photoRow = new ScrollContainer();
+		
+		for (var i = 0; i < this.photos.length; i++) {
+			this.photos[i].pipe(photoRow);
+		}
+		
     photoRow.sequenceFrom(this.photos);
 
     this.rootNode.add(photoRowModifier).add(photoRow);
@@ -106,6 +108,7 @@ define(function(require, exports, module){
 
 	function _setListeners() {
 		this.caption.pipe(this._eventOutput);
+		this.background.pipe(this._eventOutput);
 	}
 
   module.exports = FeedEntryView;
