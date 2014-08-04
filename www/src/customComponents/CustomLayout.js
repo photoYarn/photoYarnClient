@@ -12,6 +12,7 @@ define(function(require, exports, module) {
   //custom views
   var NewYarnView = require('views/NewYarnView');
   var FeedView = require('views/FeedView');
+	var ProfileView = require('views/ProfileView');
   var YarnView = require('views/YarnView');
   
   //custom tools
@@ -52,6 +53,10 @@ define(function(require, exports, module) {
 
     this.newYarnView = new NewYarnView({
       message: 'custom new yarn view'
+    });
+		
+    this.profileView = new ProfileView({
+      message: 'custom profile view'
     });
 
     this.yarnView = new YarnView({
@@ -95,21 +100,25 @@ define(function(require, exports, module) {
     }));
 
     this.buttons.push(new CustomButton({
+      name: 'Profile',
+      classes: ['customButton', 'lightgreenBG'],
+      eventTarget: this.options.eventTarget
+    }));
+
+    this.buttons.push(new CustomButton({
       name: 'Yarn',
       classes: ['customButton', 'lightgreenBG'],
       eventTarget: this.options.eventTarget
     }));
 
     this.buttonGrid = new GridLayout({
-      dimensions: [3,1]
+      dimensions: [4,1]
     });
     
     this.buttonGrid.sequenceFrom(this.buttons);
 
     this.footer.add(this.buttonGrid);
   }
- 
-
 
 
   module.exports = CustomLayout;

@@ -19,17 +19,22 @@ define(function(require, exports, module) {
   });
 
   masterController.eventInput.on('FeedClick', function(){
-    console.log('hi Feed');	
+    console.log('hi Feed');
     layout.renderController.show(layout.feedView);
   });
   masterController.eventInput.on('New YarnClick', function(){
     console.log('hi New Yarn');
     layout.renderController.show(layout.newYarnView);
   });
+  masterController.eventInput.on('ProfileClick', function(){
+    console.log('hi Profile');
+    layout.renderController.show(layout.profileView);
+  });
   masterController.eventInput.on('YarnClick', function(){
     console.log('hi Yarn');
     layout.renderController.show(layout.yarnView);
   });
+
   mainContext.add(layout);
 
 });
