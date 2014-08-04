@@ -39,7 +39,9 @@ define(function(require, exports, module){
   };
 
   function _createFeedEntries() {
-    var feed = new Scrollview();
+    var feed = new Scrollview({
+    	margin: 10000
+    });
 		this.entries = [];
 
     feed.sequenceFrom(this.entries);		
