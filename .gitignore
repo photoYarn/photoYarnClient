@@ -1,3 +1,5 @@
 platforms/ios
 platforms/android
 plugins/android.json
+plugins/org.apache.cordova.camera
+plugins/org.apache.cordova.console
