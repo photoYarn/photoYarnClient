@@ -62,14 +62,13 @@ define(function(require, exports, module){
 		this.headers = [];
 		
     this.headerGrid = new GridLayout({
-      dimensions: [2,1],
-			cellSize: [200, 22]
-    });
+      dimensions: [2, 1]
+		});
     
     this.headerGrid.sequenceFrom(this.headers);
 		
 		var captionView = new View();
-		
+
     var caption = new Surface({
       size: [this.options.captionSize[0], this.options.captionSize[1]],
       content: this.options.defaultCaption,
@@ -79,12 +78,12 @@ define(function(require, exports, module){
 				backgroundColor: '#BBB'
       }
     });
-
-    var captionModifier = new Modifier({
-      align: [0, 0],
-      origin: [0, 0]
-    });
 		
+		var captionModifier = new Modifier({
+			align: [0,0],
+			origin: [0,0]
+		});
+
 		captionView.add(captionModifier).add(caption);
 		this.headers.push(captionView);
 		
@@ -108,7 +107,7 @@ define(function(require, exports, module){
 		buttonView.add(entryButtonModifier).add(entryButton);
 		this.headers.push(buttonView);
 
-		this.add(this.headerGrid);
+		this.rootNode.add(this.headerGrid);
   };
 	
   function _createPhotos() {
