@@ -6,6 +6,7 @@ define(function(require, exports, module){
 	var ContainerSurface = require("famous/surfaces/ContainerSurface");
   var ImageSurface = require('famous/surfaces/ImageSurface');
   var ScrollContainer = require('famous/views/ScrollContainer');
+  var GridLayout = require('famous/views/GridLayout');
 	
 	var FeedEntryCaptionView = require('views/FeedEntryCaptionView');
 	var FeedEntryPhotoView = require('views/FeedEntryPhotoView');
@@ -13,10 +14,12 @@ define(function(require, exports, module){
   function FeedEntryView(){
     View.apply(this, arguments);
 		
+		this.photoCount = 0;
+		
     _createRootNode.call(this);
 		_createBackground.call(this);
-    _createCaption.call(this);
     _createPhotos.call(this);
+    _createHeaders.call(this);
 		_setListeners.call(this);
   }
 
@@ -28,9 +31,8 @@ define(function(require, exports, module){
 		defaultCaption: 'This is the default caption',
 		captionSize: [undefined, 25],
 		photoSize: [150, 150],
-		properties: {
-			cursor: 'pointer'
-		}
+		textAlign: 'right',
+		entryButtonSize: [100, 25]
   };
 
   // create root modifier node
@@ -56,8 +58,19 @@ define(function(require, exports, module){
 
   };
 	
-  function _createCaption() {
-    this.caption = new Surface({
+  function _createHeaders() {
+		this.headers = [];
+		
+    this.headerGrid = new GridLayout({
+      dimensions: [2,1],
+			cellSize: [200, 22]
+    });
+    
+    this.headerGrid.sequenceFrom(this.headers);
+		
+		var captionView = new View();
+		
+    var caption = new Surface({
       size: [this.options.captionSize[0], this.options.captionSize[1]],
       content: this.options.defaultCaption,
 			
@@ -71,14 +84,39 @@ define(function(require, exports, module){
       align: [0, 0],
       origin: [0, 0]
     });
+		
+		captionView.add(captionModifier).add(caption);
+		this.headers.push(captionView);
+		
+		var buttonView = new View();
 
-    this.rootNode.add(captionModifier).add(this.caption);
+		var entryButton = new Surface({
+	  	size: [this.options.entryButtonSize[0], this.options.entryButtonSize[1]],
+			content: this.photoCount + ' photos ' + '\u2794',
+      properties: {
+				backgroundColor: '#880',
+        lineHeight: this.options.captionSize[1] + 'px',
+        textAlign: this.options.textAlign
+      }
+		});
+		
+		var entryButtonModifier = new Modifier({
+			align: [1,0],
+			origin: [1,0]
+		});
+		
+		buttonView.add(entryButtonModifier).add(entryButton);
+		this.headers.push(buttonView);
+
+		this.add(this.headerGrid);
   };
-
+	
   function _createPhotos() {
     this.photos = [];
 
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 5 + Math.random() * 10; i++) {
+			this.photoCount++;
+			
 	    var dummyPhoto = new ImageSurface({
 	      size: [150, 150],
 	      content: 'http://www.saatchistore.com/217-438-thickbox/pretty-polaroid-notes.jpg'
@@ -108,7 +146,7 @@ define(function(require, exports, module){
   };
 
 	function _setListeners() {
-		this.caption.pipe(this._eventOutput);
+		// this.headerGrid.pipe(this._eventOutput);
 		this.background.pipe(this._eventOutput);
 	}
 

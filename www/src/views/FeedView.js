@@ -37,7 +37,7 @@ define(function(require, exports, module){
     });
 		
 		var bgMod = new Modifier({
-			transform: Transform.translate(0,0,-100)
+			transform: Transform.translate(0,0,-25)
 		});
 		
     this.rootNode.add(bgMod).add(this.background);
