@@ -69,7 +69,7 @@ define(function(require, exports, module){
 		
 		var captionView = new View();
 
-    var caption = new Surface({
+    this.caption = new Surface({
       size: [this.options.captionSize[0], this.options.captionSize[1]],
       content: this.options.defaultCaption,
 			
@@ -84,12 +84,12 @@ define(function(require, exports, module){
 			origin: [0,0]
 		});
 
-		captionView.add(captionModifier).add(caption);
+		captionView.add(captionModifier).add(this.caption);
 		this.headers.push(captionView);
 		
 		var buttonView = new View();
 
-		var entryButton = new Surface({
+		this.entryButton = new Surface({
 	  	size: [this.options.entryButtonSize[0], this.options.entryButtonSize[1]],
 			content: this.photoCount + ' photos ' + '\u2794',
       properties: {
@@ -104,7 +104,7 @@ define(function(require, exports, module){
 			origin: [1,0]
 		});
 		
-		buttonView.add(entryButtonModifier).add(entryButton);
+		buttonView.add(entryButtonModifier).add(this.entryButton);
 		this.headers.push(buttonView);
 
 		this.rootNode.add(this.headerGrid);
@@ -145,8 +145,9 @@ define(function(require, exports, module){
   };
 
 	function _setListeners() {
-		// this.headerGrid.pipe(this._eventOutput);
-		this.background.pipe(this._eventOutput);
+		this.headerGrid.pipe(this._eventOutput);
+		this.caption.pipe(this._eventOutput);
+		this.entryButton.pipe(this._eventOutput);
 	}
 
   module.exports = FeedEntryView;
