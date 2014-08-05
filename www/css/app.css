@@ -8,6 +8,10 @@ html {
     backface-visibility: visible;
 }
 
+.header {
+	font-size: 30px;
+}
+
 .salmonBG{
   background-color: #FF6138;
 }

@@ -71,8 +71,8 @@ define(function(require, exports, module) {
   //Layout Header
   function _createHeader(){
     this.header.add(new Surface({
-      content: 'Photo Yarn',
-      classes: ['customButton', 'medgreenBG'],
+      content: 'PhotoYarn',
+      classes: ['customButton', 'medgreenBG', 'header'],
       properties: {
         lineHeight: this.options.headerSize + 'px',
         textAlign: 'center'

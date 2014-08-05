@@ -31,7 +31,7 @@ define(function(require, exports, module){
 		defaultCaption: 'This is the default caption',
 		captionSize: [undefined, 25],
 		photoSize: [150, 150],
-		textAlign: 'right',
+		textAlign: 'center',
 		entryButtonSize: [100, 25]
   };
 
@@ -50,7 +50,7 @@ define(function(require, exports, module){
     this.background = new Surface({
 			size: [this.options.entrySize[0], this.options.entrySize[1]],
       properties: {
-        backgroundColor: '#789'
+        backgroundColor: '#AAA'
       }
     });
 		
@@ -70,12 +70,12 @@ define(function(require, exports, module){
 		var captionView = new View();
 
     this.caption = new Surface({
-      size: [this.options.captionSize[0], this.options.captionSize[1]],
+      size: [undefined, this.options.captionSize[1]],
       content: this.options.defaultCaption,
 			
       properties: {
 				lineHeight: this.options.captionSize[1] + 'px',
-				backgroundColor: '#BBB'
+				backgroundColor: '#AAA'
       }
     });
 		
@@ -93,9 +93,10 @@ define(function(require, exports, module){
 	  	size: [this.options.entryButtonSize[0], this.options.entryButtonSize[1]],
 			content: this.photoCount + ' photos ' + '\u2794',
       properties: {
-				backgroundColor: '#880',
+				backgroundColor: '#FF6138',
         lineHeight: this.options.captionSize[1] + 'px',
-        textAlign: this.options.textAlign
+        textAlign: this.options.textAlign,
+				borderRadius: '5px'
       }
 		});
 		
@@ -148,6 +149,7 @@ define(function(require, exports, module){
 		this.headerGrid.pipe(this._eventOutput);
 		this.caption.pipe(this._eventOutput);
 		this.entryButton.pipe(this._eventOutput);
+		this.background.pipe(this._eventOutput);
 	}
 
   module.exports = FeedEntryView;
