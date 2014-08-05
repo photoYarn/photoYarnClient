@@ -109,15 +109,15 @@ define(function(require, exports, module) {
         console.log('Post Success!');
         console.log(res.data);
         //Send to database below 
-        // $.ajax({
-        //   type: 'POST',
-        //   url: 'http://photoyarn.azurewebsites.net/yarns',
-        //   data: {
-        //     imgurId: res.data.id,
-        //     caption: 'Test Caption',
-        //     creatorId: 'Kia Kia Kia'
-        //   }
-        // });
+        $.ajax({
+          type: 'POST',
+          url: 'http://photoyarn.azurewebsites.net/yarns',
+          data: {
+            imgurId: res.data.id,
+            caption: 'Test Caption',
+            creatorId: 'Kia Kia Kia'
+          }
+        });
       },
       error: function (error, res) {
         console.log('post error', error);
