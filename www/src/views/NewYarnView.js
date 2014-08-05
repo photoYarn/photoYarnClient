@@ -8,12 +8,14 @@ define(function(require, exports, module) {
   if(navigator.camera){
     var takePictureOptions = {
       destinationType : Camera.DestinationType.FILE_URI,
-      sourceType : Camera.PictureSourceType.CAMERA
+      sourceType : Camera.PictureSourceType.CAMERA,
+      correctOrientation: true,
     };
 
     var getPictureOptions = {
-        destinationType : Camera.DestinationType.FILE_URI,
-        sourceType : Camera.PictureSourceType.PHOTOLIBRARY
+      destinationType : Camera.DestinationType.FILE_URI,
+      sourceType : Camera.PictureSourceType.PHOTOLIBRARY,
+      correctOrientation: true
     };    
   }
 
@@ -22,7 +24,15 @@ define(function(require, exports, module) {
 
     _createTakePictureButton.call(this);
     _createGetPictureButton.call(this);
+
+    this.add(surprise);
   }
+
+  var surprise = new ImageSurface({
+    align: [0.5, 0.5],
+    origin: [0.5, 0.5],
+    size: [200, true]
+  });
 
   NewYarnView.prototype = Object.create(View.prototype);
   NewYarnView.prototype.constructor = NewYarnView;
@@ -50,16 +60,15 @@ define(function(require, exports, module) {
     this.add(this.takePictureModifier).add(this.takePicture);
 
     this.takePicture.on('click', function(){
-      console.log('New Yarn View Button 1 Clicked!');
-      console.log('Navigator', navigator);
+      console.log('TakePicture Clicked!');
       navigator.camera.getPicture(onSuccess, onFail, takePictureOptions);
       });
   }
 
   function _createGetPictureButton() {
     this.getPictureModifier = new StateModifier({
-      origin: [0,0.5],
-      align: [0, 0.5]
+      origin: [0.5,0],
+      align: [0.5, 0]
     });
 
     this.getPicture = new Surface({
@@ -74,19 +83,18 @@ define(function(require, exports, module) {
     this.add(this.getPictureModifier).add(this.getPicture);
 
     this.getPicture.on('click', function(){
-      console.log('New Yarn View Button 2 Clicked!');
-      console.log('Navigator', navigator);
+      console.log('GetPicture Clicked!');
       navigator.camera.getPicture(onSuccess, onFail, getPictureOptions);
       });
   }
 
 
   function onSuccess(data){
-    console.log('Success', data);
+    surprise.setContent(data);
   }
 
   function onFail(error){
-    console.log('Error', error);
+    console.log('!!!!!!!!!!!!!Error:', error);
   }
 
   module.exports = NewYarnView;
