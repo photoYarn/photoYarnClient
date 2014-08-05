@@ -55,7 +55,6 @@ define(function(require, exports, module) {
     });
 
     this.yarnView = new YarnView({
-      message: 'custom yarn view'
     });
     
     this.renderController = new RenderController();

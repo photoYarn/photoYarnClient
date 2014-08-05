@@ -7,15 +7,19 @@ define(function(require, exports, module) {
 
   if(navigator.camera){
     var takePictureOptions = {
-      destinationType : Camera.DestinationType.FILE_URI,
+      destinationType : Camera.DestinationType.DATA_URL,
       sourceType : Camera.PictureSourceType.CAMERA,
       correctOrientation: true,
+      saveToPhotoAlbum: true,
+      encodingType: Camera.EncodingType.JPEG
     };
 
     var getPictureOptions = {
-      destinationType : Camera.DestinationType.FILE_URI,
+      destinationType : Camera.DestinationType.DATA_URL,
       sourceType : Camera.PictureSourceType.PHOTOLIBRARY,
-      correctOrientation: true
+      correctOrientation: true,
+      encodingType: Camera.EncodingType.JPEG
+
     };    
   }
 
@@ -90,7 +94,36 @@ define(function(require, exports, module) {
 
 
   function onSuccess(data){
-    surprise.setContent(data);
+    surprise.setContent('data:image/jpeg;base64,' + data);
+    $.ajax({
+      type: 'POST',
+      url: 'https://api.imgur.com/3/upload',
+      headers: {
+        Authorization: 'Client-ID ' + 'ef774ae96ae304c',
+      },
+      data: {
+        image: data,
+        title: 'pic'
+      },
+      success: function (res) {
+        console.log('Post Success!');
+        console.log(res.data);
+        //Send to database below 
+        // $.ajax({
+        //   type: 'POST',
+        //   url: 'http://photoyarn.azurewebsites.net/yarns',
+        //   data: {
+        //     imgurId: res.data.id,
+        //     caption: 'Test Caption',
+        //     creatorId: 'Kia Kia Kia'
+        //   }
+        // });
+      },
+      error: function (error, res) {
+        console.log('post error', error);
+        console.log('post response', res);
+      }
+    });
   }
 
   function onFail(error){
