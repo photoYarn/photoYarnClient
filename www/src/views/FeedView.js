@@ -18,6 +18,7 @@ define(function(require, exports, module){
 		
     _createRootNode.call(this);
 		_createBackground.call(this);
+		console.log(this.options)
     // _createFeedEntries.call(this);
   }
 
@@ -68,7 +69,7 @@ define(function(require, exports, module){
     });
 		
 		var bgMod = new Modifier({
-			transform: Transform.translate(0,0,-25)
+			transform: Transform.translate(0,0,-15)
 		});
 		
     this.rootNode.add(bgMod).add(this.background);
@@ -119,7 +120,7 @@ define(function(require, exports, module){
     feed.sequenceFrom(this.entries);		
 
 		for (var i = 0; i < data.length; i++) {
-			var newEntryView = new FeedEntryView(data[i]);
+			var newEntryView = new FeedEntryView({eventTarget: this.options.eventTarget}, data[i]);
 
 			newEntryView.pipe(feed);
 			this.entries.push(newEntryView);
@@ -134,29 +135,3 @@ define(function(require, exports, module){
   
   module.exports = FeedView;
 });
-
-
-
-
-//
-// [{"caption":"i like kittens",
-// "creatorId":1,"_id":"53e15acbc7e187a412eee8ac",
-// "__v":0,
-// "imgurIds":["http://static.tumblr.com/81b6d42b4064def5e9062d5f4410c820/betml74/Yl5ml0lia/tumblr_static_impress.jpg"]
-// },
-// {"caption":"i like kittens",
-// "creatorId":1,
-// "_id":"53e15b1ae1bb3b51144fd773",
-// "__v":0,
-// "imgurIds":["http://static.tumblr.com/81b6d42b4064def5e9062d5f4410c820/betml74/Yl5ml0lia/tumblr_static_impress.jpg"]
-// },
-// {"_id":"53e17d98b782f3880cf5d959",
-// "__v" :0,
-// "imgurIds":["http://www.davey.com/media/1001/home-tree.png?width=960&height=520&quality=80&mode=crop"]
-// },
-// {"__v":1,
-// "_id":"53e17bcbb782f3880cf5d957",
-// "imgurIds":["http://www.funchap.com/wp-content/uploads/2014/05/Cute-Dog-Wallpapers.jpg",
-//            "http://www.davey.com/media/1001/home-tree.png?width=960&height=520&quality=80&mode=crop"]
-// }]
-

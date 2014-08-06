@@ -11,7 +11,7 @@ define(function(require, exports, module){
 	var FeedEntryCaptionView = require('views/FeedEntryCaptionView');
 	var FeedEntryPhotoView = require('views/FeedEntryPhotoView');
 
-  function FeedEntryView(yarnData){
+  function FeedEntryView(options, yarnData){
     View.apply(this, arguments);
 
 		this.photoCount = 0;
@@ -20,7 +20,7 @@ define(function(require, exports, module){
 		_createBackground.call(this);
     _createPhotos.call(this, yarnData);
     _createHeaders.call(this);
-		_setListeners.call(this);
+		_setListeners.call(this, yarnData);
   }
 
   FeedEntryView.prototype = Object.create(View.prototype);
@@ -144,11 +144,19 @@ define(function(require, exports, module){
     this.rootNode.add(photoRowModifier).add(photoRow);
   }
 
-	function _setListeners() {
+	function _setListeners(yarnData) {
 		this.headerGrid.pipe(this._eventOutput);
 		this.caption.pipe(this._eventOutput);
 		this.entryButton.pipe(this._eventOutput);
 		this.background.pipe(this._eventOutput);
+		
+		this.entryButton.pipe(this.options.eventTarget);
+		
+    this.entryButton.on('click', function(){
+			console.log(this.options.eventTarget);
+			console.log('clicked');
+      this.entryButton.emit('GoAddToYarn', yarnData);
+    }.bind(this));
 	}
 
   module.exports = FeedEntryView;

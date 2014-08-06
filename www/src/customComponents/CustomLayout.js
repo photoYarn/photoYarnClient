@@ -49,7 +49,8 @@ define(function(require, exports, module) {
       origin: [0.5, 0.5],
     });
     this.feedView = new FeedView({
-      message: 'custom feed view'
+      message: 'custom feed view',
+			eventTarget: this.options.eventTarget
      });
 
     this.newYarnView = new NewYarnView({
