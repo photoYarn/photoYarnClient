@@ -167,6 +167,7 @@ define(function(require, exports, module) {
         console.log(res.data);
         mongoData = {
           id: res.data.id,
+          link: res.data.link,
           caption: captionData,
           creatorId : 2
         };
@@ -184,6 +185,7 @@ define(function(require, exports, module) {
       url: 'http://photoyarn.azurewebsites.net/yarns',
       data: {
         imgurId: data.id,
+        link: data.link,
         caption: data.caption,
         creatorId: data.creatorId
       },
