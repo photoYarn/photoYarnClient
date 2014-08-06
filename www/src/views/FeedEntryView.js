@@ -11,14 +11,14 @@ define(function(require, exports, module){
 	var FeedEntryCaptionView = require('views/FeedEntryCaptionView');
 	var FeedEntryPhotoView = require('views/FeedEntryPhotoView');
 
-  function FeedEntryView(){
+  function FeedEntryView(yarnData){
     View.apply(this, arguments);
-		
+
 		this.photoCount = 0;
-		
+
     _createRootNode.call(this);
 		_createBackground.call(this);
-    _createPhotos.call(this);
+    _createPhotos.call(this, yarnData);
     _createHeaders.call(this);
 		_setListeners.call(this);
   }
@@ -33,7 +33,7 @@ define(function(require, exports, module){
 		photoSize: [150, 150],
 		textAlign: 'center',
 		entryButtonSize: [100, 25]
-  };
+  }
 
   // create root modifier node
   function _createRootNode() {
@@ -44,19 +44,20 @@ define(function(require, exports, module){
     });
 
     this.rootNode = this.add(this.rootModifier);
-  };
+  }
 	
   function _createBackground() {
     this.background = new Surface({
 			size: [this.options.entrySize[0], this.options.entrySize[1]],
+			classes: ['FeedEntryBackground'],
       properties: {
-        backgroundColor: '#AAA'
+        backgroundColor: '#DDD'
       }
     });
 		
     this.rootNode.add(this.background);
 
-  };
+  }
 	
   function _createHeaders() {
 		this.headers = [];
@@ -75,7 +76,7 @@ define(function(require, exports, module){
 			
       properties: {
 				lineHeight: this.options.captionSize[1] + 'px',
-				backgroundColor: '#AAA'
+				backgroundColor: '#BBB'
       }
     });
 		
@@ -109,23 +110,26 @@ define(function(require, exports, module){
 		this.headers.push(buttonView);
 
 		this.rootNode.add(this.headerGrid);
-  };
+  }
 	
-  function _createPhotos() {
+  function _createPhotos(yarnData) {
     this.photos = [];
-
-    for (var i = 0; i < 5 + Math.random() * 10; i++) {
+    var photoRow = new ScrollContainer();
+		
+		console.log("yarnData", yarnData);
+    for (var i = 0; i < yarnData.links.length; i++) {
 			this.photoCount++;
 			
-	    var dummyPhoto = new ImageSurface({
+	    var newPhoto = new ImageSurface({
 	      size: [150, 150],
-	      content: 'http://www.saatchistore.com/217-438-thickbox/pretty-polaroid-notes.jpg'
+	      content: yarnData.links[i]
 	    });
 			
-      this.photos.push(dummyPhoto);
+      this.photos.push(newPhoto);
 
 			// pipe photo surface to container view
-			dummyPhoto.pipe(this._eventOutput);
+			newPhoto.pipe(this._eventOutput);
+			newPhoto.pipe(photoRow);
     }
 		
 		var photoRowModifier = new Modifier({
@@ -133,17 +137,12 @@ define(function(require, exports, module){
 			align: [0, 1],
 			origin: [0, 1]
 		});
-
-    var photoRow = new ScrollContainer();
-		
-		for (var i = 0; i < this.photos.length; i++) {
-			this.photos[i].pipe(photoRow);
-		}
 		
     photoRow.sequenceFrom(this.photos);
+		photoRow.pipe(this._eventOutput);
 
     this.rootNode.add(photoRowModifier).add(photoRow);
-  };
+  }
 
 	function _setListeners() {
 		this.headerGrid.pipe(this._eventOutput);
@@ -154,3 +153,4 @@ define(function(require, exports, module){
 
   module.exports = FeedEntryView;
 });
+
