@@ -168,7 +168,7 @@ define(function(require, exports, module) {
         mongoData = {
           id: res.data.id,
           caption: captionData,
-          creatorId : 'Kia Kia Kia'
+          creatorId : 2
         };
       },
       error: function (error, res) {
