@@ -14,6 +14,7 @@ define(function(require, exports, module) {
   var FeedView = require('views/FeedView');
 	var ProfileView = require('views/ProfileView');
   var YarnView = require('views/YarnView');
+  var AddToYarnView = require('views/AddToYarnView');
   
   //custom tools
   var CustomButton = require('customComponents/CustomButton');
@@ -60,6 +61,10 @@ define(function(require, exports, module) {
     });
 
     this.yarnView = new YarnView({
+    });
+
+    this.addToYarnView = new AddToYarnView({
+
     });
     
     this.renderController = new RenderController();
@@ -110,8 +115,15 @@ define(function(require, exports, module) {
       eventTarget: this.options.eventTarget
     }));
 
+    this.buttons.push(new CustomButton({
+      name: 'AddToYarn',
+      classes: ['customButton', 'lightgreenBG'],
+      eventTarget: this.options.eventTarget
+    }));
+
+
     this.buttonGrid = new GridLayout({
-      dimensions: [4,1]
+      dimensions: [5,1]
     });
     
     this.buttonGrid.sequenceFrom(this.buttons);

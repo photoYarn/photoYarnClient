@@ -42,7 +42,7 @@ define(function(require, exports, module) {
     this.button.pipe(this.options.eventTarget);
 
     this.button.on('click', function(){
-      this.button.emit(this.options.name +'Click');
+      this.button.emit('Go' + this.options.name);
     }.bind(this));
 
     this.rootNode.add(this.button);
