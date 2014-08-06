@@ -9,6 +9,7 @@ define(function(require, exports, module) {
 
   var captionData = '';
   var mongoData;
+  var catGif = 'http://37.media.tumblr.com/35e8d0682251fa96580100ea6a182e13/tumblr_mst9derOy01re0m3eo1_r12_500.gif';
 
   if(navigator.camera){
     var takePictureOptions = {
@@ -39,6 +40,7 @@ define(function(require, exports, module) {
   }
 
   var surprise = new ImageSurface({
+    content: catGif,
     align: [0.5, 0.5],
     origin: [0.5, 0.5],
     size: [200, true]
@@ -79,10 +81,15 @@ define(function(require, exports, module) {
     captionNode.add(buttonModifier).add(this.captionButton);
 
     this.captionButton.on('click', function(){
-      if(!!captionData && !!mongoData){
+      captionData = this.caption.getValue();
+      console.log(captionData);
+      if(!!captionData && !!mongoData && surprise.getContent() !== catGif){
+        mongoData.caption = captionData;
+        this.caption.setValue('');
+        surprise.setContent(catGif);
         postToMongo(mongoData);
       }
-    });
+    }.bind(this));
 
   }
 
@@ -107,8 +114,6 @@ define(function(require, exports, module) {
 
     this.takePicture.on('click', function(){
       console.log('TakePicture Clicked!');
-      captionData = this.caption.getValue();
-      console.log(captionData);
       navigator.camera.getPicture(onCameraSuccess, onCameraFail, takePictureOptions);
       }.bind(this));
   }
@@ -131,8 +136,6 @@ define(function(require, exports, module) {
     this.add(this.getPictureModifier).add(this.getPicture);
 
     this.getPicture.on('click', function(){
-      captionData = this.caption.getValue();
-      console.log(captionData);
       console.log('GetPicture Clicked!');
       navigator.camera.getPicture(onCameraSuccess, onCameraFail, getPictureOptions);
       }.bind(this));
@@ -165,7 +168,7 @@ define(function(require, exports, module) {
         mongoData = {
           id: res.data.id,
           caption: captionData,
-          creatorId : 'Kia Kia Kia'
+          creatorId : 2
         };
       },
       error: function (error, res) {
