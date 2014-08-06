@@ -11,6 +11,14 @@ define(function(require, exports, module) {
   var mongoData;
   var catGif = 'http://37.media.tumblr.com/35e8d0682251fa96580100ea6a182e13/tumblr_mst9derOy01re0m3eo1_r12_500.gif';
 
+
+  //Need some sort of yarnId and preset caption to post to /photo
+  //expecting yarnId and image link _id from post to DB!
+  var yarnData = {
+    yarnId : '53e269fe608875500746d30a', //string 
+    link: 'http://37.media.tumblr.com/35e8d0682251fa96580100ea6a182e13/tumblr_mst9derOy01re0m3eo1_r12_500.gif', //string,
+  };
+
   if(navigator.camera){
     var takePictureOptions = {
       destinationType : Camera.DestinationType.DATA_URL,
@@ -34,12 +42,12 @@ define(function(require, exports, module) {
 
     _createTakePictureButton.call(this);
     _createGetPictureButton.call(this);
-    _createCaption.call(this);
+    _createSendButton.call(this);
 
-    this.add(surprise);
+    this.add(pictureFrame);
   }
 
-  var surprise = new ImageSurface({
+  var pictureFrame = new ImageSurface({
     content: catGif,
     align: [0.5, 0.5],
     origin: [0.5, 0.5],
@@ -53,17 +61,15 @@ define(function(require, exports, module) {
     takePictureMsg: 'Take Picture'    
   };
 
-  function _createCaption(){
-    this.caption = new InputSurface({
-      size: [100, 20]
-    });
+  function _createSendButton(){
+    
 
-    this.captionModifier = new StateModifier({
+    this.sendButtonModifier = new StateModifier({
       transform : Transform.translate(0, -200, 0)
     });
 
 
-    this.captionButton = new Surface({
+    this.sendButton = new Surface({
       size: [50, 20],
       content: 'Submit',
       properties: {
@@ -76,19 +82,12 @@ define(function(require, exports, module) {
         transform: Transform.translate(100, 0, 0)
     });
 
-    var captionNode = this.add(this.captionModifier);
-    captionNode.add(this.caption);
-    captionNode.add(buttonModifier).add(this.captionButton);
+    var sendButtonNode = this.add(this.sendButtonModifier);
+    sendButtonNode.add(this.sendButton);
 
-    this.captionButton.on('click', function(){
-      captionData = this.caption.getValue();
-      console.log(captionData);
-      if(!!captionData && !!mongoData && surprise.getContent() !== catGif){
-        mongoData.caption = captionData;
-        this.caption.setValue('');
-        surprise.setContent(catGif);
-        postToMongo(mongoData);
-      }
+    this.sendButton.on('click', function(){
+      pictureFrame.setContent(catGif);
+      postToServer(yarnData);
     }.bind(this));
 
   }
@@ -143,7 +142,7 @@ define(function(require, exports, module) {
 
 
   function onCameraSuccess(data){
-    surprise.setContent('data:image/jpeg;base64,' + data);
+    pictureFrame.setContent('data:image/jpeg;base64,' + data);
     postToImgur(data);
   }
 
@@ -160,17 +159,12 @@ define(function(require, exports, module) {
       },
       data: {
         image: data,
-        title: 'pic'
+        title: 'New Picture'
       },
       success: function (res) {
         console.log('Post to Imgur Success!');
         console.log(res.data);
-        mongoData = {
-          id: res.data.id,
-          link: res.data.link,
-          caption: captionData,
-          creatorId : 2
-        };
+        yarnData.link = res.data.link;
       },
       error: function (error, res) {
         console.log('post error', error);
@@ -179,15 +173,13 @@ define(function(require, exports, module) {
     });
   }
 
-  function postToMongo(data){
+  function postToServer(data){
     $.ajax({
       type: 'POST',
-      url: 'http://photoyarn.azurewebsites.net/yarns',
+      url: 'http://photoyarn.azurewebsites.net/photo',
       data: {
-        imgurId: data.id,
-        link: data.link,
-        caption: data.caption,
-        creatorId: data.creatorId
+        yarnId: data.yarnId,
+        link: data.link
       },
       success: function(res){
         console.log('Post to Mongo Success!', res);

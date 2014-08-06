@@ -36,10 +36,10 @@ define(function(require, exports, module) {
     _createGetPictureButton.call(this);
     _createCaption.call(this);
 
-    this.add(surprise);
+    this.add(pictureFrame);
   }
 
-  var surprise = new ImageSurface({
+  var pictureFrame = new ImageSurface({
     content: catGif,
     align: [0.5, 0.5],
     origin: [0.5, 0.5],
@@ -83,10 +83,10 @@ define(function(require, exports, module) {
     this.captionButton.on('click', function(){
       captionData = this.caption.getValue();
       console.log(captionData);
-      if(!!captionData && !!mongoData && surprise.getContent() !== catGif){
+      if(!!captionData && !!mongoData && pictureFrame.getContent() !== catGif){
         mongoData.caption = captionData;
         this.caption.setValue('');
-        surprise.setContent(catGif);
+        pictureFrame.setContent(catGif);
         postToMongo(mongoData);
       }
     }.bind(this));
@@ -143,7 +143,7 @@ define(function(require, exports, module) {
 
 
   function onCameraSuccess(data){
-    surprise.setContent('data:image/jpeg;base64,' + data);
+    pictureFrame.setContent('data:image/jpeg;base64,' + data);
     postToImgur(data);
   }
 
