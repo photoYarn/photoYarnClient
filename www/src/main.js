@@ -34,8 +34,9 @@ define(function(require, exports, module) {
     console.log('hi Yarn');
     layout.renderController.show(layout.yarnView);
   });
-  masterController.eventInput.on('GoAddToYarn', function(){
+  masterController.eventInput.on('GoAddToYarn', function(data){
     console.log('hi Add To Yarn');
+		console.log("data passed into GoAddToYarn listener", data);
     layout.renderController.show(layout.addToYarnView);
   });
 
