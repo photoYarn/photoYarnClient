@@ -19,7 +19,7 @@ define(function(require, exports, module){
     _createRootNode.call(this);
 		_createBackground.call(this);
     _createPhotos.call(this, yarnData);
-    _createHeaders.call(this);
+    _createHeaders.call(this, yarnData);
 		_setListeners.call(this, yarnData);
   }
 
@@ -59,7 +59,7 @@ define(function(require, exports, module){
 
   }
 	
-  function _createHeaders() {
+  function _createHeaders(yarnData) {
 		this.headers = [];
 		
     this.headerGrid = new GridLayout({
@@ -72,7 +72,7 @@ define(function(require, exports, module){
 
     this.caption = new Surface({
       size: [undefined, this.options.captionSize[1]],
-      content: this.options.defaultCaption,
+      content: yarnData.caption,
 			
       properties: {
 				lineHeight: this.options.captionSize[1] + 'px',
@@ -121,7 +121,7 @@ define(function(require, exports, module){
 			this.photoCount++;
 			
 	    var newPhoto = new ImageSurface({
-	      size: [150, 150],
+	      size: [125, 150],
 	      content: yarnData.links[i]
 	    });
 			
