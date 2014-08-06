@@ -29,7 +29,7 @@ define(function(require, exports, module) {
     };    
   }
 
-  function NewYarnView(){
+  function AddToYarn(){
     View.apply(this, arguments);
 
     _createTakePictureButton.call(this);
@@ -46,9 +46,9 @@ define(function(require, exports, module) {
     size: [200, true]
   });
 
-  NewYarnView.prototype = Object.create(View.prototype);
-  NewYarnView.prototype.constructor = NewYarnView;
-  NewYarnView.DEFAULT_OPTIONS = {
+  AddToYarn.prototype = Object.create(View.prototype);
+  AddToYarn.prototype.constructor = AddToYarn;
+  AddToYarn.DEFAULT_OPTIONS = {
     getPictureMsg: 'Get Picture',
     takePictureMsg: 'Take Picture'    
   };
@@ -200,6 +200,6 @@ define(function(require, exports, module) {
   }
 
 
-  module.exports = NewYarnView;
+  module.exports = AddToYarn;
 
 });

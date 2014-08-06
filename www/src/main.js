@@ -18,21 +18,25 @@ define(function(require, exports, module) {
     eventTarget: masterController.eventInput
   });
 
-  masterController.eventInput.on('FeedClick', function(){
+  masterController.eventInput.on('GoFeed', function(){
     console.log('hi Feed');
     layout.renderController.show(layout.feedView);
   });
-  masterController.eventInput.on('New YarnClick', function(){
+  masterController.eventInput.on('GoNew Yarn', function(){
     console.log('hi New Yarn');
     layout.renderController.show(layout.newYarnView);
   });
-  masterController.eventInput.on('ProfileClick', function(){
+  masterController.eventInput.on('GoProfile', function(){
     console.log('hi Profile');
     layout.renderController.show(layout.profileView);
   });
-  masterController.eventInput.on('YarnClick', function(){
+  masterController.eventInput.on('GoYarn', function(){
     console.log('hi Yarn');
     layout.renderController.show(layout.yarnView);
+  });
+  masterController.eventInput.on('GoAddToYarn', function(){
+    console.log('hi Add To Yarn');
+    layout.renderController.show(layout.addToYarnView);
   });
 
   mainContext.add(layout);
