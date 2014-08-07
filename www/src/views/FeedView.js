@@ -35,7 +35,7 @@ define(function(require, exports, module){
 		var that = this;
     $.ajax({
 			type: 'GET',
-    	url: 'http://photoyarn.azurewebsites.net/yarns',
+    	url: 'http://photoyarn.azurewebsites.net/getAllYarns',
 			success: function (data) {
 				_createFeedEntriesFromServer.call(this, data);
 			}.bind(this),

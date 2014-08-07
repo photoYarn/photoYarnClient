@@ -12,6 +12,40 @@ html {
 	font-size: 30px;
 }
 
+.FeedEntryDivider {
+	/* fallback */
+  background-color: #CCC;
+  background: url(images/linear_bg_2.png);
+  background-repeat: repeat-x;
+
+  /* Safari 4-5, Chrome 1-9 */
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#CCC), to(#000));
+
+  /* Safari 5.1, Chrome 10+ */
+  background: -webkit-linear-gradient(top, #000, #CCC);
+
+  /* Firefox 3.6+ */
+  background: -moz-linear-gradient(top, #000, #CCC);
+
+  /* IE 10 */
+  background: -ms-linear-gradient(top, #000, #CCC);
+
+  /* Opera 11.10+ */
+  background: -o-linear-gradient(top, #000, #CCC);
+}
+
+.FeedEntryCaption {
+	color: #777;
+	font: 15px Georgia, sans-serif;
+	font-weight:bold;
+	margin-left: 5px;
+}
+
+.FeedEntryPhoto {
+	border-radius: 5px;
+	margin-left: 10px;
+}
+
 .salmonBG{
   background-color: #FF6138;
 }
