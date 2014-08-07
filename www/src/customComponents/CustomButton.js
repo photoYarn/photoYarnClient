@@ -13,17 +13,18 @@ define(function(require, exports, module) {
   CustomButton.prototype = Object.create(View.prototype);
   CustomButton.prototype.constructor = CustomButton;
   CustomButton.DEFAULT_OPTIONS = {
-    textAlign: 'center',
     align: [0.5, 0.5],
     origin: [0.5, 0.5],
-    eventTarget: null,
-    lineHeight: '50px'
+    // TODO review new structure
+    // eventTarget: null,
+    lineHeight: '50px',
+    textAlign: 'center',
   };
 
   function _createRootNode(){
     this.rootModifier = new Modifier({
       align: this.options.align,
-      origin: this.options.origin
+      origin: this.options.origin,
     });
 
     this.rootNode = this.add(this.rootModifier);
@@ -35,19 +36,20 @@ define(function(require, exports, module) {
       classes: this.options.classes,
       properties: {
         lineHeight: this.options.lineHeight,
-        textAlign: this.options.textAlign
-      }
+        textAlign: this.options.textAlign,
+      },
     });
 
-    this.button.pipe(this.options.eventTarget);
+    // TODO review new structure
+    // this.button.pipe(this.options.eventTarget);
 
-    this.button.on('click', function(){
-      this.button.emit('Go' + this.options.name);
-    }.bind(this));
+    // TODO review new structure
+    // this.button.on('click', function(){
+    //   this.button.emit('Go' + this.options.name);
+    // }.bind(this));
 
     this.rootNode.add(this.button);
   }
 
   module.exports = CustomButton;
-
 });
