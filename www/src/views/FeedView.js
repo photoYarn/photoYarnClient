@@ -46,11 +46,13 @@ define(function(require, exports, module){
           if(index){
             console.log(i, 'Entry photoCount', this.entries[index].photoCount);
           }
-          if(!tempCache[data[i]._id]){
+          if(tempCache[data[i]._id] === undefined){
             console.log('New item found!');
+            console.log(tempCache);
             console.log(data[i]);
             //Need to add data[i] to sequence now!
             var newerEntryView = new FeedEntryView({eventTarget: this.options.eventTarget}, data[i]);
+            tempCache[data[i]._id] = this.entries.length;
             newerEntryView.pipe(this.feed);
             this.entries.push(newerEntryView);
           }
