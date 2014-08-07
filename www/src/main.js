@@ -39,7 +39,7 @@ define(function(require, exports, module) {
 		console.log("data passed into GoAddToYarn listener", data);
     layout.renderController.show(layout.addToYarnView);
   });
-
+  
   mainContext.add(layout);
 
 });

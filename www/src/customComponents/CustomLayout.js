@@ -110,11 +110,11 @@ define(function(require, exports, module) {
       eventTarget: this.options.eventTarget
     }));
 
-    this.buttons.push(new CustomButton({
-      name: 'Yarn',
-      classes: ['customButton', 'lightgreenBG'],
-      eventTarget: this.options.eventTarget
-    }));
+    // this.buttons.push(new CustomButton({
+    //   name: 'Yarn',
+    //   classes: ['customButton', 'lightgreenBG'],
+    //   eventTarget: this.options.eventTarget
+    // }));
 
     this.buttons.push(new CustomButton({
       name: 'AddToYarn',
@@ -124,7 +124,7 @@ define(function(require, exports, module) {
 
 
     this.buttonGrid = new GridLayout({
-      dimensions: [5,1]
+      dimensions: [4,1]
     });
     
     this.buttonGrid.sequenceFrom(this.buttons);
