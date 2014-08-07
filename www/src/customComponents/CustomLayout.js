@@ -9,7 +9,7 @@ define(function(require, exports, module) {
   var GridLayout = require('famous/views/GridLayout');
   var RenderController = require('famous/views/RenderController');
 
-  //custom views
+  // RenderController views
   var NewYarnView = require('views/NewYarnView');
   var FeedView = require('views/FeedView');
 	var ProfileView = require('views/ProfileView');
@@ -26,6 +26,7 @@ define(function(require, exports, module) {
     _createContent.call(this);
     _createHeader.call(this);
     _createFooter.call(this);
+    _setListeners.call(this);
   }
 
   CustomLayout.prototype = Object.create(HeaderFooterLayout.prototype);
@@ -49,9 +50,9 @@ define(function(require, exports, module) {
     var centerModifier = new Modifier({
       origin: [0, 0],
     });
+
    //  this.feedView = new FeedView({
    //    message: 'custom feed view',
-			// eventTarget: this.options.eventTarget
    //   });
 
     this.newYarnView = new NewYarnView({
@@ -92,49 +93,68 @@ define(function(require, exports, module) {
 
   //Layout Footer
   function _createFooter(){
-
+    // initialize vars
     this.buttons = [];
+    this.buttonRefs = {};
 
-    this.buttons.push(new CustomButton({
+    // create buttons
+    this.buttonRefs.viewFeed = new CustomButton({
       name: 'Feed',
       classes: ['customButton', 'lightgreenBG'],
-      eventTarget: this.options.eventTarget
-    }));
+    });
+    this.buttons.push(this.buttonRefs.viewFeed);
 
-    this.buttons.push(new CustomButton({
+    this.buttonRefs.createYarn = new CustomButton({
       name: 'New Yarn',
       classes: ['customButton', 'lightgreenBG'],
-      eventTarget: this.options.eventTarget
-    }));
+    });
+    this.buttons.push(this.buttonRefs.createYarn);
 
-    this.buttons.push(new CustomButton({
+    this.buttonRefs.viewProfile = new CustomButton({
       name: 'Profile',
       classes: ['customButton', 'lightgreenBG'],
-      eventTarget: this.options.eventTarget
-    }));
+    });
+    this.buttons.push(this.buttonRefs.viewProfile);
 
-    // this.buttons.push(new CustomButton({
-    //   name: 'Yarn',
-    //   classes: ['customButton', 'lightgreenBG'],
-    //   eventTarget: this.options.eventTarget
-    // }));
-
-    this.buttons.push(new CustomButton({
+    this.buttonRefs.addToYarn = new CustomButton({
       name: 'AddToYarn',
       classes: ['customButton', 'lightgreenBG'],
-      eventTarget: this.options.eventTarget
-    }));
+    });
+    this.buttons.push(this.buttonRefs.addToYarn);
 
-
+    // create grid layout for buttons
     this.buttonGrid = new GridLayout({
       dimensions: [4,1]
     });
-    
     this.buttonGrid.sequenceFrom(this.buttons);
 
+    // add gridded buttons to layout
     this.footer.add(this.buttonGrid);
   }
 
+  // associate buttons listeners to corresponding content views
+  function _setListeners() {
+    this.buttonRefs.viewFeed.on('click', function() {
+      console.log('hi Feed');
+      this.renderController.show(this.testFeed);
+    }.bind(this));
+
+    this.buttonRefs.createYarn.on('click', function() {
+      console.log('hi New Yarn');
+      this.renderController.show(this.newYarnView);
+    }.bind(this));
+
+    this.buttonRefs.viewProfile.on('click', function() {
+      console.log('hi Profile');
+      this.renderController.show(this.profileView);
+    }.bind(this));
+
+    this.buttonRefs.addToYarn.on('click', function(data) {
+      console.log('hi Add To Yarn');
+      console.log("data passed into GoAddToYarn listener", data);
+      this.renderController.show(this.addToYarnView);
+    }.bind(this));
+  }
 
   module.exports = CustomLayout;
 });
