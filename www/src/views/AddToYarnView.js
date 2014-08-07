@@ -4,23 +4,21 @@ define(function(require, exports, module) {
   var Surface = require('famous/core/Surface');
   var StateModifier = require('famous/modifiers/StateModifier');
   var ImageSurface = require('famous/surfaces/ImageSurface');
-  var InputSurface = require('famous/surfaces/InputSurface');
   var Transform = require('famous/core/Transform');
 
-  var captionData = '';
-  var mongoData;
   var catGif = 'http://37.media.tumblr.com/35e8d0682251fa96580100ea6a182e13/tumblr_mst9derOy01re0m3eo1_r12_500.gif';
-
+  var serverRequests = require('src/services/serverRequests.js');
 
   //Need some sort of yarnId and preset caption to post to /photo
   //expecting yarnId and image link _id from post to DB!
   var yarnData = {
     yarnId : '53e269fe608875500746d30a', //string 
     link: 'http://37.media.tumblr.com/35e8d0682251fa96580100ea6a182e13/tumblr_mst9derOy01re0m3eo1_r12_500.gif', //string,
-  };
+  };  
 
   if(navigator.camera){
     var takePictureOptions = {
+      quality: 25,
       destinationType : Camera.DestinationType.DATA_URL,
       sourceType : Camera.PictureSourceType.CAMERA,
       correctOrientation: true,
@@ -29,6 +27,7 @@ define(function(require, exports, module) {
     };
 
     var getPictureOptions = {
+      quality: 25,
       destinationType : Camera.DestinationType.DATA_URL,
       sourceType : Camera.PictureSourceType.PHOTOLIBRARY,
       correctOrientation: true,
@@ -87,7 +86,7 @@ define(function(require, exports, module) {
 
     this.sendButton.on('click', function(){
       pictureFrame.setContent(catGif);
-      postToServer(yarnData);
+      serverRequests.postPhotoToServerYarn(yarnData);
     }.bind(this));
 
   }
@@ -143,55 +142,13 @@ define(function(require, exports, module) {
 
   function onCameraSuccess(data){
     pictureFrame.setContent('data:image/jpeg;base64,' + data);
-    postToImgur(data);
+    serverRequests.postToImgur(data, yarnData);
+    console.log(yarnData);
   }
 
   function onCameraFail(error){
-    console.log('!!!!!!!!!!!!!Error:', error);
+    console.log('Camera Error:', error);
   }
-
-  function postToImgur(data){
-    $.ajax({
-      type: 'POST',
-      url: 'https://api.imgur.com/3/upload',
-      headers: {
-        Authorization: 'Client-ID ' + 'ef774ae96ae304c',
-      },
-      data: {
-        image: data,
-        title: 'New Picture'
-      },
-      success: function (res) {
-        console.log('Post to Imgur Success!');
-        console.log(res.data);
-        yarnData.link = res.data.link;
-      },
-      error: function (error, res) {
-        console.log('post error', error);
-        console.log('post response', res);
-      }
-    });
-  }
-
-  function postToServer(data){
-    $.ajax({
-      type: 'POST',
-      url: 'http://photoyarn.azurewebsites.net/photo',
-      data: {
-        yarnId: data.yarnId,
-        link: data.link
-      },
-      success: function(res){
-        console.log('Post to Mongo Success!', res);
-      },
-      error: function(error, res){
-        console.log('post to mongo err', error);
-        console.log('post error res', res);
-      }
-    });
-  }
-
 
   module.exports = AddToYarn;
-
 });
