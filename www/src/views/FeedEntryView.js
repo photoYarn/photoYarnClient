@@ -20,6 +20,7 @@ define(function(require, exports, module){
 		_createBackground.call(this);
     _createPhotos.call(this, yarnData);
     _createHeaders.call(this, yarnData);
+		_createDividers.call(this);
 		_setListeners.call(this, yarnData);
   }
 
@@ -30,9 +31,11 @@ define(function(require, exports, module){
 		entrySize: [undefined, 175],
 		defaultCaption: 'This is the default caption',
 		captionSize: [undefined, 25],
-		photoSize: [150, 150],
+		photoSize: [100, 125],
 		textAlign: 'center',
-		entryButtonSize: [100, 25]
+		entryButtonSize: [100, 25],
+		dividerHeight: 1,
+		photoPadding: 10
   }
 
   // create root modifier node
@@ -60,23 +63,14 @@ define(function(require, exports, module){
   }
 	
   function _createHeaders(yarnData) {
-		this.headers = [];
-		
-    this.headerGrid = new GridLayout({
-      dimensions: [2, 1]
-		});
-    
-    this.headerGrid.sequenceFrom(this.headers);
-		
-		var captionView = new View();
-
     this.caption = new Surface({
-      size: [undefined, this.options.captionSize[1]],
+      size: [window.innerWidth - this.options.entryButtonSize[0], this.options.captionSize[1]],
       content: yarnData.caption,
-			
+			classes: ['FeedEntryCaption'],
       properties: {
 				lineHeight: this.options.captionSize[1] + 'px',
-				backgroundColor: '#BBB'
+				backgroundColor: '#DDD',
+				
       }
     });
 		
@@ -84,11 +78,6 @@ define(function(require, exports, module){
 			align: [0,0],
 			origin: [0,0]
 		});
-
-		captionView.add(captionModifier).add(this.caption);
-		this.headers.push(captionView);
-		
-		var buttonView = new View();
 
 		this.entryButton = new Surface({
 	  	size: [this.options.entryButtonSize[0], this.options.entryButtonSize[1]],
@@ -106,26 +95,34 @@ define(function(require, exports, module){
 			origin: [1,0]
 		});
 		
-		buttonView.add(entryButtonModifier).add(this.entryButton);
-		this.headers.push(buttonView);
+		this.rootNode.add(entryButtonModifier).add(this.entryButton);
 
-		this.rootNode.add(this.headerGrid);
+		this.rootNode.add(captionModifier).add(this.caption);
   }
 	
   function _createPhotos(yarnData) {
     this.photos = [];
     var photoRow = new ScrollContainer();
 		
-		console.log("yarnData", yarnData);
     for (var i = 0; i < yarnData.links.length; i++) {
 			this.photoCount++;
 			
 	    var newPhoto = new ImageSurface({
-	      size: [125, 150],
-	      content: yarnData.links[i]
+	      size: [this.options.photoSize[0], this.options.photoSize[1]],
+	      content: yarnData.links[i],
+				classes: ['FeedEntryPhoto']
 	    });
 			
       this.photos.push(newPhoto);
+			
+			if (i < yarnData.links.length - 1) {
+		    var padding = new Surface({
+		      size: [this.options.photoPadding, this.options.photoSize[1]]
+		    });
+				
+				this.photos.push(padding);
+				padding.pipe(this._eventOutput);
+			}
 
 			// pipe photo surface to container view
 			newPhoto.pipe(this._eventOutput);
@@ -134,7 +131,7 @@ define(function(require, exports, module){
 		
 		var photoRowModifier = new Modifier({
 			size: [undefined, this.options.photoSize[1]],
-			align: [0, 1],
+			align: [0, 0.9],
 			origin: [0, 1]
 		});
 		
@@ -143,9 +140,24 @@ define(function(require, exports, module){
 
     this.rootNode.add(photoRowModifier).add(photoRow);
   }
+	
+  function _createDividers() {
+    this.divider = new Surface({
+			size: [undefined, this.options.dividerHeight],
+			classes: ['FeedEntryDivider']
+    });
+		
+		var dividerModifier = new Modifier({
+			align: [0,1],
+			origin: [0,1]
+		});
+		
+    this.rootNode.add(dividerModifier).add(this.divider);
+
+  }
 
 	function _setListeners(yarnData) {
-		this.headerGrid.pipe(this._eventOutput);
+		// this.headerGrid.pipe(this._eventOutput);
 		this.caption.pipe(this._eventOutput);
 		this.entryButton.pipe(this._eventOutput);
 		this.background.pipe(this._eventOutput);
