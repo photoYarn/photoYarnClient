@@ -15,8 +15,6 @@ define(function(require, exports, module) {
   CustomButton.DEFAULT_OPTIONS = {
     align: [0.5, 0.5],
     origin: [0.5, 0.5],
-    // TODO review new structure
-    // eventTarget: null,
     lineHeight: '50px',
     textAlign: 'center',
   };
@@ -40,13 +38,9 @@ define(function(require, exports, module) {
       },
     });
 
-    // TODO review new structure
-    // this.button.pipe(this.options.eventTarget);
-
-    // TODO review new structure
-    // this.button.on('click', function(){
-    //   this.button.emit('Go' + this.options.name);
-    // }.bind(this));
+    this.button.on('click', function() {
+      this._eventOutput.emit('click');
+    }.bind(this));
 
     this.rootNode.add(this.button);
   }
