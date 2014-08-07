@@ -9,7 +9,7 @@ define(function(require, exports, module) {
 
   var serverRequests = require('src/services/serverRequests.js');
 
-
+  
 
   //Variables used by this view
   var captionData = '';

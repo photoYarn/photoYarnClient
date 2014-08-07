@@ -14,7 +14,7 @@ define(function(require, exports, module){
   function FeedView(){
     View.apply(this, arguments);
 		
-		_getFeeds.call(this);
+		this._getFeeds();
 		
     _createRootNode.call(this);
 		_createBackground.call(this);
@@ -31,7 +31,8 @@ define(function(require, exports, module){
 		entryHeight: 175
   }
 	
-	function _getFeeds() {
+	FeedView.prototype._getFeeds = function() {
+    console.log('Get Feeds Called!');
 		var that = this;
     $.ajax({
 			type: 'GET',
@@ -58,7 +59,7 @@ define(function(require, exports, module){
 			// 	console.log("error", error);
 			// }
 			//     });
-	}
+	};
 	
   function _createBackground() {
     this.background = new Surface({
