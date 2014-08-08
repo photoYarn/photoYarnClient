@@ -36,7 +36,6 @@ define(function(require, exports, module) {
     headerSize: 75,
     footerSize: 50,
     origin: [0, 0],
-    eventTarget: null
   };
 
   //Layout Content
@@ -70,7 +69,6 @@ define(function(require, exports, module) {
     this.testFeed = new TestFeed({
       direction: 1,
       margin: 10000,
-    });
     
     this.renderController = new RenderController();
     this.content.add(centerModifier).add(this.renderController);
@@ -126,8 +124,8 @@ define(function(require, exports, module) {
     this.footer.add(this.buttonGrid);
   }
 
-  // associate buttons listeners to corresponding content views
   function _setListeners() {
+    // associate nav button events to corresponding content views
     this.buttonRefs.viewFeed.on('click', function() {
       console.log('hi Feed');
       this.renderController.show(this.testFeed);

@@ -8,6 +8,7 @@ define(function(require, exports, module) {
     View.apply(this, arguments);
     _createRootNode.call(this);
     _createButton.call(this);
+    _setListeners.call(this);
   }
 
   CustomButton.prototype = Object.create(View.prototype);
@@ -38,11 +39,13 @@ define(function(require, exports, module) {
       },
     });
 
+    this.rootNode.add(this.button);
+  }
+
+  function _setListeners() {
     this.button.on('click', function() {
       this._eventOutput.emit('click');
     }.bind(this));
-
-    this.rootNode.add(this.button);
   }
 
   module.exports = CustomButton;
