@@ -40,6 +40,8 @@ define(function(require, exports, module) {
 
   //Layout Content
   function _createContent(){
+
+    // console.log(this.options.serverRequests);
     //famo.us logo because famo.us is cool!
     var logo = new ImageSurface({
       size: [200, 200],
@@ -56,20 +58,27 @@ define(function(require, exports, module) {
    //   });
 
     this.newYarnView = new NewYarnView({
-      message: 'custom new yarn view'
+      message: 'custom new yarn view',
+      serverRequests: this.options.serverRequests
     });
 		
     this.profileView = new ProfileView({
-      message: 'custom profile view'
+      message: 'custom profile view',
+      serverRequests: this.options.serverRequests
     });
 
-    this.yarnView = new YarnView({});
+    this.yarnView = new YarnView({
+      serverRequests: this.options.serverRequests
+    });
 
-    this.addToYarnView = new AddToYarnView({});
+    this.addToYarnView = new AddToYarnView({
+      serverRequests: this.options.serverRequests
+    });
 
     this.testFeed = new TestFeed({
       direction: 1,
       margin: 10000,
+      serverRequests: this.options.serverRequests
     });
 
     this.renderController = new RenderController();
