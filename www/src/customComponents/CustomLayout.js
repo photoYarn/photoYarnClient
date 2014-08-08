@@ -48,6 +48,7 @@ define(function(require, exports, module) {
       var init = function(params) {
           if (params.appId) {
               appId = params.appId;
+              console.log('init called, appId', appId)
           } else {
               throw 'appId param not set';
           }
@@ -64,44 +65,21 @@ define(function(require, exports, module) {
           var loginWindow;
           var startTime;
 
-          var loginWindowLoadHandler = function() {
-              // var url = event.url;
-              console.log('im in the inapp browser')
-              loginWindow.close();
-              // if (url.indexOf('access_token') !== -1 || url.indexOf('error') !== -1) {
-              //     var timeout = 600 - (new Date().getTime() - startTime);
-              //     setTimeout(function () {
-              //       loginWindow.close();
-              //     }, timeout > 0 ? timeout : 0);
-              //     oauthCallback(url);
-              // }
-          };
-
-          // var loginWindowExitHandler = function() {
-          //     loginWindow.removeEventListener('loadstart', loginWindowLoadHandler);
-          //     loginWindow.removeEventListener('exit', loginWindowExitHandler);
-          // };
-
           loginCallback = callback;
           loginProcessed = false;
           if (runningInCordova) {
+            console.log('yo im running in cordova')
             oauthRedirectURL = 'https://www.facebook.com/connect/login_success.html';
-            // console.log('runningInCordova =====================================================')
           }
 
-          startTime = new Date().getTime();
           loginWindow = window.open(FB_LOGIN_URL + '?client_id=' + appId + '&redirect_uri=' + oauthRedirectURL +
                       '&response_type=token&scope=public_profile', '_blank', 'location=no');
 
           if (runningInCordova) {
-              // tokenStore = window.LocalStorage;
-              // loginWindow.addEventListener('loadstart', loginWindowLoadHandler);
-              console.log('im al;sdkfjals;kdfjlak;sdfjl;ksjfl;j')
-              loginWindow.addEventListener('loadstop', function() {
-                alert('hiiiiiii')
+              loginWindow.addEventListener('loadstart', function() {
+                console.log('hiiiiiii')
                 loginWindow.close();
               });
-              // loginWindow.addEventListener('exit', loginWindowExitHandler);
           }
 
       };
