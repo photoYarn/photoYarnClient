@@ -53,9 +53,10 @@ define(function(require, exports, module) {
       align: [0.5, 0.5]
     });
 
-   //  this.feedView = new FeedView({
-   //    message: 'custom feed view',
-   //   });
+    this.feedView = new FeedView({
+      message: 'custom feed view',
+			eventTarget: this.options.eventTarget
+     });
 
     this.newYarnView = new NewYarnView({
       message: 'custom new yarn view',
@@ -75,12 +76,11 @@ define(function(require, exports, module) {
       serverRequests: this.options.serverRequests
     });
 
-    this.testFeed = new TestFeed({
-      direction: 1,
-      margin: 10000,
-      serverRequests: this.options.serverRequests
-    });
-
+    // this.testFeed = new TestFeed({
+    //   direction: 1,
+    //   margin: 10000,
+    // });
+    
     this.renderController = new RenderController();
     this.content.add(centerModifier).add(this.renderController);
     this.renderController.show(logo);

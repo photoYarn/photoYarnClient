@@ -29,10 +29,11 @@ define(function(require, exports, module){
   FeedEntryView.prototype.constructor = FeedEntryView;
 	
   FeedEntryView.DEFAULT_OPTIONS = {
-		entrySize: [undefined, 175],
+		entrySize: [undefined, 125],
 		defaultCaption: 'This is the default caption',
 		captionSize: [undefined, 25],
-		photoSize: [100, 125],
+		photosToShow: 5,
+		photoSize: [50, 67],
 		textAlign: 'center',
 		entryButtonSize: [100, 25],
 		dividerHeight: 1,
@@ -82,7 +83,7 @@ define(function(require, exports, module){
 
 		this.entryButton = new Surface({
 	  	size: [this.options.entryButtonSize[0], this.options.entryButtonSize[1]],
-			content: this.photoCount + ' photos ' + '\u2794',
+			content: yarnData.links.length + ' photos ' + '\u2794',
       properties: {
 				backgroundColor: '#FF6138',
         lineHeight: this.options.captionSize[1] + 'px',
@@ -103,22 +104,21 @@ define(function(require, exports, module){
 	
   function _createPhotos(yarnData) {
     this.photos = [];
-    this.photoRow = new Scrollview({
-      direction: 0
-    });
 		
-    for (var i = 0; i < yarnData.links.length; i++) {
-			this.photoCount++;
+    for (var i = 0; i < yarnData.links; i++) {
 			
 	    var newPhoto = new ImageSurface({
 	      size: [this.options.photoSize[0], this.options.photoSize[1]],
 	      content: yarnData.links[i],
-				classes: ['FeedEntryPhoto']
+				classes: ['FeedEntryPhoto'],
+				properties: {
+					backgroundColor: '#CCC'
+				}
 	    });
 			
       this.photos.push(newPhoto);
 			
-			if (i < yarnData.links.length - 1) {
+			if (i < yarnData.links.length) {
 		    var padding = new Surface({
 		      size: [this.options.photoPadding, this.options.photoSize[1]]
 		    });
@@ -126,23 +126,60 @@ define(function(require, exports, module){
 				this.photos.push(padding);
 				padding.pipe(this._eventOutput);
 			}
+			
+			var photoModifier = new Modifier({
+				align: [i * (this.options.photoSize[0] + this.options.photoPadding) / window.innerWidth , 0.9],
+				origin: [0, 1]
+			});
+			
+			this.rootNode.add(photoModifier).add(newPhoto);
 
-			// pipe photo surface to container view
 			newPhoto.pipe(this._eventOutput);
-			newPhoto.pipe(this.photoRow);
     }
-		
-		var photoRowModifier = new Modifier({
-			size: [undefined, this.options.photoSize[1]],
-			align: [0, 0.9],
-			origin: [0, 1]
-		});
-		
-    this.photoRow.sequenceFrom(this.photos);
-		this.photoRow.pipe(this._eventOutput);
-
-    this.rootNode.add(photoRowModifier).add(this.photoRow);
   }
+	
+  // function _createPhotos(yarnData) {
+  //   this.photos = [];
+  //   this.photoRow = new Scrollview({
+  //     direction: 0
+  //   });
+  //
+  //   for (var i = 0; i < yarnData.links.length; i++) {
+  // 			this.photoCount++;
+  //
+  // 	    var newPhoto = new ImageSurface({
+  // 	      size: [this.options.photoSize[0], this.options.photoSize[1]],
+  // 	      content: yarnData.links[i],
+  // 				classes: ['FeedEntryPhoto']
+  // 	    });
+  //
+  //     this.photos.push(newPhoto);
+  //
+  // 			if (i < yarnData.links.length - 1) {
+  // 		    var padding = new Surface({
+  // 		      size: [this.options.photoPadding, this.options.photoSize[1]]
+  // 		    });
+  //
+  // 				this.photos.push(padding);
+  // 				padding.pipe(this._eventOutput);
+  // 			}
+  //
+  // 			// pipe photo surface to container view
+  // 			newPhoto.pipe(this._eventOutput);
+  // 			newPhoto.pipe(this.photoRow);
+  //   }
+  //
+  // 		var photoRowModifier = new Modifier({
+  // 			size: [undefined, this.options.photoSize[1]],
+  // 			align: [0, 0.9],
+  // 			origin: [0, 1]
+  // 		});
+  //
+  //   this.photoRow.sequenceFrom(this.photos);
+  // 		this.photoRow.pipe(this._eventOutput);
+  //
+  //   this.rootNode.add(photoRowModifier).add(this.photoRow);
+  // }
 	
   function _createDividers() {
     this.divider = new Surface({
