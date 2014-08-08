@@ -72,18 +72,25 @@ define(function(require, exports, module) {
             oauthRedirectURL = 'https://www.facebook.com/connect/login_success.html';
           }
 
+          startTime = new Date().getTime(); 
           loginWindow = window.open(FB_LOGIN_URL + '?client_id=' + appId + '&redirect_uri=' + oauthRedirectURL +
                       '&response_type=token&scope=public_profile', '_blank', 'location=no');
 
           if (runningInCordova) {
               loginWindow.addEventListener('loadstart', function() {
                 console.log('in loadstart')
-                loginWindow.close();
+                var timeout = 600 - (new Date().getTime() - startTime);
+                setTimeout(function () {
+                    loginWindow.close();
+                }, timeout > 0 ? timeout : 0);
               });
 
               loginWindow.addEventListener('loadstop', function() {
                 console.log('in loadstop');
-                loginWindow.close();
+                var timeout = 600 - (new Date().getTime() - startTime);
+                setTimeout(function () {
+                    loginWindow.close();
+                }, timeout > 0 ? timeout : 0);
               })
           }
 
