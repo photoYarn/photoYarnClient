@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 
   //custom tools
   var CustomLayout = require('customComponents/CustomLayout');
-  var serverReqs = require('services/serverReqs');
+  var serverReqs = require('services/serverRequests');
 
 
   //Creating Layout
