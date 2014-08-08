@@ -73,12 +73,14 @@ define(function(require, exports, module) {
           var loginWindow;
           loginCallback = callback;
           loginProcessed = false;
-
+          if (runningInCordova) {
+            oauthRedirectURL = 'https://www.facebook.com/connect/login_success.html';
+            console.log('runningInCordova =====================================================')
+          }
           loginWindow = window.open(FB_LOGIN_URL + '?client_id=' + appId + '&redirect_uri=' + oauthRedirectURL +
                       '&response_type=token&scope=public_profile', '_blank', 'location=no');
 
           if (runningInCordova) {
-              oauthRedirectURL = 'https://www.facebook.com/connect/login_success.html';
               tokenStore = window.LocalStorage;
               loginWindow.addEventListener('loadstart', loginWindowLoadHandler);
               loginWindow.addEventListener('exit', loginWindowExitHandler);
