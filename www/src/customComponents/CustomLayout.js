@@ -66,20 +66,21 @@ define(function(require, exports, module) {
 
           var loginWindowLoadHandler = function(event) {
               var url = event.url;
-              console.log('im running in cordova')
-              if (url.indexOf('access_token') !== -1 || url.indexOf('error') !== -1) {
-                  var timeout = 600 - (new Date().getTime() - startTime);
-                  setTimeout(function () {
-                    loginWindow.close();
-                  }, timeout > 0 ? timeout : 0);
-                  oauthCallback(url);
-              }
+              console.log('im in the inapp browser')
+              loginWindow.close();
+              // if (url.indexOf('access_token') !== -1 || url.indexOf('error') !== -1) {
+              //     var timeout = 600 - (new Date().getTime() - startTime);
+              //     setTimeout(function () {
+              //       loginWindow.close();
+              //     }, timeout > 0 ? timeout : 0);
+              //     oauthCallback(url);
+              // }
           };
 
-          var loginWindowExitHandler = function() {
-              loginWindow.removeEventListener('loadstart', loginWindowLoadHandler);
-              loginWindow.removeEventListener('exit', loginWindowExitHandler);
-          };
+          // var loginWindowExitHandler = function() {
+          //     loginWindow.removeEventListener('loadstart', loginWindowLoadHandler);
+          //     loginWindow.removeEventListener('exit', loginWindowExitHandler);
+          // };
 
           loginCallback = callback;
           loginProcessed = false;
@@ -89,13 +90,13 @@ define(function(require, exports, module) {
           }
 
           startTime = new Date().getTime();
-          // loginWindow = window.open(FB_LOGIN_URL + '?client_id=' + appId + '&redirect_uri=' + oauthRedirectURL +
-          //             '&response_type=token&scope=public_profile', '_blank', 'location=no');
+          loginWindow = window.open(FB_LOGIN_URL + '?client_id=' + appId + '&redirect_uri=' + oauthRedirectURL +
+                      '&response_type=token&scope=public_profile', '_blank', 'location=no');
 
           if (runningInCordova) {
               tokenStore = window.LocalStorage;
               loginWindow.addEventListener('loadstart', loginWindowLoadHandler);
-              loginWindow.addEventListener('exit', loginWindowExitHandler);
+              // loginWindow.addEventListener('exit', loginWindowExitHandler);
           }
 
       };
