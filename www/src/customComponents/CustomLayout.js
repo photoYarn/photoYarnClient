@@ -102,29 +102,23 @@ define(function(require, exports, module) {
       name: 'Feed',
       classes: ['customButton', 'lightgreenBG'],
     });
-    this.buttons.push(this.buttonRefs.viewFeed);
-
     this.buttonRefs.createYarn = new CustomButton({
       name: 'New Yarn',
       classes: ['customButton', 'lightgreenBG'],
     });
-    this.buttons.push(this.buttonRefs.createYarn);
-
     this.buttonRefs.viewProfile = new CustomButton({
       name: 'Profile',
       classes: ['customButton', 'lightgreenBG'],
     });
-    this.buttons.push(this.buttonRefs.viewProfile);
-
-    this.buttonRefs.addToYarn = new CustomButton({
-      name: 'AddToYarn',
-      classes: ['customButton', 'lightgreenBG'],
-    });
-    this.buttons.push(this.buttonRefs.addToYarn);
 
     // create grid layout for buttons
+    this.buttons = [
+      this.buttonRefs.viewFeed,
+      this.buttonRefs.createYarn,
+      this.buttonRefs.viewProfile,
+    ];
     this.buttonGrid = new GridLayout({
-      dimensions: [4,1]
+      dimensions: [this.buttons.length, 1]
     });
     this.buttonGrid.sequenceFrom(this.buttons);
 
@@ -147,12 +141,6 @@ define(function(require, exports, module) {
     this.buttonRefs.viewProfile.on('click', function() {
       console.log('hi Profile');
       this.renderController.show(this.profileView);
-    }.bind(this));
-
-    this.buttonRefs.addToYarn.on('click', function(data) {
-      console.log('hi Add To Yarn');
-      console.log("data passed into GoAddToYarn listener", data);
-      this.renderController.show(this.addToYarnView);
     }.bind(this));
   }
 
