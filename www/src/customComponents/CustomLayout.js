@@ -60,13 +60,18 @@ define(function(require, exports, module) {
           if (!appId) {
               callback({status: 'unkonwn', error: 'appId not set'});
           }
+          var loginWindow;
+          var startTime;
 
           var loginWindowLoadHandler = function(event) {
               var url = event.url;
               console.log('im running in cordova')
               if (url.indexOf('access_token') !== -1 || url.indexOf('error') !== -1) {
-                  loginWindow.close();
-                  oauthcallback(url);
+                  var timeout = 600 - (new Date().getTime() - startTime);
+                  setTimeout(function () {
+                    loginWindow.close();
+                  }, timeout > 0 ? timeout : 0);
+                  oauthCallback(url);
               }
           };
 
@@ -75,13 +80,14 @@ define(function(require, exports, module) {
               loginWindow.removeEventListener('exit', loginWindowExitHandler);
           };
 
-          var loginWindow;
           loginCallback = callback;
           loginProcessed = false;
           if (runningInCordova) {
             oauthRedirectURL = 'https://www.facebook.com/connect/login_success.html';
             console.log('runningInCordova =====================================================')
           }
+
+          startTime = new Date().getTime();
           loginWindow = window.open(FB_LOGIN_URL + '?client_id=' + appId + '&redirect_uri=' + oauthRedirectURL +
                       '&response_type=token&scope=public_profile', '_blank', 'location=no');
 
