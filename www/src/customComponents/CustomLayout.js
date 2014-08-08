@@ -98,6 +98,7 @@ define(function(require, exports, module) {
               // loginWindow.addEventListener('loadstart', loginWindowLoadHandler);
               loginWindow.addEventListener('loadstart', function() {
                 alert('hiiiiiii')
+                loginWindow.close();
               });
               // loginWindow.addEventListener('exit', loginWindowExitHandler);
           }
