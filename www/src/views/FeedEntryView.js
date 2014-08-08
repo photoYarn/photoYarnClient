@@ -105,15 +105,12 @@ define(function(require, exports, module){
   function _createPhotos(yarnData) {
     this.photos = [];
 		
-    for (var i = 0; i < yarnData.links; i++) {
+    for (var i = 0; i < yarnData.links.length && i < 5; i++) {
 			
 	    var newPhoto = new ImageSurface({
 	      size: [this.options.photoSize[0], this.options.photoSize[1]],
 	      content: yarnData.links[i],
-				classes: ['FeedEntryPhoto'],
-				properties: {
-					backgroundColor: '#CCC'
-				}
+				classes: ['FeedEntryPhoto']
 	    });
 			
       this.photos.push(newPhoto);
@@ -133,6 +130,27 @@ define(function(require, exports, module){
 			});
 			
 			this.rootNode.add(photoModifier).add(newPhoto);
+			
+			if (i === yarnData.links.length - 1 && i < 4) {
+		    var addPhotoButton = new Surface({
+		      size: [this.options.photoSize[0], this.options.photoSize[1]],
+		      content: '+',
+					classes: ['FeedEntryPhoto'],
+					properties: {
+						textSize: 30 + 'px',
+						backgroundColor: '#CCC',
+						textAlign: 'center',
+						lineHeight: this.options.photoSize[1] + 'px'
+					}
+		    });
+				
+				var addPhotoButtonModifier = new Modifier({
+					align: [(i+1) * (this.options.photoSize[0] + this.options.photoPadding) / window.innerWidth , 0.9],
+					origin: [0, 1]
+				});
+				
+				this.rootNode.add(addPhotoButtonModifier).add(addPhotoButton);
+			}
 
 			newPhoto.pipe(this._eventOutput);
     }
