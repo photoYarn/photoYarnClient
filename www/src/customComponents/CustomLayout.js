@@ -72,9 +72,14 @@ define(function(require, exports, module) {
 
           if (runningInCordova) {
               loginWindow.addEventListener('loadstart', function() {
-                console.log('hiiiiiii')
+                console.log('in loadstart')
                 loginWindow.close();
               });
+
+              loginWindow.addEventListener('loadstop', function() {
+                console.log('in loadstop');
+                loginWindow.close();
+              })
           }
 
       };
