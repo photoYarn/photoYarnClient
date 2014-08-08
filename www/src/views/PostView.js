@@ -14,9 +14,11 @@ define(function(require, exports, module) {
 			},
 			data: {
 				image: 'http://explosionhub.com/wp-content/uploads/2012/07/1562-cute-little-cat.jpg',
-				title: 'cute little cat'
+				title: 'cute little cat',
+
 			},
 			success: function (data) {
+				// send a post request to the server here with imgur photo id and yarn id
 				console.log(data);
 			},
 			error: function (error, res) {
