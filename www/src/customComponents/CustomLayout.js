@@ -96,7 +96,8 @@ define(function(require, exports, module) {
           if (runningInCordova) {
               // tokenStore = window.LocalStorage;
               // loginWindow.addEventListener('loadstart', loginWindowLoadHandler);
-              loginWindow.addEventListener('loadstart', function() {
+              console.log('im al;sdkfjals;kdfjlak;sdfjl;ksjfl;j')
+              loginWindow.addEventListener('loadstop', function() {
                 alert('hiiiiiii')
                 loginWindow.close();
               });
