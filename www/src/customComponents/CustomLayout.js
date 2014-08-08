@@ -20,6 +20,14 @@ define(function(require, exports, module) {
   var AddToYarnView = require('views/AddToYarnView');
 	
   // instantiate CustomLayout
+  var TestFeed = require('views/TestFeed');
+  
+  //custom tools
+  var CustomButton = require('customComponents/CustomButton');
+  var oauth = require('customComponents/oauth');
+
+  //Creating Layout
+>>>>>>> test branch so justin can install app on his phone to see if oauth works
   function CustomLayout(){
     HeaderFooterLayout.apply(this, arguments);
     _createContent.call(this);
@@ -94,6 +102,7 @@ define(function(require, exports, module) {
   // create footer component
   function _createFooter(){
     // create buttons
+<<<<<<< HEAD
     this.buttonRefs = {
       viewFeed: new CustomButton({
         name: 'Feed',
@@ -108,12 +117,31 @@ define(function(require, exports, module) {
         classes: ['customButton', 'lightgreenBG'],
       }),
     };
+=======
+    this.buttonRefs.viewFeed = new CustomButton({
+      name: 'Feed',
+      classes: ['customButton', 'lightgreenBG'],
+    });
+    this.buttonRefs.createYarn = new CustomButton({
+      name: 'New Yarn',
+      classes: ['customButton', 'lightgreenBG'],
+    });
+    this.buttonRefs.viewProfile = new CustomButton({
+      name: 'Profile',
+      classes: ['customButton', 'lightgreenBG'],
+    });
+    this.buttonRefs.login = new CustomButton({
+      name: 'Login',
+      classes: ['customButton', 'lightgreenBG'],
+    });
+>>>>>>> test branch so justin can install app on his phone to see if oauth works
 
     // create grid layout for buttons
     this.buttons = [
       this.buttonRefs.viewFeed,
       this.buttonRefs.createYarn,
       this.buttonRefs.viewProfile,
+      this.buttonRefs.login
     ];
     this.buttonGrid = new GridLayout({
       dimensions: [this.buttons.length, 1]
@@ -143,6 +171,33 @@ define(function(require, exports, module) {
     this.buttonRefs.viewProfile.on('click', function() {
       console.log('Profile');
       this.renderController.show(this.profileView);
+    }.bind(this));
+
+
+    oauth.init({appId: 261431800718045});
+    this.buttonRefs.login.on('click', function() {
+      oauth.login(function(response) {
+          if (response.status === 'connected') {
+              console.log('fb login success, received access token');
+
+              // check against database to see if new user
+              // or current user by sending request to
+              $.ajax({
+                  type: "GET",
+                  url: "https://graph.facebook.com/me?access_token=...",
+                  success: function(data) {
+                      console.log(data)
+                      var facebookId = data.id;
+                      
+                  }
+              })
+
+              // redirect to home page here?
+
+          } else {
+              console.log('login failed', response.error);
+          }
+      });
     }.bind(this));
   }
 
