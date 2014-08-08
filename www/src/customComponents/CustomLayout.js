@@ -18,7 +18,6 @@ define(function(require, exports, module) {
   var ProfileView = require('views/ProfileView');
   var YarnView = require('views/YarnView');
   var AddToYarnView = require('views/AddToYarnView');
-  var TestFeed = require('views/TestFeed');
 	
   // instantiate CustomLayout
   function CustomLayout(){
@@ -128,15 +127,19 @@ define(function(require, exports, module) {
   function _setListeners() {
     // associate nav button events to display content actions
     this.buttonRefs.viewFeed.on('click', function() {
-      console.log('hi Feed');
+      console.log('Feed');
       this.renderController.show(this.feedView);
+      this.options.serverRequests.updateData();
+      // TODO reintegrate update event when testFeed switched to main feed
+      // this.feedView.trigger('update');
+
     }.bind(this));
     this.buttonRefs.createYarn.on('click', function() {
-      console.log('hi New Yarn');
+      console.log('New Yarn');
       this.renderController.show(this.newYarnView);
     }.bind(this));
     this.buttonRefs.viewProfile.on('click', function() {
-      console.log('hi Profile');
+      console.log('Profile');
       this.renderController.show(this.profileView);
     }.bind(this));
   }
