@@ -2,6 +2,8 @@ define(function(require, exports, module) {
   'use strict';
   var serverRequests = {};
 
+  var serverData = {};
+
   serverRequests.postToImgur = function(data, target){
    $.ajax({
       type: 'POST',
