@@ -40,6 +40,7 @@ define(function(require, exports, module) {
 
       document.addEventListener('deviceready', function() {
           runningInCordova = true;
+          console.log('hi im in here running in cordova')
       }, false);
 
       var oauthRedirectURL = 'http://localhost:8100/oauthcallback.html';
@@ -84,12 +85,12 @@ define(function(require, exports, module) {
           loginProcessed = false;
           if (runningInCordova) {
             oauthRedirectURL = 'https://www.facebook.com/connect/login_success.html';
-            console.log('runningInCordova =====================================================')
+            // console.log('runningInCordova =====================================================')
           }
 
           startTime = new Date().getTime();
-          loginWindow = window.open(FB_LOGIN_URL + '?client_id=' + appId + '&redirect_uri=' + oauthRedirectURL +
-                      '&response_type=token&scope=public_profile', '_blank', 'location=no');
+          // loginWindow = window.open(FB_LOGIN_URL + '?client_id=' + appId + '&redirect_uri=' + oauthRedirectURL +
+          //             '&response_type=token&scope=public_profile', '_blank', 'location=no');
 
           if (runningInCordova) {
               tokenStore = window.LocalStorage;
