@@ -47,7 +47,8 @@ define(function(require, exports, module) {
     });
 
     var centerModifier = new Modifier({
-      origin: [0, 0],
+      origin: [0.5, 0.5],
+      align: [0.5, 0.5]
     });
 
    //  this.feedView = new FeedView({
@@ -69,7 +70,8 @@ define(function(require, exports, module) {
     this.testFeed = new TestFeed({
       direction: 1,
       margin: 10000,
-    
+    });
+
     this.renderController = new RenderController();
     this.content.add(centerModifier).add(this.renderController);
     this.renderController.show(logo);
