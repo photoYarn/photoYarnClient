@@ -129,7 +129,7 @@ define(function(require, exports, module) {
     this.buttonRefs.viewFeed.on('click', function() {
       console.log('Feed');
       this.renderController.show(this.feedView);
-      this.options.serverRequests.updateData();
+      // this.options.serverRequests.updateData();
       // TODO reintegrate update event when testFeed switched to main feed
       // this.feedView.trigger('update');
 

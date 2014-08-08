@@ -9,8 +9,6 @@ define(function(require, exports, module){
   var GridLayout = require('famous/views/GridLayout');
   var Scrollview = require('famous/views/Scrollview');
 	
-	var FeedEntryCaptionView = require('views/FeedEntryCaptionView');
-	var FeedEntryPhotoView = require('views/FeedEntryPhotoView');
 
   function FeedEntryView(options, yarnData){
     View.apply(this, arguments);
@@ -38,7 +36,7 @@ define(function(require, exports, module){
 		entryButtonSize: [100, 25],
 		dividerHeight: 1,
 		photoPadding: 10
-  }
+  };
 
   // create root modifier node
   function _createRootNode() {

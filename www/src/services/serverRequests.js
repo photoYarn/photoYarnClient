@@ -1,5 +1,6 @@
 define(function(require, exports, module) {
   'use strict';
+  
   var serverRequests = {};
 
 
@@ -18,8 +19,6 @@ define(function(require, exports, module) {
           this.cache[id] = this.data.length;
           this.data.push(cur);
         }
-        console.log(this.data);
-        console.log(this.cache);
       }.bind(this),
       error: function (error) {
         console.log('Get Data Error: ', error);
