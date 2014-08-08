@@ -6,7 +6,8 @@ define(function(require, exports, module) {
 
   // import layout
   var CustomLayout = require('customComponents/CustomLayout');
-  var serverReqs = require('services/serverRequests');
+  var serverRequests = require('services/serverRequests');
+  serverRequests.getData();
 
 
   // create display context
@@ -16,6 +17,7 @@ define(function(require, exports, module) {
   var layout = new CustomLayout({
     headerSize: 75,
     footerSize: 50,
+    serverRequests: serverRequests
   });
   
   // attach layout to display context

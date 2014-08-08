@@ -1,8 +1,59 @@
 define(function(require, exports, module) {
   'use strict';
+
   var serverRequests = {};
 
-  var serverData = {};
+
+  serverRequests.data = [];
+  serverRequests.cache = {};
+
+  serverRequests.getData = function(callback){
+    $.ajax({
+      type: 'GET',
+      url: 'http://photoyarn.azurewebsites.net/getAllYarns',
+      success: function (data) {
+        for(var i = 0; i < data.length; i++){
+          var cur = data[i];
+          var id = data[i]._id;
+          this.cache[id] = this.data.length;
+          this.data.push(cur);
+        }
+        if(callback){
+          callback(this.data);
+        }
+      }.bind(this),
+      error: function (error) {
+        console.log('Get Data Error: ', error);
+      }
+    });
+  };
+
+  serverRequests.updateData = function(){
+    console.log('Updating Data');
+    $.ajax({
+      type: 'GET',
+      url: 'http://photoyarn.azurewebsites.net/getAllYarns',
+      success: function (data) {
+        for(var i = 0; i < data.length; i++){
+          var cur = data[i];
+          var id = data[i]._id;
+          if(this.cache[id] === undefined){
+            console.log('New Entry Found: ', cur);
+            this.cache[id] = this.data.length;
+            this.data.push(cur);
+          } else if(this.data[this.cache[id]].links.length !== cur.links.length){
+            console.log('Updated An Entry: ', cur);
+            this.data.splice([this.cache[id]],1, cur);
+          }
+        }
+        console.log(this.data);
+        console.log(this.cache);
+      }.bind(this),
+      error: function (error) {
+        console.log('Update Data Error: ', error);
+      }
+    });
+  };
 
   serverRequests.postToImgur = function(data, target){
    $.ajax({
@@ -37,11 +88,12 @@ define(function(require, exports, module) {
         creatorId: data.creatorId
       },
       success: function(res){
-        console.log('Post to Server Success!', res);
+        console.log('Post to Server Success: ', res);
+        serverRequests.updateData();
       },
       error: function(error, res){
-        console.log('Post to Server Error', error);
-        console.log('Post Error Response', res);
+        console.log('Post to Server Error: ', error);
+        console.log('Post Error Response: ', res);
       }
     });
   };
@@ -55,11 +107,12 @@ define(function(require, exports, module) {
         link: data.link
       },
       success: function(res){
-        console.log('Post to Server Success!', res);
+        console.log('Post to Server Success: ', res);
+        serverRequests.updateData();
       },
       error: function(error, res){
-        console.log('Post to Server Error', error);
-        console.log('Post Error Response', res);
+        console.log('Post to Server Error: ', error);
+        console.log('Post to Server Error Response: ', res);
       }
     });
   };
