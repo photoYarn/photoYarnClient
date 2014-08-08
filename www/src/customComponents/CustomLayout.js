@@ -142,7 +142,8 @@ define(function(require, exports, module) {
     // associate nav button events to corresponding content views
     this.buttonRefs.viewFeed.on('click', function() {
       console.log('hi Feed');
-      this.renderController.show(this.feedView);
+      this.renderController.show(this.testFeed);
+      this.options.serverRequests.updateData();
       // TODO reintegrate update event when testFeed switched to main feed
       // this.feedView.trigger('update');
     }.bind(this));

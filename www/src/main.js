@@ -6,13 +6,15 @@ define(function(require, exports, module) {
 
   //custom tools
   var CustomLayout = require('customComponents/CustomLayout');
-  var serverReqs = require('services/serverRequests');
+  var serverRequests = require('services/serverRequests');
+  serverRequests.getData();
 
 
   //Creating Layout
   var layout = new CustomLayout({
     headerSize: 75,
-    footerSize: 50
+    footerSize: 50,
+    serverRequests: serverRequests
   });
   
   mainContext.add(layout);
