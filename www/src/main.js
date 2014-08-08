@@ -12,8 +12,7 @@ define(function(require, exports, module) {
   //Creating Layout
   var layout = new CustomLayout({
     headerSize: 75,
-    footerSize: 50,
-    serverRequests: serverReqs
+    footerSize: 50
   });
   
   mainContext.add(layout);

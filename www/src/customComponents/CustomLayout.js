@@ -16,6 +16,8 @@ define(function(require, exports, module) {
   var YarnView = require('views/YarnView');
   var AddToYarnView = require('views/AddToYarnView');
   var TestFeed = require('views/TestFeed');
+	
+	var EventHandler = require('famous/core/EventHandler');
   
   //custom tools
   var CustomButton = require('customComponents/CustomButton');
@@ -53,9 +55,10 @@ define(function(require, exports, module) {
       align: [0.5, 0.5]
     });
 
-   //  this.feedView = new FeedView({
-   //    message: 'custom feed view',
-   //   });
+    this.feedView = new FeedView({
+      message: 'custom feed view',
+			// eventTarget: this.options.eventTarget
+     });
 
     this.newYarnView = new NewYarnView({
       message: 'custom new yarn view',
@@ -75,13 +78,13 @@ define(function(require, exports, module) {
       serverRequests: this.options.serverRequests
     });
 
-    this.testFeed = new TestFeed({
-      direction: 1,
-      margin: 10000,
-      serverRequests: this.options.serverRequests
-    });
-
+    // this.testFeed = new TestFeed({
+    //   direction: 1,
+    //   margin: 10000,
+    // });
+    
     this.renderController = new RenderController();
+		this.renderController.eventInput = new EventHandler();
     this.content.add(centerModifier).add(this.renderController);
     this.renderController.show(logo);
 
@@ -139,7 +142,7 @@ define(function(require, exports, module) {
     // associate nav button events to corresponding content views
     this.buttonRefs.viewFeed.on('click', function() {
       console.log('hi Feed');
-      this.renderController.show(this.testFeed);
+      this.renderController.show(this.feedView);
       // TODO reintegrate update event when testFeed switched to main feed
       // this.feedView.trigger('update');
     }.bind(this));

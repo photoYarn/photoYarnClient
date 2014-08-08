@@ -56,6 +56,7 @@ define(function(require, exports, module){
           } else if(itemTarget.photoCount !== data[i].links.length){
             console.log('UPDATING ENTRY @ ', i);
             var location = i;
+						console.log(this.options.eventTarget)
             var updatedEntryView = new FeedEntryView({eventTarget: this.options.eventTarget}, data[i]);
             updatedEntryView.pipe(this.feed);
             photoCache[data[i]._id] = updatedEntryView;
@@ -139,9 +140,9 @@ define(function(require, exports, module){
   }
 
   function _setListeners() {
-    this._eventInput.on('update', function() {
-        this.updateFeeds();
-    }.bind(this));
+    // this._eventInput.on('update', function() {
+    //     this.updateFeeds();
+    // }.bind(this));
   }
   
   module.exports = FeedView;
