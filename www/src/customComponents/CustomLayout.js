@@ -18,8 +18,7 @@ define(function(require, exports, module) {
   var ProfileView = require('views/ProfileView');
   var YarnView = require('views/YarnView');
   var AddToYarnView = require('views/AddToYarnView');
-	
-  // instantiate CustomLayout
+
   function CustomLayout(){
     HeaderFooterLayout.apply(this, arguments);
     _createContent.call(this);
@@ -61,6 +60,7 @@ define(function(require, exports, module) {
       message: 'custom new yarn view',
       serverRequests: this.options.serverRequests
     });
+
     this.profileView = new ProfileView({
       message: 'custom profile view',
       serverRequests: this.options.serverRequests
