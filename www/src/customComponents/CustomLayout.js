@@ -64,8 +64,8 @@ define(function(require, exports, module) {
           var loginWindow;
           var startTime;
 
-          var loginWindowLoadHandler = function(event) {
-              var url = event.url;
+          var loginWindowLoadHandler = function() {
+              // var url = event.url;
               console.log('im in the inapp browser')
               loginWindow.close();
               // if (url.indexOf('access_token') !== -1 || url.indexOf('error') !== -1) {
@@ -94,8 +94,11 @@ define(function(require, exports, module) {
                       '&response_type=token&scope=public_profile', '_blank', 'location=no');
 
           if (runningInCordova) {
-              tokenStore = window.LocalStorage;
-              loginWindow.addEventListener('loadstart', loginWindowLoadHandler);
+              // tokenStore = window.LocalStorage;
+              // loginWindow.addEventListener('loadstart', loginWindowLoadHandler);
+              loginWindow.addEventListener('loadstart', function() {
+                alert('hiiiiiii')
+              });
               // loginWindow.addEventListener('exit', loginWindowExitHandler);
           }
 
