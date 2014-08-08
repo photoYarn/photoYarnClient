@@ -65,10 +65,29 @@ define(function(require, exports, module) {
           var loginWindow;
           var startTime;
 
+          var loginWindowLoadHandler = function(event) {
+              var url = event.url;
+              console.log('im running in cordova, here is url', url);
+              if (url.indexOf('access_token') !== -1 || url.indexOf('error') !== -1) {
+                  var timeout = 600 - (new Date().getTime() - startTime);
+                  setTimeout(function () {
+                      loginWindow.close();
+                  }, timeout > 0 ? timeout : 0);
+                  // oauthCallback(url);
+              }
+          };
+
+          var loginWindowExitHandler = function() {
+              loginWindow.removeEventListener('loadstart', loginWindowLoadHandler);
+              loginWindow.removeEventListener('exit', loginWindowExitHandler);
+              loginWindow = null;
+              console.log('removed listeners and login window');
+          };
+
           loginCallback = callback;
           loginProcessed = false;
+
           if (runningInCordova) {
-            console.log('yo im running in cordova')
             oauthRedirectURL = 'https://www.facebook.com/connect/login_success.html';
           }
 
@@ -77,20 +96,9 @@ define(function(require, exports, module) {
                       '&response_type=token&scope=public_profile', '_blank', 'location=no');
 
           if (runningInCordova) {
-              loginWindow.addEventListener('loadstart', function() {
-                console.log('in loadstart')
-                var timeout = 600 - (new Date().getTime() - startTime);
-                setTimeout(function () {
-                    loginWindow.close();
-                }, timeout > 0 ? timeout : 0);
-              });
-
-              loginWindow.addEventListener('exit', function() {
-                console.log('in exit');
-                loginWindow.removeEventListener('loadstart', loginWindowLoadHandler);
-                loginWindow.removeEventListener('exit', loginWindowExitHandler);
-                loginWindow = null;
-              })
+              // tokenStore = window.LocalStorage;
+              loginWindow.addEventListener('loadstart', loginWindowLoadHandler);
+              loginWindow.addEventListener('exit', loginWindowExitHandler);
           }
 
       };
