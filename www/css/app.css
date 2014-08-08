@@ -12,6 +12,12 @@ html {
 	font-size: 30px;
 }
 
+.FeedEntryBackground {
+  border: 1px solid black;
+  text-indent: 5px;
+  font-weight: bold;
+}
+
 .FeedEntryDivider {
 	/* fallback */
   background-color: #CCC;
@@ -32,6 +38,7 @@ html {
 
   /* Opera 11.10+ */
   background: -o-linear-gradient(top, #000, #CCC);
+
 }
 
 .FeedEntryCaption {
