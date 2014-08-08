@@ -7,7 +7,7 @@ define(function(require, exports, module) {
   var InputSurface = require('famous/surfaces/InputSurface');
   var Transform = require('famous/core/Transform');
 
-  var serverRequests = require('src/services/serverRequests.js');
+  var serverRequests;
 
   
 
@@ -15,6 +15,8 @@ define(function(require, exports, module) {
   var captionData = '';
   var mongoData = {};
   var catGif = 'http://37.media.tumblr.com/35e8d0682251fa96580100ea6a182e13/tumblr_mst9derOy01re0m3eo1_r12_500.gif';
+
+
 
 
   if(navigator.camera){
@@ -42,6 +44,7 @@ define(function(require, exports, module) {
     _createTakePictureButton.call(this);
     _createGetPictureButton.call(this);
     _createCaption.call(this);
+    serverRequests = this.options.serverRequests;
 
     this.add(pictureFrame);
   }
@@ -61,6 +64,8 @@ define(function(require, exports, module) {
   };
 
   function _createCaption(){
+
+
     this.caption = new InputSurface({
       size: [100, 20]
     });
@@ -95,7 +100,8 @@ define(function(require, exports, module) {
         this.caption.setValue('');
         pictureFrame.setContent(catGif);
 
-        serverRequests.postYarnToServer(mongoData);
+        console.log(this.options.serverRequests);
+        this.options.serverRequests.postYarnToServer(mongoData);
       }
     }.bind(this));
 

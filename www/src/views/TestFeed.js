@@ -3,6 +3,8 @@ define(function(require, exports, module){
   var Scrollview = require('famous/views/Scrollview');
   var ViewSequence = require('famous/core/ViewSequence');
 
+  var serverRequests;
+
 
   var ImageSurface = require('famous/surfaces/ImageSurface');
 
@@ -10,7 +12,8 @@ define(function(require, exports, module){
   function TestFeed(){
     Scrollview.apply(this, arguments);
     console.log('Trying to make a test feed');
-
+    serverRequests = this.options.serverRequests;
+    console.log(serverRequests);
     // _addImage.call(this);
     _createFeed.call(this);
     this._getFeeds.call(this);

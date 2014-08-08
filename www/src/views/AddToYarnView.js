@@ -7,7 +7,7 @@ define(function(require, exports, module) {
   var Transform = require('famous/core/Transform');
 
   var catGif = 'http://37.media.tumblr.com/35e8d0682251fa96580100ea6a182e13/tumblr_mst9derOy01re0m3eo1_r12_500.gif';
-  var serverRequests = require('src/services/serverRequests.js');
+  var serverRequests;
 
   //Need some sort of yarnId and preset caption to post to /photo
   //expecting yarnId and image link _id from post to DB!
@@ -42,6 +42,7 @@ define(function(require, exports, module) {
     _createTakePictureButton.call(this);
     _createGetPictureButton.call(this);
     _createSendButton.call(this);
+    serverRequests = this.options.serverRequests;
 
     this.add(pictureFrame);
   }
