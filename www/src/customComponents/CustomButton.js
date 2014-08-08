@@ -1,9 +1,12 @@
 define(function(require, exports, module) {
   'use strict';
+
+  // import famo.us dependences
   var View = require('famous/core/View');
   var Modifier = require('famous/core/Modifier');
   var Surface = require('famous/core/Surface');
 
+  // instanstiate CustomButton
   function CustomButton(){
     View.apply(this, arguments);
     _createRootNode.call(this);
@@ -11,6 +14,7 @@ define(function(require, exports, module) {
     _setListeners.call(this);
   }
 
+  // set defaults
   CustomButton.prototype = Object.create(View.prototype);
   CustomButton.prototype.constructor = CustomButton;
   CustomButton.DEFAULT_OPTIONS = {
@@ -20,6 +24,7 @@ define(function(require, exports, module) {
     textAlign: 'center',
   };
 
+  // create root modifier
   function _createRootNode(){
     this.rootModifier = new Modifier({
       align: this.options.align,
@@ -29,6 +34,7 @@ define(function(require, exports, module) {
     this.rootNode = this.add(this.rootModifier);
   }
 
+  // create button
   function _createButton(){
     this.button = new Surface({
       content: this.options.name,
@@ -42,7 +48,9 @@ define(function(require, exports, module) {
     this.rootNode.add(this.button);
   }
 
+  // set listener to bubble up button events
   function _setListeners() {
+    // only explicitly bubbling up click event
     this.button.on('click', function() {
       this._eventOutput.emit('click');
     }.bind(this));

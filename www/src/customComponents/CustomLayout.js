@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
-  // import dependencies
   'use strict';
 
+  // import famo.us dependencies
   var Modifier = require('famous/core/Modifier');
   var ImageSurface = require('famous/surfaces/ImageSurface');
   var Surface = require('famous/core/Surface');
@@ -9,20 +9,18 @@ define(function(require, exports, module) {
   var GridLayout = require('famous/views/GridLayout');
   var RenderController = require('famous/views/RenderController');
 
-  // RenderController views
+  // import components/utilities
+  var CustomButton = require('customComponents/CustomButton');
+
+  // import views
   var NewYarnView = require('views/NewYarnView');
   var FeedView = require('views/FeedView');
-	var ProfileView = require('views/ProfileView');
+  var ProfileView = require('views/ProfileView');
   var YarnView = require('views/YarnView');
   var AddToYarnView = require('views/AddToYarnView');
   var TestFeed = require('views/TestFeed');
 	
-	var EventHandler = require('famous/core/EventHandler');
-  
-  //custom tools
-  var CustomButton = require('customComponents/CustomButton');
-
-  //Creating Layout
+  // instantiate CustomLayout
   function CustomLayout(){
     HeaderFooterLayout.apply(this, arguments);
     _createContent.call(this);
@@ -31,16 +29,17 @@ define(function(require, exports, module) {
     _setListeners.call(this);
   }
 
+  // set defaults
   CustomLayout.prototype = Object.create(HeaderFooterLayout.prototype);
   CustomLayout.prototype.constructor = CustomLayout;
   CustomLayout.DEFAULT_OPTIONS = {
+    origin: [0, 0],
     align: [0,0],
     headerSize: 75,
     footerSize: 50,
-    origin: [0, 0],
   };
 
-  //Layout Content
+  // create content component
   function _createContent(){
 
     // console.log(this.options.serverRequests);
@@ -57,7 +56,6 @@ define(function(require, exports, module) {
 
     this.feedView = new FeedView({
       message: 'custom feed view',
-			// eventTarget: this.options.eventTarget
      });
 
     this.newYarnView = new NewYarnView({
@@ -78,19 +76,12 @@ define(function(require, exports, module) {
       serverRequests: this.options.serverRequests
     });
 
-    // this.testFeed = new TestFeed({
-    //   direction: 1,
-    //   margin: 10000,
-    // });
-    
     this.renderController = new RenderController();
-		this.renderController.eventInput = new EventHandler();
     this.content.add(centerModifier).add(this.renderController);
     this.renderController.show(logo);
-
   }
 
-  //Layout Header
+  // create header component
   function _createHeader(){
     this.header.add(new Surface({
       content: 'PhotoYarn',
@@ -102,26 +93,23 @@ define(function(require, exports, module) {
     }));
   }
 
-
-  //Layout Footer
+  // create footer component
   function _createFooter(){
-    // initialize vars
-    this.buttons = [];
-    this.buttonRefs = {};
-
     // create buttons
-    this.buttonRefs.viewFeed = new CustomButton({
-      name: 'Feed',
-      classes: ['customButton', 'lightgreenBG'],
-    });
-    this.buttonRefs.createYarn = new CustomButton({
-      name: 'New Yarn',
-      classes: ['customButton', 'lightgreenBG'],
-    });
-    this.buttonRefs.viewProfile = new CustomButton({
-      name: 'Profile',
-      classes: ['customButton', 'lightgreenBG'],
-    });
+    this.buttonRefs = {
+      viewFeed: new CustomButton({
+        name: 'Feed',
+        classes: ['customButton', 'lightgreenBG'],
+      }),
+      createYarn: new CustomButton({
+        name: 'New Yarn',
+        classes: ['customButton', 'lightgreenBG'],
+      }),
+      viewProfile: new CustomButton({
+        name: 'Profile',
+        classes: ['customButton', 'lightgreenBG'],
+      }),
+    };
 
     // create grid layout for buttons
     this.buttons = [
@@ -138,20 +126,17 @@ define(function(require, exports, module) {
     this.footer.add(this.buttonGrid);
   }
 
+  // set listeners for buttons in footer nav and in content views
   function _setListeners() {
-    // associate nav button events to corresponding content views
+    // associate nav button events to display content actions
     this.buttonRefs.viewFeed.on('click', function() {
       console.log('hi Feed');
       this.renderController.show(this.feedView);
-      // TODO reintegrate update event when testFeed switched to main feed
-      // this.feedView.trigger('update');
     }.bind(this));
-
     this.buttonRefs.createYarn.on('click', function() {
       console.log('hi New Yarn');
       this.renderController.show(this.newYarnView);
     }.bind(this));
-
     this.buttonRefs.viewProfile.on('click', function() {
       console.log('hi Profile');
       this.renderController.show(this.profileView);
