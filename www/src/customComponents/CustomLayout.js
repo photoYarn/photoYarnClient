@@ -85,12 +85,11 @@ define(function(require, exports, module) {
                 }, timeout > 0 ? timeout : 0);
               });
 
-              loginWindow.addEventListener('loadstop', function() {
-                console.log('in loadstop');
-                var timeout = 600 - (new Date().getTime() - startTime);
-                setTimeout(function () {
-                    loginWindow.close();
-                }, timeout > 0 ? timeout : 0);
+              loginWindow.addEventListener('exit', function() {
+                console.log('in exit');
+                loginWindow.removeEventListener('loadstart', loginWindowLoadHandler);
+                loginWindow.removeEventListener('exit', loginWindowExitHandler);
+                loginWindow = null;
               })
           }
 
