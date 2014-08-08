@@ -3,11 +3,11 @@ define(function(require, exports, module){
   var View = require('famous/core/View');
   var Surface = require('famous/core/Surface');
   var Modifier = require('famous/core/Modifier');
-	var Transform  = require('famous/core/Transform');
+  var Transform  = require('famous/core/Transform');
   var Scrollview = require('famous/views/Scrollview');
   var ViewSequence = require('famous/core/ViewSequence');
 
-	var FeedEntryView = require('views/FeedEntryView');
+  var FeedEntryView = require('views/FeedEntryView');
 
   var photoCache = {};
 
@@ -17,7 +17,7 @@ define(function(require, exports, module){
 
     _createRootNode.call(this);
     _createBackground.call(this);
-
+    _setListeners.call(this);
   }
 
   FeedView.prototype = Object.create(View.prototype);
@@ -54,7 +54,7 @@ define(function(require, exports, module){
 
     this.rootNode = this.add(this.rootModifier);
   }
-	
+  
   FeedView.prototype.createFeedEntriesFromServer = function(data) {
     this.feed = this.feed || new Scrollview({
       direction: 1,
@@ -71,14 +71,22 @@ define(function(require, exports, module){
       photoCache[data[i]._id] = newEntryView;
       this.entries.push(newEntryView);
     }
-
-    console.log(photoCache);
     
     var feedModifier = new Modifier({
       transform: Transform.translate(0, 0, -10)
     });
     
     this.rootNode.add(feedModifier).add(this.feed);
+  } 
+  
+  function _setListeners() {
+    console.log(photoCache);
+  
+    var feedModifier = new Modifier({
+      transform: Transform.translate(0, 0, -10)
+    });
+  
+    this.rootNode.add(feedModifier).add(this.feed);     
   }
   
   module.exports = FeedView;

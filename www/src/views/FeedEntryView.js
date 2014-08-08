@@ -8,7 +8,7 @@ define(function(require, exports, module){
   var ScrollContainer = require('famous/views/ScrollContainer');
   var GridLayout = require('famous/views/GridLayout');
   var Scrollview = require('famous/views/Scrollview');
-	var Transform = require('famous/core/Transform');
+  var Transform = require('famous/core/Transform');
 
   function FeedEntryView(options, yarnData){
     View.apply(this, arguments);
