@@ -1,14 +1,13 @@
 define(function(require, exports, module) {
   'use strict';
-  
+
   var serverRequests = {};
 
 
   serverRequests.data = [];
   serverRequests.cache = {};
-  serverRequests.images = [];
 
-  serverRequests.getData = function(){
+  serverRequests.getData = function(callback){
     $.ajax({
       type: 'GET',
       url: 'http://photoyarn.azurewebsites.net/getAllYarns',
@@ -19,6 +18,9 @@ define(function(require, exports, module) {
           this.cache[id] = this.data.length;
           this.data.push(cur);
         }
+        if(callback){
+          callback(this.data);
+        }
       }.bind(this),
       error: function (error) {
         console.log('Get Data Error: ', error);
@@ -27,6 +29,7 @@ define(function(require, exports, module) {
   };
 
   serverRequests.updateData = function(){
+    console.log('Updating Data');
     $.ajax({
       type: 'GET',
       url: 'http://photoyarn.azurewebsites.net/getAllYarns',
@@ -86,6 +89,7 @@ define(function(require, exports, module) {
       },
       success: function(res){
         console.log('Post to Server Success: ', res);
+        serverRequests.updateData();
       },
       error: function(error, res){
         console.log('Post to Server Error: ', error);
@@ -104,6 +108,7 @@ define(function(require, exports, module) {
       },
       success: function(res){
         console.log('Post to Server Success: ', res);
+        serverRequests.updateData();
       },
       error: function(error, res){
         console.log('Post to Server Error: ', error);

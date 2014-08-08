@@ -55,6 +55,7 @@ define(function(require, exports, module) {
     // initialize content views
     this.feedView = new FeedView({
       message: 'custom feed view',
+      serverRequests: this.options.serverRequests,
      });
     this.newYarnView = new NewYarnView({
       message: 'custom new yarn view',
@@ -128,6 +129,7 @@ define(function(require, exports, module) {
     // associate nav button events to display content actions
     this.buttonRefs.viewFeed.on('click', function() {
       console.log('Feed');
+      this.feedView.createFeedEntriesFromServer(this.options.serverRequests.data);
       this.renderController.show(this.feedView);
       // this.options.serverRequests.updateData();
       // TODO reintegrate update event when testFeed switched to main feed
