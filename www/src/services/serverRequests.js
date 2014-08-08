@@ -5,6 +5,7 @@ define(function(require, exports, module) {
 
   serverRequests.data = [];
   serverRequests.cache = {};
+  serverRequests.images = [];
 
   serverRequests.getData = function(){
     $.ajax({
