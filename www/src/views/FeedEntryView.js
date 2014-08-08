@@ -220,7 +220,7 @@ define(function(require, exports, module){
 		this.entryButton.pipe(this._eventOutput);
 		this.background.pipe(this._eventOutput);
 		
-		this.entryButton.pipe(this.options.eventTarget);
+		// this.entryButton.pipe(this.options.eventTarget);
 		
     this.entryButton.on('click', function(){
 			console.log(this.options.eventTarget);
