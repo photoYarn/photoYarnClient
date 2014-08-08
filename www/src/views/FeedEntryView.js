@@ -8,8 +8,7 @@ define(function(require, exports, module){
   var ScrollContainer = require('famous/views/ScrollContainer');
   var GridLayout = require('famous/views/GridLayout');
   var Scrollview = require('famous/views/Scrollview');
-  var Transform = require('famous/core/Transform');
-	
+	var Transform = require('famous/core/Transform');
 
   function FeedEntryView(options, yarnData){
     View.apply(this, arguments);
@@ -65,7 +64,6 @@ define(function(require, exports, module){
   }
 	
   function _createHeaders(yarnData) {
-  
 		this.entryButton = new Surface({
 	  	size: [this.options.entryButtonSize[0], this.options.entryButtonSize[1]],
 			content: yarnData.links.length + ' photos ' + '\u2794',
@@ -88,7 +86,7 @@ define(function(require, exports, module){
 	
   function _createPhotos(yarnData) {
     this.photos = [];
-		
+
     for (var i = 0; i < yarnData.links.length && i < 5; i++) {
 			
 	    var newPhoto = new ImageSurface({
@@ -141,7 +139,6 @@ define(function(require, exports, module){
 			newPhoto.pipe(this._eventOutput);
     }
   }
-	
 
 	function _setListeners(yarnData) {
 		this.entryButton.pipe(this._eventOutput);

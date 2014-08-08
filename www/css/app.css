@@ -9,7 +9,7 @@ html {
 }
 
 .header {
-	font-size: 30px;
+  font-size: 30px;
 }
 
 .FeedEntryBackground {
@@ -18,8 +18,32 @@ html {
   font-weight: bold;
 }
 
+.Background {
+  background-color: #BBB;
+}
+
+.ProfileHeaderButton {
+  border-radius: 10px;
+  border: 2px solid white;
+  margin-top: 3px;
+  color: #FFF;
+  font: 14px Georgia, sans-serif;
+  font-weight: bold;
+}
+
+.ProfileUserLocation {
+  color: #777;
+  font: 16px Georgia, sans-serif;
+}
+
+.ProfileUsername {
+  color: #777;
+  font: 17px Georgia, sans-serif;
+  font-weight: bold;
+}
+
 .FeedEntryDivider {
-	/* fallback */
+  /* fallback */
   background-color: #CCC;
   background: url(images/linear_bg_2.png);
   background-repeat: repeat-x;
@@ -42,15 +66,15 @@ html {
 }
 
 .FeedEntryCaption {
-	color: #777;
-	font: 15px Georgia, sans-serif;
-	font-weight:bold;
-	margin-left: 5px;
+  color: #777;
+  font: 15px Georgia, sans-serif;
+  font-weight:bold;
+  margin-left: 5px;
 }
 
 .FeedEntryPhoto {
-	border-radius: 5px;
-	margin-left: 10px;
+  border-radius: 5px;
+  margin-left: 10px;
 }
 
 .salmonBG{
