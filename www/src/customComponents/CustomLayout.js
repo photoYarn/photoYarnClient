@@ -42,8 +42,7 @@ define(function(require, exports, module) {
   // create content component
   function _createContent(){
 
-    // console.log(this.options.serverRequests);
-    //famo.us logo because famo.us is cool!
+    // famo.us logo because famo.us is cool!
     var logo = new ImageSurface({
       size: [200, 200],
       content: 'http://img3.wikia.nocookie.net/__cb20130220230859/farmville2/images/a/aa/Super-Fine_Yarn_Ball.png',
@@ -54,28 +53,26 @@ define(function(require, exports, module) {
       align: [0.5, 0.5]
     });
 
+    // initialize content views
     this.feedView = new FeedView({
       message: 'custom feed view',
      });
-
     this.newYarnView = new NewYarnView({
       message: 'custom new yarn view',
       serverRequests: this.options.serverRequests
     });
-		
     this.profileView = new ProfileView({
       message: 'custom profile view',
       serverRequests: this.options.serverRequests
     });
-
     this.yarnView = new YarnView({
       serverRequests: this.options.serverRequests
     });
-
     this.addToYarnView = new AddToYarnView({
       serverRequests: this.options.serverRequests
     });
 
+    // initialize and attach RenderController to content display
     this.renderController = new RenderController();
     this.content.add(centerModifier).add(this.renderController);
     this.renderController.show(logo);
@@ -83,6 +80,7 @@ define(function(require, exports, module) {
 
   // create header component
   function _createHeader(){
+    // add title bar to header display
     this.header.add(new Surface({
       content: 'PhotoYarn',
       classes: ['customButton', 'medgreenBG', 'header'],
@@ -122,7 +120,7 @@ define(function(require, exports, module) {
     });
     this.buttonGrid.sequenceFrom(this.buttons);
 
-    // add gridded buttons to layout
+    // add gridded buttons to footer display
     this.footer.add(this.buttonGrid);
   }
 
