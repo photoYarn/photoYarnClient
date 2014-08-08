@@ -19,6 +19,128 @@ define(function(require, exports, module) {
   
   //custom tools
   var CustomButton = require('customComponents/CustomButton');
+  var deparam = require('customComponents/deparam');
+
+  var oauth = (function() {
+
+      var FB_LOGIN_URL = 'https://www.facebook.com/dialog/oauth';
+      var FB_LOGOUT_URL = 'https://www.facebook.com/logout.php';
+
+      var tokenStore = window.sessionStorage;
+      var appId;
+
+      var loginCallback;
+      var loginProcessed;
+      var runningInCordova;
+
+      document.addEventListener('deviceready', function() {
+          runningInCordova = true;
+      }, false);
+
+      var oauthRedirectURL = 'http://localhost:8100/oauthcallback.html';
+
+      var init = function(params) {
+          if (params.appId) {
+              appId = params.appId;
+          } else {
+              throw 'appId param not set';
+          }
+      };
+
+      var isLoggedIn = function() {
+          return tokenStore.hasOwnProperty('access_token');
+      }
+
+      var login = function(callback) {
+          if (!appId) {
+              callback({status: 'unkonwn', error: 'appId not set'});
+          }
+
+          var loginWindowLoadHandler = function(event) {
+              var url = event.url;
+              console.log('im running in cordova')
+              if (url.indexOf('access_token') !== -1 || url.indexOf('error') !== -1) {
+                  loginWindow.close();
+                  oauthcallback(url);
+              }
+          };
+
+          var loginWindowExitHandler = function() {
+              loginWindow.removeEventListener('loadstart', loginWindowLoadHandler);
+              loginWindow.removeEventListener('exit', loginWindowExitHandler);
+          };
+
+          var loginWindow;
+          loginCallback = callback;
+          loginProcessed = false;
+
+          loginWindow = window.open(FB_LOGIN_URL + '?client_id=' + appId + '&redirect_uri=' + oauthRedirectURL +
+                      '&response_type=token&scope=public_profile', '_blank', 'location=no');
+
+          if (runningInCordova) {
+              oauthRedirectURL = 'https://www.facebook.com/connect/login_success.html';
+              tokenStore = window.LocalStorage;
+              loginWindow.addEventListener('loadstart', loginWindowLoadHandler);
+              loginWindow.addEventListener('exit', loginWindowExitHandler);
+          }
+
+      };
+
+      var logout = function(callback) {
+          var access_token = tokenStore['access_token']
+          delete tokenStore['access_token'];
+          if (callback) {
+              callback(access_token);
+          }
+      };
+
+      var oauthCallback = function(url) {
+          // Parse the OAuth data received from Facebook
+          var queryString;
+          var queryObj;
+
+          loginProcessed = true;
+
+          if (url.indexOf("access_token=") !== -1) {
+              queryString = url.substr(url.indexOf('#') + 1);
+              console.log('heihihi')
+              queryObj = $.deparam(queryString)
+              console.log(queryObj)
+              tokenStore['access_token'] = queryObj['access_token'];
+              console.log(tokenStore)
+              if (loginCallback) {
+                  loginCallback({
+                      status: 'connected', 
+                      token: queryObj['access_token']
+                  });
+              }
+          } else if (url.indexOf("error=") !== -1) {
+              queryString = url.substring(url.indexOf('?') + 1, url.indexOf('#'));
+              queryObj = $.deparam(queryString);
+              if (loginCallback) {
+                  loginCallback({
+                      status: 'not_authorized', 
+                      error: queryObj.error
+                  });
+              }
+          } else {
+              if (loginCallback) {
+                  loginCallback({
+                      status: 'not_authorized'
+                  });
+              }
+          }
+      };
+
+      return {
+          login: login,
+          logout: logout,
+          isLoggedIn: isLoggedIn,
+          init: init,
+          oauthCallback: oauthCallback,
+      }
+
+  })();
 
   //Creating Layout
   function CustomLayout(){
@@ -110,12 +232,17 @@ define(function(require, exports, module) {
       name: 'Profile',
       classes: ['customButton', 'lightgreenBG'],
     });
+    this.buttonRefs.login = new CustomButton({
+      name: 'Login',
+      classes: ['customButton', 'lightgreenBG'],
+    });
 
     // create grid layout for buttons
     this.buttons = [
       this.buttonRefs.viewFeed,
       this.buttonRefs.createYarn,
       this.buttonRefs.viewProfile,
+      this.buttonRefs.login
     ];
     this.buttonGrid = new GridLayout({
       dimensions: [this.buttons.length, 1]
@@ -143,6 +270,30 @@ define(function(require, exports, module) {
     this.buttonRefs.viewProfile.on('click', function() {
       console.log('hi Profile');
       this.renderController.show(this.profileView);
+    }.bind(this));
+
+    oauth.init({appId: 261431800718045});
+    this.buttonRefs.login.on('click', function() {
+      oauth.login(function(response) {
+          if (response.status === 'connected') {
+              console.log('fb login success, received access token');
+
+              // check against database to see if new user
+              // or current user by sending request to
+              // $.ajax({
+              //     type: "GET",
+              //     url: "https://graph.facebook.com/me?access_token=...",
+              //     success: function(data) {
+              //         console.log(data)
+              //     }
+              // })
+
+              // redirect to home page here?
+
+          } else {
+              console.log('login failed', response.error);
+          }
+      });
     }.bind(this));
   }
 
