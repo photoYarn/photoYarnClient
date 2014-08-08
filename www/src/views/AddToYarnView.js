@@ -86,7 +86,11 @@ define(function(require, exports, module) {
 
     this.sendButton.on('click', function(){
       pictureFrame.setContent(catGif);
-      serverRequests.postPhotoToServerYarn(yarnData);
+      console.log(yarnData);
+      var serverData = {};
+      serverData.yarnId = yarnData._id;
+      serverData.link = yarnData.link; 
+      serverRequests.postPhotoToServerYarn(serverData);
     }.bind(this));
 
   }
@@ -111,6 +115,7 @@ define(function(require, exports, module) {
     this.add(this.takePictureModifier).add(this.takePicture);
 
     this.takePicture.on('click', function(){
+      yarnData = this.yarnData;
       console.log('TakePicture Clicked!');
       navigator.camera.getPicture(onCameraSuccess, onCameraFail, takePictureOptions);
       }.bind(this));
@@ -134,6 +139,7 @@ define(function(require, exports, module) {
     this.add(this.getPictureModifier).add(this.getPicture);
 
     this.getPicture.on('click', function(){
+      yarnData = this.yarnData;
       console.log('GetPicture Clicked!');
       navigator.camera.getPicture(onCameraSuccess, onCameraFail, getPictureOptions);
       }.bind(this));
@@ -143,7 +149,6 @@ define(function(require, exports, module) {
   function onCameraSuccess(data){
     pictureFrame.setContent('data:image/jpeg;base64,' + data);
     serverRequests.postToImgur(data, yarnData);
-    console.log(yarnData);
   }
 
   function onCameraFail(error){

@@ -20,6 +20,7 @@ define(function(require, exports, module) {
 
   masterController.eventInput.on('GoFeed', function(){
     console.log('hi Feed');
+    layout.feedView.updateFeeds();
     layout.renderController.show(layout.feedView);
   });
   masterController.eventInput.on('GoNew Yarn', function(){
@@ -37,6 +38,7 @@ define(function(require, exports, module) {
   masterController.eventInput.on('GoAddToYarn', function(data){
     console.log('hi Add To Yarn');
 		console.log("data passed into GoAddToYarn listener", data);
+    layout.addToYarnView.yarnData = data;
     layout.renderController.show(layout.addToYarnView);
   });
   

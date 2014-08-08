@@ -3,10 +3,11 @@ define(function(require, exports, module){
   var View = require('famous/core/View');
   var Surface = require('famous/core/Surface');
   var Modifier = require('famous/core/Modifier');
-	var ContainerSurface = require("famous/surfaces/ContainerSurface");
+	var ContainerSurface = require('famous/surfaces/ContainerSurface');
   var ImageSurface = require('famous/surfaces/ImageSurface');
   var ScrollContainer = require('famous/views/ScrollContainer');
   var GridLayout = require('famous/views/GridLayout');
+  var Scrollview = require('famous/views/Scrollview');
 	
 	var FeedEntryCaptionView = require('views/FeedEntryCaptionView');
 	var FeedEntryPhotoView = require('views/FeedEntryPhotoView');
@@ -102,7 +103,9 @@ define(function(require, exports, module){
 	
   function _createPhotos(yarnData) {
     this.photos = [];
-    var photoRow = new ScrollContainer();
+    this.photoRow = new Scrollview({
+      direction: 0
+    });
 		
     for (var i = 0; i < yarnData.links.length; i++) {
 			this.photoCount++;
@@ -126,7 +129,7 @@ define(function(require, exports, module){
 
 			// pipe photo surface to container view
 			newPhoto.pipe(this._eventOutput);
-			newPhoto.pipe(photoRow);
+			newPhoto.pipe(this.photoRow);
     }
 		
 		var photoRowModifier = new Modifier({
@@ -135,10 +138,10 @@ define(function(require, exports, module){
 			origin: [0, 1]
 		});
 		
-    photoRow.sequenceFrom(this.photos);
-		photoRow.pipe(this._eventOutput);
+    this.photoRow.sequenceFrom(this.photos);
+		this.photoRow.pipe(this._eventOutput);
 
-    this.rootNode.add(photoRowModifier).add(photoRow);
+    this.rootNode.add(photoRowModifier).add(this.photoRow);
   }
 	
   function _createDividers() {
