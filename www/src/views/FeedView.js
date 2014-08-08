@@ -45,7 +45,7 @@ define(function(require, exports, module){
         for(var i = 0; i < data.length; i++){
           var itemTarget = photoCache[data[i]._id];
           console.log('Item Target', itemTarget);
-          console.log('Index in this.feeds', this.feeds.indexOf(itemTarget));
+          console.log('Index in this.feeds', this.entries.getIndex(photoCache[data[i]._id]));
           if(itemTarget === undefined){
             console.log('NEW ITEM FOUND');
             var newEntryView = new FeedEntryView({eventTarget: this.options.eventTarget}, data[i]);

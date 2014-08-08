@@ -15,6 +15,7 @@ define(function(require, exports, module) {
 	var ProfileView = require('views/ProfileView');
   var YarnView = require('views/YarnView');
   var AddToYarnView = require('views/AddToYarnView');
+  var TestFeed = require('views/TestFeed');
   
   //custom tools
   var CustomButton = require('customComponents/CustomButton');
@@ -30,10 +31,10 @@ define(function(require, exports, module) {
   CustomLayout.prototype = Object.create(HeaderFooterLayout.prototype);
   CustomLayout.prototype.constructor = CustomLayout;
   CustomLayout.DEFAULT_OPTIONS = {
-    align: [0.5, 0,5],
+    align: [0,0],
     headerSize: 75,
     footerSize: 50,
-    origin: [0.5, 0.5],
+    origin: [0, 0],
     eventTarget: null
   };
 
@@ -46,12 +47,12 @@ define(function(require, exports, module) {
     });
 
     var centerModifier = new Modifier({
-      origin: [0.5, 0.5],
+      origin: [0, 0],
     });
-    this.feedView = new FeedView({
-      message: 'custom feed view',
-			eventTarget: this.options.eventTarget
-     });
+   //  this.feedView = new FeedView({
+   //    message: 'custom feed view',
+			// eventTarget: this.options.eventTarget
+   //   });
 
     this.newYarnView = new NewYarnView({
       message: 'custom new yarn view'
@@ -61,11 +62,13 @@ define(function(require, exports, module) {
       message: 'custom profile view'
     });
 
-    this.yarnView = new YarnView({
-    });
+    this.yarnView = new YarnView({});
 
-    this.addToYarnView = new AddToYarnView({
+    this.addToYarnView = new AddToYarnView({});
 
+    this.testFeed = new TestFeed({
+      direction: 1,
+      margin: 10000,
     });
     
     this.renderController = new RenderController();
@@ -73,7 +76,7 @@ define(function(require, exports, module) {
     this.renderController.show(logo);
 
   }
-  
+
   //Layout Header
   function _createHeader(){
     this.header.add(new Surface({

@@ -20,8 +20,10 @@ define(function(require, exports, module) {
 
   masterController.eventInput.on('GoFeed', function(){
     console.log('hi Feed');
-    layout.feedView.updateFeeds();
-    layout.renderController.show(layout.feedView);
+    // layout.feedView.updateFeeds();
+    // layout.renderController.show(layout.feedView);
+    layout.renderController.show(layout.testFeed);
+    console.log('Showing test feed');
   });
   masterController.eventInput.on('GoNew Yarn', function(){
     console.log('hi New Yarn');
