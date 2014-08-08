@@ -24,6 +24,7 @@ define(function(require, exports, module){
 		_createBackground.call(this);
 		console.log(this.options)
     // _createFeedEntries.call(this);
+    _setListeners.call(this);
   }
 
   FeedView.prototype = Object.create(View.prototype);
@@ -135,6 +136,12 @@ define(function(require, exports, module){
 		});
 		
 		this.rootNode.add(feedModifier).add(this.feed);
+  }
+
+  function _setListeners() {
+    this._eventInput.on('update', function() {
+        this.updateFeeds();
+    }.bind(this));
   }
   
   module.exports = FeedView;

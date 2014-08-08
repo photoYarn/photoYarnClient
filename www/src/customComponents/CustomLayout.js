@@ -129,6 +129,8 @@ define(function(require, exports, module) {
     this.buttonRefs.viewFeed.on('click', function() {
       console.log('hi Feed');
       this.renderController.show(this.testFeed);
+      // TODO reintegrate update event when testFeed switched to main feed
+      // this.feedView.trigger('update');
     }.bind(this));
 
     this.buttonRefs.createYarn.on('click', function() {
