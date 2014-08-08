@@ -1,5 +1,7 @@
 define(function(require, exports, module){
   'use strict';
+
+  // import famo.us dependencies
   var View = require('famous/core/View');
   var Surface = require('famous/core/Surface');
   var Modifier = require('famous/core/Modifier');
@@ -7,22 +9,23 @@ define(function(require, exports, module){
   var Scrollview = require('famous/views/Scrollview');
   var ViewSequence = require('famous/core/ViewSequence');
 
+  // import views
   var FeedEntryView = require('views/FeedEntryView');
 
+  // initialize class variables
   var photoCache = {};
 
-
+  // FeedView constructor
   function FeedView(){
     View.apply(this, arguments);
-
     _createRootNode.call(this);
     _createBackground.call(this);
     _setListeners.call(this);
   }
 
+  // set defaults
   FeedView.prototype = Object.create(View.prototype);
   FeedView.prototype.constructor = FeedView;
-  
   FeedView.DEFAULT_OPTIONS = {
     message: 'Default message',
     entryCount: 4,
@@ -67,7 +70,6 @@ define(function(require, exports, module){
 
     for (var i = 0; i < data.length; i++) {
       var newEntryView = new FeedEntryView({eventTarget: this.options.eventTarget}, data[i]);
-      newEntryView.pipe(this.feed);
       photoCache[data[i]._id] = newEntryView;
       this.entries.push(newEntryView);
     }

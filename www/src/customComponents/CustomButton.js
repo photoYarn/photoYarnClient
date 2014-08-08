@@ -6,9 +6,11 @@ define(function(require, exports, module) {
   var Modifier = require('famous/core/Modifier');
   var Surface = require('famous/core/Surface');
 
-  // instanstiate CustomButton
+  // CustomButton constructor
   function CustomButton(){
     View.apply(this, arguments);
+
+    // adding elements
     _createRootNode.call(this);
     _createButton.call(this);
     _setListeners.call(this);
