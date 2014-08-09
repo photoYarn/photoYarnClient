@@ -35,7 +35,8 @@ define(function(require, exports, module){
     textAlign: 'center',
     entryButtonSize: [100, 25],
     dividerHeight: 1,
-    photoPadding: 10
+    photoPadding: 10,
+    showNum: 4,
   };
 
   // create root modifier
@@ -62,7 +63,6 @@ define(function(require, exports, module){
     });
 
     this.rootNode.add(this.background);
-
   }
   
   // create header
@@ -92,49 +92,43 @@ define(function(require, exports, module){
   function _createPhotos(yarnData) {
     this.photos = [];
 
-    for (var i = 0; i < 3 && i < yarnData.links.length; i++) {
-      var newPhoto = new ImageSurface({
-        size: [this.options.photoSize[0], this.options.photoSize[1]],
-        content: yarnData.links[i],
-        classes: ['FeedEntryPhoto'],
-        properties: {
-          'pointer-events': 'none',
-        },
-      });
+    // display number of photos and addPhotoButton
+    for (var i = 0; i <= yarnData.links.length && i <= this.options.showNum; i++) {
+      if (i === yarnData.links.length || i === this.options.showNum) {
+        // instantiate addPhotoButton elem
+        var elem = new Surface({
+          size: [this.options.photoSize[0], this.options.photoSize[1]],
+          content: '+',
+          classes: ['FeedEntryPhoto'],
+          properties: {
+            textSize: 30 + 'px',
+            backgroundColor: '#CCC',
+            textAlign: 'center',
+            lineHeight: this.options.photoSize[1] + 'px',
+            cursor: 'pointer',
+          }
+        });
+        this.addPhotoButton = elem;
+      } else {
+        // instantiate photo elem
+        var elem = new ImageSurface({
+          size: [this.options.photoSize[0], this.options.photoSize[1]],
+          content: yarnData.links[i],
+          classes: ['FeedEntryPhoto'],
+          properties: {
+            'pointer-events': 'none',
+          },
+        });
+      }
 
-      var photoModifier = new Modifier({
+      var elemModifier = new Modifier({
         transform: Transform.translate(0,0,2),
         align: [i * (this.options.photoSize[0] + this.options.photoPadding) / window.innerWidth , 0.9],
         origin: [0, 1]
       });
 
-      // attach photo to reference array and display node
-      this.photos.push(newPhoto);
-      this.rootNode.add(photoModifier).add(newPhoto);
-
-      newPhoto.pipe(this._eventOutput);
-
+      this.rootNode.add(elemModifier).add(elem);
     }
-
-    this.addPhotoButton = new Surface({
-        size: [this.options.photoSize[0], this.options.photoSize[1]],
-        content: '+',
-        classes: ['FeedEntryPhoto'],
-        properties: {
-          textSize: 30 + 'px',
-          backgroundColor: '#CCC',
-          textAlign: 'center',
-          lineHeight: this.options.photoSize[1] + 'px'
-        }
-      });
-
-      var addPhotoButtonModifier = new Modifier({
-        transform: Transform.translate(0,0,2),
-        align: [(i+1) * (this.options.photoSize[0] + this.options.photoPadding) / window.innerWidth , 0.9],
-        origin: [0, 1]
-      });
-
-      this.rootNode.add(addPhotoButtonModifier).add(this.addPhotoButton);
   }
 
   // set listeners
@@ -155,4 +149,3 @@ define(function(require, exports, module){
 
   module.exports = FeedEntryView;
 });
-
