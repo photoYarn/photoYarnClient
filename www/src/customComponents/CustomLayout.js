@@ -19,8 +19,11 @@ define(function(require, exports, module) {
   var YarnView = require('views/YarnView');
   var AddToYarnView = require('views/AddToYarnView');
 
+  // CustomLayout constructor
   function CustomLayout(){
     HeaderFooterLayout.apply(this, arguments);
+
+    // adding elements
     _createContent.call(this);
     _createHeader.call(this);
     _createFooter.call(this);
@@ -126,23 +129,22 @@ define(function(require, exports, module) {
 
   // set listeners for buttons in footer nav and in content views
   function _setListeners() {
-    // associate nav button events to display content actions
+    // associate click events to display actions
     this.buttonRefs.viewFeed.on('click', function() {
-      console.log('Feed');
       this.feedView.createFeedEntriesFromServer(this.options.serverRequests.data);
       this.renderController.show(this.feedView);
       // this.options.serverRequests.updateData();
-      // TODO reintegrate update event when testFeed switched to main feed
+      // TODO reintegrate update event when displaying feedview
       // this.feedView.trigger('update');
-
     }.bind(this));
     this.buttonRefs.createYarn.on('click', function() {
-      console.log('New Yarn');
       this.renderController.show(this.newYarnView);
     }.bind(this));
     this.buttonRefs.viewProfile.on('click', function() {
-      console.log('Profile');
       this.renderController.show(this.profileView);
+    }.bind(this));
+    this.feedView.on('click', function(data) {
+      this.renderController.show(this.addToYarnView);
     }.bind(this));
   }
 
