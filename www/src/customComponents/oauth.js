@@ -41,7 +41,7 @@ define(function(require, exports, module) {
 
             var loginWindowLoadHandler = function(event) {
                 var url = event.url;
-                console.log('im running in cordova, here is url', url);
+                console.log('im running in cordova, im in loginWindowHandler, here is url', url);
                 if (url.indexOf('access_token') !== -1 || url.indexOf('error') !== -1) {
                     var timeout = 600 - (new Date().getTime() - startTime);
                     setTimeout(function () {
