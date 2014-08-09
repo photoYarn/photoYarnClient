@@ -131,12 +131,12 @@ define(function(require, exports, module) {
     // for now I'm returning data before we set up the db to actually handle
     //  the real GET request commented out above - Kyle
     return {
-      profilePicUrl: 'http://image.shutterstock.com/display_pic_with_logo/1142849/149083895/stock-vector-male-avatar-profile-picture-vector-149083895.jpg',
+      profilePicUrl: 'https://cdn3.iconfinder.com/data/icons/cat-power-premium/120/cat_tied-512.png',
       username: 'exampleUserName',
       userLocation: 'San Francisco',
-      numFollowers: 5,
-      numFollowing: 12,
-      likes: 3
+      numFollowers: 12,
+      numFollowing: 33,
+      likes: 11
     }
   };
 
