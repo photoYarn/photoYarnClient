@@ -54,7 +54,7 @@ define(function(require, exports, module){
     this.rootNode = this.add(this.rootModifier);
   }
 
-  // create background component
+  // create background
   function _createBackground(yarnData) {
     this.background = new Surface({
       content: yarnData.caption,
@@ -69,7 +69,7 @@ define(function(require, exports, module){
 
   }
   
-  // create header component
+  // create header
   function _createHeaders(yarnData) {
     this.yarnDetailButton = new Surface({
       size: [this.options.entryButtonSize[0], this.options.entryButtonSize[1]],
@@ -78,7 +78,8 @@ define(function(require, exports, module){
         backgroundColor: '#FF6138',
         lineHeight: this.options.captionSize[1] + 'px',
         textAlign: this.options.textAlign,
-        borderRadius: '5px'
+        borderRadius: '5px',
+        cursor: 'pointer',
       }
     });
 
@@ -99,19 +100,11 @@ define(function(require, exports, module){
       var newPhoto = new ImageSurface({
         size: [this.options.photoSize[0], this.options.photoSize[1]],
         content: yarnData.links[i],
-        classes: ['FeedEntryPhoto']
+        classes: ['FeedEntryPhoto'],
+        properties: {
+          'pointer-events': 'none',
+        },
       });
-
-      this.photos.push(newPhoto);
-
-      if (i < yarnData.links.length) {
-        var padding = new Surface({
-          size: [this.options.photoPadding, this.options.photoSize[1]]
-        });
-
-        this.photos.push(padding);
-        padding.pipe(this._eventOutput);
-      }
 
       var photoModifier = new Modifier({
         transform: Transform.translate(0,0,2),
@@ -119,10 +112,12 @@ define(function(require, exports, module){
         origin: [0, 1]
       });
 
+      // attach photo to reference array and display node
+      this.photos.push(newPhoto);
       this.rootNode.add(photoModifier).add(newPhoto);
 
-
       newPhoto.pipe(this._eventOutput);
+
     }
 
     this.addPhotoButton = new Surface({
@@ -146,18 +141,20 @@ define(function(require, exports, module){
       this.rootNode.add(addPhotoButtonModifier).add(this.addPhotoButton);
   }
 
-  // set listeners to bubble up events
+  // set listeners
   function _setListeners(yarnData) {
-    this.yarnDetailButton.pipe(this._eventOutput);
-    this.background.pipe(this._eventOutput);
-
+    // associate click events to display actions
     this.yarnDetailButton.on('click', function() {
       this._eventOutput.emit('showYarnDetail', yarnData);
     }.bind(this));
-
     this.addPhotoButton.on('click', function() {
       this._eventOutput.emit('showAddToYarn', yarnData);
     }.bind(this));
+
+    // bubble up sync events for scrolling
+    this.yarnDetailButton.pipe(this._eventOutput);
+    this.addPhotoButton.pipe(this._eventOutput);
+    this.background.pipe(this._eventOutput);
   }
 
   module.exports = FeedEntryView;
