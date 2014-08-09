@@ -114,6 +114,10 @@ define(function(require, exports, module) {
       login: new CustomButton({
         name: 'Login',
         classes: ['customButton', 'lightgreenBG']
+      }),
+      yarnView: new CustomButton({
+        name: 'YarnView',
+        classes: ['customButton', 'lightgreenBG']
       })
     };
 
@@ -122,7 +126,8 @@ define(function(require, exports, module) {
       this.buttonRefs.viewFeed,
       this.buttonRefs.createYarn,
       this.buttonRefs.viewProfile,
-      this.buttonRefs.login
+      this.buttonRefs.login,
+      this.buttonRefs.yarnView
     ];
     this.buttonGrid = new GridLayout({
       dimensions: [this.buttons.length, 1]
@@ -151,6 +156,9 @@ define(function(require, exports, module) {
     }.bind(this));
     this.feedView.on('click', function(data) {
       this.renderController.show(this.addToYarnView);
+    }.bind(this));
+    this.buttonRefs.yarnView.on('click', function(data) {
+      this.renderController.show(this.yarnView);
     }.bind(this));
 
     this.buttonRefs.login.on('click', function() {
