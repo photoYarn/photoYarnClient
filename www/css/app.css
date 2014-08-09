@@ -77,6 +77,11 @@ html {
   margin-left: 10px;
 }
 
+.AddPicViewPic {
+	border: 2px solid #FF6138;
+	border-radius: 5px;
+}
+
 .salmonBG{
   background-color: #FF6138;
 }

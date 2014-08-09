@@ -9,15 +9,10 @@ define(function(require, exports, module) {
 
   var serverRequests;
 
-  
-
   //Variables used by this view
   var captionData = '';
   var mongoData = {};
   var catGif = 'http://37.media.tumblr.com/35e8d0682251fa96580100ea6a182e13/tumblr_mst9derOy01re0m3eo1_r12_500.gif';
-
-
-
 
   if(navigator.camera){
     var takePictureOptions = {
@@ -44,48 +39,48 @@ define(function(require, exports, module) {
     _createTakePictureButton.call(this);
     _createGetPictureButton.call(this);
     _createCaption.call(this);
+    _createPictureFrame.call(this);
     serverRequests = this.options.serverRequests;
 
-    this.add(pictureFrame);
   }
-
-  var pictureFrame = new ImageSurface({
-    content: catGif,
-    align: [0.5, 0.5],
-    origin: [0.5, 0.5],
-    size: [200, true]
-  });
 
   NewYarnView.prototype = Object.create(View.prototype);
   NewYarnView.prototype.constructor = NewYarnView;
   NewYarnView.DEFAULT_OPTIONS = {
     getPictureMsg: 'Get Picture',
-    takePictureMsg: 'Take Picture'    
+    takePictureMsg: 'Take Picture',
+    picSize: [175, 220]
   };
 
   function _createCaption(){
-
-
+    console.log(window.innerWidth)
     this.caption = new InputSurface({
-      size: [100, 20]
+      size: [this.options.picSize[0], true],
+      placeholder: 'Your caption here'
     });
 
     this.captionModifier = new StateModifier({
-      transform : Transform.translate(0, -200, 0)
+      align: [0.5, 0],
+      origin: [0.5, -4]
     });
 
-
     this.captionButton = new Surface({
-      size: [50, 20],
+      size: [50, 50],
       content: 'Submit',
+      classes: ['CaptionSubmitButton'],
       properties: {
-        backgroundColor: 'red'
-      }
+        borderRadius: '10px',
+        fontWeight: 'bold',
+        textAlign: 'center',
+        lineHeight: '50px',
+        backgroundColor: '#FF6138',
+        color: 'white',
+      },
     });
 
     var buttonModifier = new StateModifier({
-        // places the icon in the proper location
-        transform: Transform.translate(100, 0, 0)
+      align: [0.5,1],
+      origin: [0.5,1.5]
     });
 
     var captionNode = this.add(this.captionModifier);
@@ -112,14 +107,18 @@ define(function(require, exports, module) {
 
     this.takePictureModifier = new StateModifier({
       align: [0.25,1],
-      origin: [0.25,1]
+      origin: [0.5,1.5]
     });
 
     this.takePicture = new Surface({
-      size: [100, true],
+      size: [100, 50],
       content: this.options.takePictureMsg,
       properties: {
-        backgroundColor: '#fa5c4f',
+        borderRadius: '10px',
+        fontWeight: 'bold',
+        textAlign: 'center',
+        lineHeight: '50px',
+        backgroundColor: '#79BD8F',
         color: 'white',
       },
     });
@@ -134,15 +133,19 @@ define(function(require, exports, module) {
 
   function _createGetPictureButton() {
     this.getPictureModifier = new StateModifier({
-      origin: [0.75,1],
+      origin: [0.5, 1.5],
       align: [0.75, 1]
     });
 
     this.getPicture = new Surface({
-      size: [100, true],
+      size: [100, 50],
       content: this.options.getPictureMsg,
       properties: {
-        backgroundColor: '#fa5c4f',
+        borderRadius: '10px',
+        lineHeight: '50px',
+        fontWeight: 'bold',
+        textAlign: 'center',
+        backgroundColor: '#79BD8F',
         color: 'white',
       },
     });
@@ -153,6 +156,21 @@ define(function(require, exports, module) {
       console.log('GetPicture Clicked!');
       navigator.camera.getPicture(onCameraSuccess, onCameraFail, getPictureOptions);
       }.bind(this));
+  }
+  
+  function _createPictureFrame() {
+    var pictureFrame = new ImageSurface({
+      content: catGif,
+      size: [this.options.picSize[0], this.options.picSize[1]],
+      classes: ['AddPicViewPic']
+    });
+    
+    var pictureFrameModifier = new StateModifier({
+      align: [0.5, 0.5],
+      origin: [0.5, 0.5]  
+    });
+    
+    this.add(pictureFrameModifier).add(pictureFrame);
   }
 
 
