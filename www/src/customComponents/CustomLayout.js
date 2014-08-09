@@ -11,6 +11,7 @@ define(function(require, exports, module) {
 
   // import components/utilities
   var CustomButton = require('customComponents/CustomButton');
+  var oauth = require('customComponents/oauth');
 
   // import views
   var NewYarnView = require('views/NewYarnView');
@@ -107,6 +108,10 @@ define(function(require, exports, module) {
         name: 'Profile',
         classes: ['customButton', 'lightgreenBG'],
       }),
+      login: new CustomButton({
+        name: 'Login',
+        classes: ['customButton', 'lightgreenBG']
+      })
     };
 
     // create grid layout for buttons
@@ -114,6 +119,7 @@ define(function(require, exports, module) {
       this.buttonRefs.viewFeed,
       this.buttonRefs.createYarn,
       this.buttonRefs.viewProfile,
+      this.buttonRefs.login
     ];
     this.buttonGrid = new GridLayout({
       dimensions: [this.buttons.length, 1]
@@ -144,6 +150,31 @@ define(function(require, exports, module) {
       console.log('Profile');
       this.renderController.show(this.profileView);
     }.bind(this));
+
+    this.buttonRefs.login.on('click', function() {
+      oauth.login(function(response) {
+          if (response.status === 'connected') {
+              console.log('fb login success, received access token');
+
+              // check against database to see if new user
+              // or current user by sending request to
+              $.ajax({
+                  type: "GET",
+                  url: "https://graph.facebook.com/me?access_token=...",
+                  success: function(data) {
+                      console.log(data)
+                      var facebookId = data.id;
+                      
+                  }
+              })
+
+              // redirect to home page here?
+
+          } else {
+              console.log('login failed', response.error);
+          }
+      });
+    })
   }
 
   module.exports = CustomLayout;
