@@ -39,13 +39,13 @@ define(function(require, exports, module){
       size: [100,],
       align: [0.5, 0],
       origin: [0.5, 0],
-      transform: Transform.translate(0,0,-10)
+      transform: Transform.translate(0,15,-10)
     });
     this.add(this.scrollModifier).add(this.scrollView);
 
   }
 
-  YarnView.prototype.magicTime = function(data){
+  YarnView.prototype.createDetail = function(data){
     var targetArray = data.links;
     console.log(targetArray)
     this.sequence = [];

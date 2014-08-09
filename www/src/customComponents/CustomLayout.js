@@ -156,7 +156,7 @@ define(function(require, exports, module) {
 
     this.feedView.on('showYarnDetail', function(data) {
       this.yarnView.yarnData = data;
-      this.yarnView.magicTime(data);
+      this.yarnView.createDetail(data);
       this.renderController.show(this.yarnView);
     }.bind(this));
     this.feedView.on('showAddToYarn', function(data) {
