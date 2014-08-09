@@ -5,11 +5,7 @@ define(function(require, exports, module){
   var View = require('famous/core/View');
   var Surface = require('famous/core/Surface');
   var Modifier = require('famous/core/Modifier');
-  var ContainerSurface = require('famous/surfaces/ContainerSurface');
   var ImageSurface = require('famous/surfaces/ImageSurface');
-  var ScrollContainer = require('famous/views/ScrollContainer');
-  var GridLayout = require('famous/views/GridLayout');
-  var Scrollview = require('famous/views/Scrollview');
   var Transform = require('famous/core/Transform');
 
   // FeedEntryView constructor
@@ -22,8 +18,8 @@ define(function(require, exports, module){
     // adding elements
     _createRootNode.call(this);
     _createBackground.call(this, yarnData);
-    _createPhotos.call(this, yarnData);
     _createHeaders.call(this, yarnData);
+    _createPhotos.call(this, yarnData);
     _setListeners.call(this, yarnData);
   }
 
