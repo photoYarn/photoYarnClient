@@ -6,6 +6,7 @@ define(function(require, exports, module){
   var Scrollview = require('famous/views/Scrollview');
   var ViewSequence = require('famous/core/ViewSequence');
   var Transform = require('famous/core/Transform');
+  var Surface = require('famous/core/Surface');
 
   var serverRequests = require('services/serverRequests');
   var catGif = 'http://37.media.tumblr.com/35e8d0682251fa96580100ea6a182e13/tumblr_mst9derOy01re0m3eo1_r12_500.gif';
@@ -46,6 +47,7 @@ define(function(require, exports, module){
   }
 
   YarnView.prototype.createDetail = function(data){
+
     var targetArray = data.links;
     console.log(targetArray)
     this.sequence = [];
@@ -60,9 +62,26 @@ define(function(require, exports, module){
       this.sequence.push(image);      
       console.log(this.sequence);
     }
+
+    var addPhotoButton = new Surface({
+        size: [100, 30],
+        content: '+',
+        properties: {
+          textSize: 30 + 'px',
+          backgroundColor: '#CCC',
+          textAlign: 'center',
+        }
+      });
+
+    this.sequence.push(addPhotoButton);
+
+    addPhotoButton.on('click', function(){
+      console.log('HI!');
+      this._eventOutput.emit('showAddToYarn', this.yarnData);
+    }.bind(this))
+
     this.scrollView.sequenceFrom(this.sequence);
   }
-
 
   module.exports = YarnView;
 });
