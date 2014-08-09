@@ -70,7 +70,8 @@ define(function(require, exports, module){
 
     for (var i = 0; i < data.length; i++) {
       var newEntryView = new FeedEntryView({eventTarget: this.options.eventTarget}, data[i]);
-      newEntryView.pipe(this._eventOutput);
+      newEntryView.pipe(this.feed);
+      newEntryView.pipe(this._eventOutput); 
       photoCache[data[i]._id] = newEntryView;
       this.entries.push(newEntryView);
     }
