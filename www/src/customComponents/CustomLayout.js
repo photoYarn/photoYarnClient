@@ -45,7 +45,7 @@ define(function(require, exports, module) {
   function _createContent(){
 
     // famo.us logo because famo.us is cool!
-    var logo = new ImageSurface({
+    this.logo = new ImageSurface({
       size: [200, 200],
       content: 'http://img3.wikia.nocookie.net/__cb20130220230859/farmville2/images/a/aa/Super-Fine_Yarn_Ball.png',
     });
@@ -79,7 +79,7 @@ define(function(require, exports, module) {
     // initialize and attach RenderController to content display
     this.renderController = new RenderController();
     this.content.add(centerModifier).add(this.renderController);
-    this.renderController.show(logo);
+    this.renderController.show(this.logo);
   }
 
   // create header component
@@ -154,7 +154,12 @@ define(function(require, exports, module) {
     this.buttonRefs.viewProfile.on('click', function() {
       this.renderController.show(this.profileView);
     }.bind(this));
-    this.feedView.on('click', function(data) {
+
+    this.feedView.on('showYarnDetail', function(data) {
+      this.renderController.show(this.yarnView);
+    }.bind(this));
+    this.feedView.on('showAddToYarn', function(data) {
+      this.addToYarnView.yarnData = data;
       this.renderController.show(this.addToYarnView);
     }.bind(this));
     this.buttonRefs.yarnView.on('click', function(data) {
