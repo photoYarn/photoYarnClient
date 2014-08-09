@@ -127,7 +127,6 @@ define(function(require, exports, module) {
       this.buttonRefs.createYarn,
       this.buttonRefs.viewProfile,
       this.buttonRefs.login,
-      this.buttonRefs.yarnView
     ];
     this.buttonGrid = new GridLayout({
       dimensions: [this.buttons.length, 1]
@@ -156,14 +155,13 @@ define(function(require, exports, module) {
     }.bind(this));
 
     this.feedView.on('showYarnDetail', function(data) {
+      this.yarnView.yarnData = data;
+      this.yarnView.magicTime(data);
       this.renderController.show(this.yarnView);
     }.bind(this));
     this.feedView.on('showAddToYarn', function(data) {
       this.addToYarnView.yarnData = data;
       this.renderController.show(this.addToYarnView);
-    }.bind(this));
-    this.buttonRefs.yarnView.on('click', function(data) {
-      this.renderController.show(this.yarnView);
     }.bind(this));
 
     this.buttonRefs.login.on('click', function() {

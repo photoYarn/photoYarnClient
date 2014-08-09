@@ -4,6 +4,8 @@ define(function(require, exports, module){
   var StateModifier = require('famous/modifiers/StateModifier');
   var ImageSurface = require('famous/surfaces/ImageSurface');
   var Scrollview = require('famous/views/Scrollview');
+  var ViewSequence = require('famous/core/ViewSequence');
+  var Transform = require('famous/core/Transform');
 
   var serverRequests = require('services/serverRequests');
   var catGif = 'http://37.media.tumblr.com/35e8d0682251fa96580100ea6a182e13/tumblr_mst9derOy01re0m3eo1_r12_500.gif';
@@ -12,6 +14,7 @@ define(function(require, exports, module){
   function YarnView(){
     View.apply(this, arguments);
     console.log(serverRequests.data);
+    console.log('Yarn Data', this.yarnData);
 
     _createYarn.call(this);
   }
@@ -19,23 +22,45 @@ define(function(require, exports, module){
 
   YarnView.prototype = Object.create(View.prototype);
   YarnView.prototype.constructor = YarnView;
+  YarnView.DEFAULT_OPTIONS = {
+    entryHeight: 175
+  }
 
 
 
   function _createYarn(){
-    this.scrollView = new Scrollview({})
 
-    this.scrollModifier = new StateModifier({});
-
+    this.scrollView = new Scrollview({
+      align: [0.5, 0],
+      origin: [0.5, 0],
+      margin: 10000
+    })
+    this.scrollModifier = new StateModifier({
+      size: [100,],
+      align: [0.5, 0],
+      origin: [0.5, 0],
+      transform: Transform.translate(0,0,-10)
+    });
     this.add(this.scrollModifier).add(this.scrollView);
-    this.scrollView.on('click', function(){
-      this.magicTime();
-    }.bind(this));
+
   }
 
-  YarnView.prototype.magicTime = function(){
-    var targetYarn = serverRequests.data[serverRequests.cache[dummyTarget]];
-    console.log(targetYarn);
+  YarnView.prototype.magicTime = function(data){
+    var targetArray = data.links;
+    console.log(targetArray)
+    this.sequence = [];
+    for(var i = 0; i < targetArray.length; i++){
+      var cur = targetArray[i];
+      console.log(cur);
+      var image = new ImageSurface({
+        size: [100,125],
+        content: cur
+      })
+      image.pipe(this.scrollView);
+      this.sequence.push(image);      
+      console.log(this.sequence);
+    }
+    this.scrollView.sequenceFrom(this.sequence);
   }
 
 
