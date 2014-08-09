@@ -46,8 +46,6 @@ define(function(require, exports, module) {
             this.data.splice([this.cache[id]],1, cur);
           }
         }
-        console.log(this.data);
-        console.log(this.cache);
       }.bind(this),
       error: function (error) {
         console.log('Update Data Error: ', error);
