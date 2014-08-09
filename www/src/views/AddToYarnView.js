@@ -7,16 +7,18 @@ define(function(require, exports, module) {
   var Transform = require('famous/core/Transform');
 
   var catGif = 'http://37.media.tumblr.com/35e8d0682251fa96580100ea6a182e13/tumblr_mst9derOy01re0m3eo1_r12_500.gif';
+  
   var serverRequests;
 
   //Need some sort of yarnId and preset caption to post to /photo
   //expecting yarnId and image link _id from post to DB!
   var yarnData = {
-    yarnId : '53e269fe608875500746d30a', //string 
-    link: 'http://37.media.tumblr.com/35e8d0682251fa96580100ea6a182e13/tumblr_mst9derOy01re0m3eo1_r12_500.gif', //string,
+    yarnId : undefined, //string 
+    link: undefined, //string,
   };  
 
   if(navigator.camera){
+
     var takePictureOptions = {
       quality: 25,
       destinationType : Camera.DestinationType.DATA_URL,
@@ -87,11 +89,7 @@ define(function(require, exports, module) {
 
     this.sendButton.on('click', function(){
       pictureFrame.setContent(catGif);
-      console.log(yarnData);
-      var serverData = {};
-      serverData.yarnId = yarnData._id;
-      serverData.link = yarnData.link; 
-      serverRequests.postPhotoToServerYarn(serverData);
+      serverRequests.postToImgur(data, yarnData);
     }.bind(this));
 
   }
@@ -149,7 +147,6 @@ define(function(require, exports, module) {
 
   function onCameraSuccess(data){
     pictureFrame.setContent('data:image/jpeg;base64,' + data);
-    serverRequests.postToImgur(data, yarnData);
   }
 
   function onCameraFail(error){
@@ -157,4 +154,5 @@ define(function(require, exports, module) {
   }
 
   module.exports = AddToYarn;
+
 });

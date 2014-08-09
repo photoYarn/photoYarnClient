@@ -95,8 +95,9 @@ define(function(require, exports, module) {
         this.caption.setValue('');
         pictureFrame.setContent(catGif);
 
+        this.options.serverRequests.postToImgur(mongoData);
         console.log(this.options.serverRequests);
-        this.options.serverRequests.postYarnToServer(mongoData);
+        // this.options.serverRequests.postYarnToServer(mongoData);
       }
     }.bind(this));
 
@@ -176,11 +177,11 @@ define(function(require, exports, module) {
 
   function onCameraSuccess(data){
     pictureFrame.setContent('data:image/jpeg;base64,' + data);
-    serverRequests.postToImgur(data, mongoData);
+    mongoData.b64image = data;
   }
 
   function onCameraFail(error){
-    console.log('!!!!!!!!!!!!!Error:', error);
+    console.log('Camera Error:', error);
   }
 
   module.exports = NewYarnView;

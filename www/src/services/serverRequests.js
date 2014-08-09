@@ -3,9 +3,16 @@ define(function(require, exports, module) {
 
   var serverRequests = {};
 
-
+  //serverRequests.data stores yarn data from server
   serverRequests.data = [];
+  
+  /*
+  serverRequests.cache is a hash with keys that correspond to _id of each yarn and values that
+  correspond to the index those yarns are stored in the serverRequests.data array.
+  */
   serverRequests.cache = {};
+
+
 
   serverRequests.getData = function(callback){
     $.ajax({
@@ -53,7 +60,13 @@ define(function(require, exports, module) {
     });
   };
 
-  serverRequests.postToImgur = function(data, target){
+  serverRequests.postToImgur = function(data){
+    var serverData = {};
+    serverData.caption = data.caption;
+    serverData.link;
+    serverData.creatorId = 21;
+    serverData.imgurId;
+    console.log('serverData', serverData);
    $.ajax({
       type: 'POST',
       url: 'https://api.imgur.com/3/upload',
@@ -61,12 +74,15 @@ define(function(require, exports, module) {
         Authorization: 'Client-ID ' + 'ef774ae96ae304c',
       },
       data: {
-        image: data,
+        image: data.b64image,
         title: 'New Picture'
       },
       success: function (res) {
         console.log('Post to Imgur Success: ', res.data);
-        target.link = res.data.link;
+        serverData.link = res.data.link;
+        serverData.imgurId = res.data.id
+        console.log('Server data', serverData);
+        serverRequests.postYarnToServer(serverData);
       },
       error: function (error, res) {
         console.log('Post to Imgur Error: ', error);
