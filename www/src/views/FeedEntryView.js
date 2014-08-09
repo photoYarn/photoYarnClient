@@ -71,7 +71,7 @@ define(function(require, exports, module){
   
   // create header component
   function _createHeaders(yarnData) {
-    this.entryButton = new Surface({
+    this.yarnDetailButton = new Surface({
       size: [this.options.entryButtonSize[0], this.options.entryButtonSize[1]],
       content: yarnData.links.length + ' photos ' + '\u2794',
       properties: {
@@ -82,13 +82,13 @@ define(function(require, exports, module){
       }
     });
 
-    var entryButtonModifier = new Modifier({
+    var yarnDetailButtonModifier = new Modifier({
       transform: Transform.translate(-3,3,2),
       align: [1,0],
       origin: [1,0]
     });
 
-    this.rootNode.add(entryButtonModifier).add(this.entryButton);
+    this.rootNode.add(yarnDetailButtonModifier).add(this.yarnDetailButton);
   }
 
   // create photos display
@@ -122,7 +122,7 @@ define(function(require, exports, module){
       this.rootNode.add(photoModifier).add(newPhoto);
 
       if (i === yarnData.links.length - 1 && i < 4) {
-        var addPhotoButton = new Surface({
+        this.addPhotoButton = new Surface({
           size: [this.options.photoSize[0], this.options.photoSize[1]],
           content: '+',
           classes: ['FeedEntryPhoto'],
@@ -140,7 +140,7 @@ define(function(require, exports, module){
           origin: [0, 1]
         });
 
-        this.rootNode.add(addPhotoButtonModifier).add(addPhotoButton);
+        this.rootNode.add(addPhotoButtonModifier).add(this.addPhotoButton);
       }
 
       newPhoto.pipe(this._eventOutput);
@@ -149,13 +149,15 @@ define(function(require, exports, module){
 
   // set listeners to bubble up events
   function _setListeners(yarnData) {
-    this.entryButton.pipe(this._eventOutput);
+    this.yarnDetailButton.pipe(this._eventOutput);
     this.background.pipe(this._eventOutput);
 
-    this.entryButton.on('click', function(){
-      console.log(this.options.eventTarget);
-      console.log('clicked');
-      this.entryButton.emit('GoAddToYarn', yarnData);
+    this.yarnDetailButton.on('click', function() {
+      this._eventOutput.emit('showYarnDetail', yarnData);
+    }.bind(this));
+
+    this.addPhotoButton.on('click', function() {
+      this._eventOutput.emit('showAddToYarn', yarnData);
     }.bind(this));
   }
 

@@ -70,6 +70,7 @@ define(function(require, exports, module){
 
     for (var i = 0; i < data.length; i++) {
       var newEntryView = new FeedEntryView({eventTarget: this.options.eventTarget}, data[i]);
+      newEntryView.pipe(this._eventOutput);
       photoCache[data[i]._id] = newEntryView;
       this.entries.push(newEntryView);
     }
@@ -82,13 +83,7 @@ define(function(require, exports, module){
   } 
   
   function _setListeners() {
-    console.log(photoCache);
-  
-    var feedModifier = new Modifier({
-      transform: Transform.translate(0, 0, -10)
-    });
-  
-    this.rootNode.add(feedModifier).add(this.feed);     
+
   }
   
   module.exports = FeedView;
