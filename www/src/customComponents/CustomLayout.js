@@ -153,7 +153,10 @@ define(function(require, exports, module) {
     this.buttonRefs.viewProfile.on('click', function() {
       this.renderController.show(this.profileView);
     }.bind(this));
-
+    this.yarnView.on('showAddToYarn', function(data){
+      this.yarnView.yarnData = data;
+      this.renderController.show(this.addToYarnView)
+    }.bind(this))
     this.feedView.on('showYarnDetail', function(data) {
       this.yarnView.yarnData = data;
       this.yarnView.createDetail(data);

@@ -95,7 +95,7 @@ define(function(require, exports, module){
   function _createPhotos(yarnData) {
     this.photos = [];
 
-    for (var i = 0; i < yarnData.links.length && i < 5; i++) {
+    for (var i = 0; i < 3 && i < yarnData.links.length; i++) {
       var newPhoto = new ImageSurface({
         size: [this.options.photoSize[0], this.options.photoSize[1]],
         content: yarnData.links[i],
@@ -121,30 +121,29 @@ define(function(require, exports, module){
 
       this.rootNode.add(photoModifier).add(newPhoto);
 
-      if (i === yarnData.links.length - 1 && i < 4) {
-        this.addPhotoButton = new Surface({
-          size: [this.options.photoSize[0], this.options.photoSize[1]],
-          content: '+',
-          classes: ['FeedEntryPhoto'],
-          properties: {
-            textSize: 30 + 'px',
-            backgroundColor: '#CCC',
-            textAlign: 'center',
-            lineHeight: this.options.photoSize[1] + 'px'
-          }
-        });
-
-        var addPhotoButtonModifier = new Modifier({
-          transform: Transform.translate(0,0,2),
-          align: [(i+1) * (this.options.photoSize[0] + this.options.photoPadding) / window.innerWidth , 0.9],
-          origin: [0, 1]
-        });
-
-        this.rootNode.add(addPhotoButtonModifier).add(this.addPhotoButton);
-      }
 
       newPhoto.pipe(this._eventOutput);
     }
+
+    this.addPhotoButton = new Surface({
+        size: [this.options.photoSize[0], this.options.photoSize[1]],
+        content: '+',
+        classes: ['FeedEntryPhoto'],
+        properties: {
+          textSize: 30 + 'px',
+          backgroundColor: '#CCC',
+          textAlign: 'center',
+          lineHeight: this.options.photoSize[1] + 'px'
+        }
+      });
+
+      var addPhotoButtonModifier = new Modifier({
+        transform: Transform.translate(0,0,2),
+        align: [(i+1) * (this.options.photoSize[0] + this.options.photoPadding) / window.innerWidth , 0.9],
+        origin: [0, 1]
+      });
+
+      this.rootNode.add(addPhotoButtonModifier).add(this.addPhotoButton);
   }
 
   // set listeners to bubble up events
