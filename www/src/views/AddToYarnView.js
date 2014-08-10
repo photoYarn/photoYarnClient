@@ -87,8 +87,6 @@ define(function(require, exports, module) {
 
     this.sendButton.on('click', function(){
       this.yarnData.b64image = cameraData.b64image;
-      console.log('this.yarndata', this.yarnData);
-      console.log('yarndata', cameraData)
       pictureFrame.setContent(catGif);
       serverRequests.postToImgur(this.yarnData, 'add');
     }.bind(this));
@@ -115,7 +113,6 @@ define(function(require, exports, module) {
     this.add(this.takePictureModifier).add(this.takePicture);
 
     this.takePicture.on('click', function(){
-      console.log('TakePicture Clicked!');
       navigator.camera.getPicture(onCameraSuccess, onCameraFail, takePictureOptions);
       }.bind(this));
   }
@@ -138,7 +135,6 @@ define(function(require, exports, module) {
     this.add(this.getPictureModifier).add(this.getPicture);
 
     this.getPicture.on('click', function(){
-      console.log('GetPicture Clicked!');
       navigator.camera.getPicture(onCameraSuccess, onCameraFail, getPictureOptions);
       }.bind(this));
   }

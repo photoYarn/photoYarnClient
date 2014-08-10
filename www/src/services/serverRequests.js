@@ -68,7 +68,6 @@ define(function(require, exports, module) {
     serverData.link;
     serverData.imgurId;
     serverData.yarnId = data._id
-    console.log('serverData', serverData);
    $.ajax({
       type: 'POST',
       url: 'https://api.imgur.com/3/upload',

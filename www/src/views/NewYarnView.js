@@ -54,7 +54,6 @@ define(function(require, exports, module) {
   };
 
   function _createCaption(){
-    console.log(window.innerWidth)
     this.caption = new InputSurface({
       size: [this.options.picSize[0], true],
       placeholder: 'Your caption here'
@@ -90,7 +89,6 @@ define(function(require, exports, module) {
 
     this.captionButton.on('click', function(){
       captionData = this.caption.getValue();
-      console.log(captionData);
       if(!!captionData && !!serverData && pictureFrame.getContent() !== catGif){
         serverData.caption = captionData;
         this.caption.setValue('');
@@ -125,7 +123,6 @@ define(function(require, exports, module) {
     this.add(this.takePictureModifier).add(this.takePicture);
 
     this.takePicture.on('click', function(){
-      console.log('TakePicture Clicked!');
       navigator.camera.getPicture(onCameraSuccess, onCameraFail, takePictureOptions);
       }.bind(this));
   }
@@ -152,7 +149,6 @@ define(function(require, exports, module) {
     this.add(this.getPictureModifier).add(this.getPicture);
 
     this.getPicture.on('click', function(){
-      console.log('GetPicture Clicked!');
       navigator.camera.getPicture(onCameraSuccess, onCameraFail, getPictureOptions);
       }.bind(this));
   }
