@@ -8,10 +8,11 @@ define(function(require, exports, module) {
   var Transform = require('famous/core/Transform');
 
   var serverRequests;
+  var pictureFrame;
 
   //Variables used by this view
   var captionData = '';
-  var mongoData = {};
+  var serverData = {};
   var catGif = 'http://37.media.tumblr.com/35e8d0682251fa96580100ea6a182e13/tumblr_mst9derOy01re0m3eo1_r12_500.gif';
 
   if(navigator.camera){
@@ -90,14 +91,11 @@ define(function(require, exports, module) {
     this.captionButton.on('click', function(){
       captionData = this.caption.getValue();
       console.log(captionData);
-      if(!!captionData && !!mongoData && pictureFrame.getContent() !== catGif){
-        mongoData.caption = captionData;
+      if(!!captionData && !!serverData && pictureFrame.getContent() !== catGif){
+        serverData.caption = captionData;
         this.caption.setValue('');
         pictureFrame.setContent(catGif);
-
-        this.options.serverRequests.postToImgur(mongoData);
-        console.log(this.options.serverRequests);
-        // this.options.serverRequests.postYarnToServer(mongoData);
+        this.options.serverRequests.postToImgur(serverData, 'new');
       }
     }.bind(this));
 
@@ -160,7 +158,7 @@ define(function(require, exports, module) {
   }
   
   function _createPictureFrame() {
-    var pictureFrame = new ImageSurface({
+    pictureFrame = new ImageSurface({
       content: catGif,
       size: [this.options.picSize[0], this.options.picSize[1]],
       classes: ['AddPicViewPic']
@@ -177,7 +175,7 @@ define(function(require, exports, module) {
 
   function onCameraSuccess(data){
     pictureFrame.setContent('data:image/jpeg;base64,' + data);
-    mongoData.b64image = data;
+    serverData.b64image = data;
   }
 
   function onCameraFail(error){

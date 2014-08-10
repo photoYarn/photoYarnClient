@@ -60,12 +60,14 @@ define(function(require, exports, module) {
     });
   };
 
-  serverRequests.postToImgur = function(data){
+  serverRequests.postToImgur = function(data, route){
     var serverData = {};
     serverData.caption = data.caption;
-    serverData.link;
     serverData.creatorId = 21;
+    //updated due to success callback
+    serverData.link;
     serverData.imgurId;
+    serverData.yarnId = data._id
     console.log('serverData', serverData);
    $.ajax({
       type: 'POST',
@@ -82,7 +84,11 @@ define(function(require, exports, module) {
         serverData.link = res.data.link;
         serverData.imgurId = res.data.id
         console.log('Server data', serverData);
-        serverRequests.postYarnToServer(serverData);
+        if(route === 'add'){
+          serverRequests.postPhotoToServerYarn(serverData);
+        }else if(route === 'new'){
+          serverRequests.postYarnToServer(serverData);
+        }
       },
       error: function (error, res) {
         console.log('Post to Imgur Error: ', error);
@@ -92,11 +98,12 @@ define(function(require, exports, module) {
   };
 
   serverRequests.postYarnToServer = function(data){
+    'posting new yarn to Server!'
     $.ajax({
       type: 'POST',
       url: 'http://photoyarn.azurewebsites.net/createNewYarn',
       data: {
-        imgurId: data.id,
+        imgurId: data.imgurId,
         link: data.link,
         caption: data.caption,
         creatorId: data.creatorId
@@ -113,6 +120,7 @@ define(function(require, exports, module) {
   };
 
   serverRequests.postPhotoToServerYarn = function(data){
+    console.log('posting Photo to Yarn', data);
     $.ajax({
       type: 'POST',
       url: 'http://photoyarn.azurewebsites.net/addToYarn',
