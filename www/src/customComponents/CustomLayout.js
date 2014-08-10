@@ -126,7 +126,7 @@ define(function(require, exports, module) {
       this.buttonRefs.viewFeed,
       this.buttonRefs.createYarn,
       this.buttonRefs.viewProfile,
-      this.buttonRefs.login,
+      // this.buttonRefs.login,
     ];
     this.buttonGrid = new GridLayout({
       dimensions: [this.buttons.length, 1]

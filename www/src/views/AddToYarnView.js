@@ -7,16 +7,16 @@ define(function(require, exports, module) {
   var Transform = require('famous/core/Transform');
 
   var catGif = 'http://37.media.tumblr.com/35e8d0682251fa96580100ea6a182e13/tumblr_mst9derOy01re0m3eo1_r12_500.gif';
+  
   var serverRequests;
 
   //Need some sort of yarnId and preset caption to post to /photo
   //expecting yarnId and image link _id from post to DB!
-  var yarnData = {
-    yarnId : '53e269fe608875500746d30a', //string 
-    link: 'http://37.media.tumblr.com/35e8d0682251fa96580100ea6a182e13/tumblr_mst9derOy01re0m3eo1_r12_500.gif', //string,
-  };  
+  var cameraData = {};  
+
 
   if(navigator.camera){
+
     var takePictureOptions = {
       quality: 25,
       destinationType : Camera.DestinationType.DATA_URL,
@@ -86,12 +86,9 @@ define(function(require, exports, module) {
     sendButtonNode.add(this.sendButton);
 
     this.sendButton.on('click', function(){
+      this.yarnData.b64image = cameraData.b64image;
       pictureFrame.setContent(catGif);
-      console.log(yarnData);
-      var serverData = {};
-      serverData.yarnId = yarnData._id;
-      serverData.link = yarnData.link; 
-      serverRequests.postPhotoToServerYarn(serverData);
+      serverRequests.postToImgur(this.yarnData, 'add');
     }.bind(this));
 
   }
@@ -116,8 +113,6 @@ define(function(require, exports, module) {
     this.add(this.takePictureModifier).add(this.takePicture);
 
     this.takePicture.on('click', function(){
-      yarnData = this.yarnData;
-      console.log('TakePicture Clicked!');
       navigator.camera.getPicture(onCameraSuccess, onCameraFail, takePictureOptions);
       }.bind(this));
   }
@@ -140,8 +135,6 @@ define(function(require, exports, module) {
     this.add(this.getPictureModifier).add(this.getPicture);
 
     this.getPicture.on('click', function(){
-      yarnData = this.yarnData;
-      console.log('GetPicture Clicked!');
       navigator.camera.getPicture(onCameraSuccess, onCameraFail, getPictureOptions);
       }.bind(this));
   }
@@ -149,7 +142,7 @@ define(function(require, exports, module) {
 
   function onCameraSuccess(data){
     pictureFrame.setContent('data:image/jpeg;base64,' + data);
-    serverRequests.postToImgur(data, yarnData);
+    cameraData.b64image = data;
   }
 
   function onCameraFail(error){
@@ -157,4 +150,5 @@ define(function(require, exports, module) {
   }
 
   module.exports = AddToYarn;
+
 });
