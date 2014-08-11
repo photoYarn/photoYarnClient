@@ -77,9 +77,18 @@ html {
   margin-left: 10px;
 }
 
-.AddPicViewPic {
-	border: 2px solid #FF6138;
-	border-radius: 5px;
+.AddViewPictureFrame {
+  border: 2px solid #FF6138;
+  border-radius: 5px;
+}
+
+.AddViewButton {
+  border-radius: 10px;
+  line-height: 50px;
+  font-weight: bold;
+  text-align: center;
+  background-color: #79BD8F;
+  color: 'white';
 }
 
 .salmonBG{
