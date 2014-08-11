@@ -159,8 +159,7 @@ function _setListeners() {
   }.bind(this))
 
   this.feedView.on('showYarnDetail', function(data) {
-    this.yarnView.yarnData = data;
-    this.yarnView.createDetail(data);
+    this.yarnView.trigger('initYarnData', data);
     this.renderController.show(this.yarnView);
   }.bind(this));
 

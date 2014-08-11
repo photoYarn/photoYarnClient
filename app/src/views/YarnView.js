@@ -16,6 +16,7 @@ function YarnView(){
   console.log('Yarn Data', this.yarnData);
 
   _createYarn.call(this);
+  _setListeners.call(this);
 }
 
 
@@ -42,6 +43,13 @@ function _createYarn(){
   });
   this.add(this.scrollModifier).add(this.scrollView);
 
+}
+
+function _setListeners() {
+  this._eventInput.on('initYarnData', function(data) {
+    this.yarnData = data;
+    this.createDetail(data);
+  }.bind(this));
 }
 
 YarnView.prototype.createDetail = function(data){
