@@ -6,17 +6,22 @@ define(function(require, exports, module) {
   var ImageSurface = require('famous/surfaces/ImageSurface');
   var Transform = require('famous/core/Transform');
 
-  var catGif = 'http://37.media.tumblr.com/35e8d0682251fa96580100ea6a182e13/tumblr_mst9derOy01re0m3eo1_r12_500.gif';
+  //placeholder image used in production
+  var catGif = 'assets/catGif.gif';
   
+  //This is used 
   var serverRequests;
 
-  //Need some sort of yarnId and preset caption to post to /photo
-  //expecting yarnId and image link _id from post to DB!
-  var cameraData = {};  
+  /*
+  When this view is rendered it has a this.yarnData property
+  this.yarnData has  caption, _id, and a creatorId properties
+  When picture is added, it creates a b64image property to this.yarnData
+  */
 
 
   if(navigator.camera){
 
+    //options used when taking pictures with device camera
     var takePictureOptions = {
       quality: 25,
       destinationType : Camera.DestinationType.DATA_URL,
@@ -26,6 +31,7 @@ define(function(require, exports, module) {
       encodingType: Camera.EncodingType.JPEG
     };
 
+    //options used when getting pictures from device library
     var getPictureOptions = {
       quality: 25,
       destinationType : Camera.DestinationType.DATA_URL,
@@ -86,7 +92,6 @@ define(function(require, exports, module) {
     sendButtonNode.add(this.sendButton);
 
     this.sendButton.on('click', function(){
-      this.yarnData.b64image = cameraData.b64image;
       pictureFrame.setContent(catGif);
       serverRequests.postToImgur(this.yarnData, 'add');
     }.bind(this));
@@ -113,7 +118,10 @@ define(function(require, exports, module) {
     this.add(this.takePictureModifier).add(this.takePicture);
 
     this.takePicture.on('click', function(){
-      navigator.camera.getPicture(onCameraSuccess, onCameraFail, takePictureOptions);
+      var context = this;
+      navigator.camera.getPicture(function(data){
+        onCameraSuccess(data, context)
+      }, onCameraFail, takePictureOptions);
       }.bind(this));
   }
 
@@ -135,14 +143,17 @@ define(function(require, exports, module) {
     this.add(this.getPictureModifier).add(this.getPicture);
 
     this.getPicture.on('click', function(){
-      navigator.camera.getPicture(onCameraSuccess, onCameraFail, getPictureOptions);
+      var context = this;
+      navigator.camera.getPicture(function(data){
+        onCameraSuccess(data, context)
+      }, onCameraFail, getPictureOptions);
       }.bind(this));
   }
 
 
-  function onCameraSuccess(data){
+  function onCameraSuccess(data, context){
     pictureFrame.setContent('data:image/jpeg;base64,' + data);
-    cameraData.b64image = data;
+    context.yarnData.b64image = data;
   }
 
   function onCameraFail(error){

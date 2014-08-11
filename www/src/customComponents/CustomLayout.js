@@ -47,7 +47,7 @@ define(function(require, exports, module) {
     // famo.us logo because famo.us is cool!
     this.logo = new ImageSurface({
       size: [200, 200],
-      content: 'http://img3.wikia.nocookie.net/__cb20130220230859/farmville2/images/a/aa/Super-Fine_Yarn_Ball.png',
+      content: 'assets/catTied.png',
     });
 
     var centerModifier = new Modifier({
@@ -126,7 +126,7 @@ define(function(require, exports, module) {
       this.buttonRefs.viewFeed,
       this.buttonRefs.createYarn,
       this.buttonRefs.viewProfile,
-      // this.buttonRefs.login,
+      this.buttonRefs.login,
     ];
     this.buttonGrid = new GridLayout({
       dimensions: [this.buttons.length, 1]

@@ -13,7 +13,10 @@ define(function(require, exports, module) {
   serverRequests.cache = {};
 
 
-
+  /*
+  getData fetches data from server and stores it in data array
+  Stores strings of _id in cache 
+  */
   serverRequests.getData = function(callback){
     $.ajax({
       type: 'GET',
@@ -35,6 +38,10 @@ define(function(require, exports, module) {
     });
   };
 
+  /*
+  Checks for updated data from server, updates cache and data array if new info found.
+  Should emit an update event when update is succesful, to dictate state changes
+  */
   serverRequests.updateData = function(){
     console.log('Updating Data');
     $.ajax({
@@ -60,9 +67,15 @@ define(function(require, exports, module) {
     });
   };
 
+  /*
+  Posts images to imgur, and then either adds to a yarn or creates a new yarn.
+  Requires a data object with a caption, and a ._id which is the yarns unique id.
+  Requires a b64 string of the image to post to imgur, data.b64image.
+  */
   serverRequests.postToImgur = function(data, route){
     var serverData = {};
     serverData.caption = data.caption;
+    //serverData.creatorId is hard coded currently, as we do not have users implemented yet!
     serverData.creatorId = 21;
     //updated due to success callback
     serverData.link;
@@ -76,7 +89,8 @@ define(function(require, exports, module) {
       },
       data: {
         image: data.b64image,
-        title: 'New Picture'
+        //title is not necessary for the purposes of our app. 
+        title: data.caption
       },
       success: function (res) {
         console.log('Post to Imgur Success: ', res.data);
@@ -96,6 +110,11 @@ define(function(require, exports, module) {
     });
   };
 
+  /*
+  Adds a new yarn to the server
+  On success will invoke the update function
+  Requires a data object with imgurId, link, caption, and creatorId properties
+  */
   serverRequests.postYarnToServer = function(data){
     'posting new yarn to Server!'
     $.ajax({
@@ -118,6 +137,11 @@ define(function(require, exports, module) {
     });
   };
 
+  /*
+  Adds a photo to a yarn on the server
+  On success, will invoke the update function
+  Requires a data object with yarnId and link properties.
+  */
   serverRequests.postPhotoToServerYarn = function(data){
     console.log('posting Photo to Yarn', data);
     $.ajax({
@@ -154,7 +178,7 @@ define(function(require, exports, module) {
     // for now I'm returning data before we set up the db to actually handle
     //  the real GET request commented out above - Kyle
     return {
-      profilePicUrl: 'https://cdn3.iconfinder.com/data/icons/cat-power-premium/120/cat_tied-512.png',
+      profilePicUrl: 'assets/catTied.png',
       username: 'exampleUserName',
       userLocation: 'San Francisco',
       numFollowers: 12,
