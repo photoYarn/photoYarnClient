@@ -6,17 +6,26 @@ define(function(require, exports, module) {
   var ImageSurface = require('famous/surfaces/ImageSurface');
   var Transform = require('famous/core/Transform');
 
+  //placeholder image used in production
   var catGif = 'assets/catGif.gif';
   
+  //This is used 
   var serverRequests;
 
   //Need some sort of yarnId and preset caption to post to /photo
   //expecting yarnId and image link _id from post to DB!
   var cameraData = {};  
 
+  /*
+  When this view is rendered it has a this.yarnData property
+  this.yarnData has  caption, _id, and a creatorId properties
+  When picture is added, it creates a b64image property to this.yarnData
+  */
+
 
   if(navigator.camera){
 
+    //options used when taking pictures with device camera
     var takePictureOptions = {
       quality: 25,
       destinationType : Camera.DestinationType.DATA_URL,
@@ -26,6 +35,7 @@ define(function(require, exports, module) {
       encodingType: Camera.EncodingType.JPEG
     };
 
+    //options used when getting pictures from device library
     var getPictureOptions = {
       quality: 25,
       destinationType : Camera.DestinationType.DATA_URL,

@@ -11,9 +11,7 @@ define(function(require, exports, module) {
   var pictureFrame;
 
   //Variables used by this view
-  var captionData = '';
-  var serverData = {};
-  var catGif = 'assets/catGif.gif';
+  var catGif = './assets/catGif.gif';
 
   if(navigator.camera){
     var takePictureOptions = {
@@ -36,6 +34,8 @@ define(function(require, exports, module) {
 
   function NewYarnView(){
     View.apply(this, arguments);
+
+    this.yarnData = {};
 
     _createTakePictureButton.call(this);
     _createGetPictureButton.call(this);
@@ -88,12 +88,11 @@ define(function(require, exports, module) {
     captionNode.add(buttonModifier).add(this.captionButton);
 
     this.captionButton.on('click', function(){
-      captionData = this.caption.getValue();
-      if(!!captionData && !!serverData && pictureFrame.getContent() !== catGif){
-        serverData.caption = captionData;
+      if(this.caption.getValue() !== undefined && pictureFrame.getContent() !== catGif){
+        this.yarnData.caption = this.caption.getValue();
         this.caption.setValue('');
         pictureFrame.setContent(catGif);
-        this.options.serverRequests.postToImgur(serverData, 'new');
+        this.options.serverRequests.postToImgur(this.yarnData, 'new');
       }
     }.bind(this));
 
@@ -123,7 +122,11 @@ define(function(require, exports, module) {
     this.add(this.takePictureModifier).add(this.takePicture);
 
     this.takePicture.on('click', function(){
-      navigator.camera.getPicture(onCameraSuccess, onCameraFail, takePictureOptions);
+      var context = this;
+      console.log(context.yarnData);
+      navigator.camera.getPicture(function(data){
+        onCameraSuccess(data, context)
+      }, onCameraFail, takePictureOptions);
       }.bind(this));
   }
 
@@ -149,7 +152,10 @@ define(function(require, exports, module) {
     this.add(this.getPictureModifier).add(this.getPicture);
 
     this.getPicture.on('click', function(){
-      navigator.camera.getPicture(onCameraSuccess, onCameraFail, getPictureOptions);
+      var context = this;
+      navigator.camera.getPicture(function(data){
+        onCameraSuccess(data, context)
+      }, onCameraFail, getPictureOptions);
       }.bind(this));
   }
   
@@ -169,9 +175,9 @@ define(function(require, exports, module) {
   }
 
 
-  function onCameraSuccess(data){
+  function onCameraSuccess(data, context){
     pictureFrame.setContent('data:image/jpeg;base64,' + data);
-    serverData.b64image = data;
+    context.yarnData.b64image = data;
   }
 
   function onCameraFail(error){
