@@ -12,25 +12,6 @@ var pictureFrame;
 //Variables used by this view
 var catGif = './assets/catGif.gif';
 
-if(navigator.camera){
-  var takePictureOptions = {
-    destinationType : Camera.DestinationType.DATA_URL,
-    sourceType : Camera.PictureSourceType.CAMERA,
-    correctOrientation: true,
-    saveToPhotoAlbum: true,
-    encodingType: Camera.EncodingType.JPEG,
-    quality: 25
-  };
-
-  var getPictureOptions = {
-    destinationType : Camera.DestinationType.DATA_URL,
-    sourceType : Camera.PictureSourceType.PHOTOLIBRARY,
-    correctOrientation: true,
-    encodingType: Camera.EncodingType.JPEG,
-    quality: 25
-  };    
-}
-
 function NewYarnView(){
   View.apply(this, arguments);
 
@@ -124,7 +105,14 @@ function _createTakePictureButton() {
     var context = this;
     navigator.camera.getPicture(function(data){
       onCameraSuccess(data, context)
-    }, onCameraFail, takePictureOptions);
+    }, onCameraFail, {
+      destinationType : Camera.DestinationType.DATA_URL,
+      sourceType : Camera.PictureSourceType.CAMERA,
+      correctOrientation: true,
+      saveToPhotoAlbum: true,
+      encodingType: Camera.EncodingType.JPEG,
+      quality: 25
+  });
     }.bind(this));
 }
 
@@ -153,7 +141,14 @@ function _createGetPictureButton() {
     var context = this;
     navigator.camera.getPicture(function(data){
       onCameraSuccess(data, context)
-    }, onCameraFail, getPictureOptions);
+    }, onCameraFail, 
+    {
+      destinationType : Camera.DestinationType.DATA_URL,
+      sourceType : Camera.PictureSourceType.PHOTOLIBRARY,
+      correctOrientation: true,
+      encodingType: Camera.EncodingType.JPEG,
+      quality: 25
+  });
     }.bind(this));
 }
 

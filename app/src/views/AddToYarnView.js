@@ -17,30 +17,6 @@ this.yarnData has  caption, _id, and a creatorId properties
 When picture is added, it creates a b64image property to this.yarnData
 */
 
-
-if(navigator.camera){
-
-  //options used when taking pictures with device camera
-  var takePictureOptions = {
-    quality: 25,
-    destinationType : Camera.DestinationType.DATA_URL,
-    sourceType : Camera.PictureSourceType.CAMERA,
-    correctOrientation: true,
-    saveToPhotoAlbum: true,
-    encodingType: Camera.EncodingType.JPEG
-  };
-
-  //options used when getting pictures from device library
-  var getPictureOptions = {
-    quality: 25,
-    destinationType : Camera.DestinationType.DATA_URL,
-    sourceType : Camera.PictureSourceType.PHOTOLIBRARY,
-    correctOrientation: true,
-    encodingType: Camera.EncodingType.JPEG
-
-  };    
-}
-
 function AddToYarn(){
   View.apply(this, arguments);
 
@@ -120,7 +96,15 @@ function _createTakePictureButton() {
     var context = this;
     navigator.camera.getPicture(function(data){
       onCameraSuccess(data, context)
-    }, onCameraFail, takePictureOptions);
+    }, onCameraFail, 
+    {
+      quality: 25,
+      destinationType : Camera.DestinationType.DATA_URL,
+      sourceType : Camera.PictureSourceType.CAMERA,
+      correctOrientation: true,
+      saveToPhotoAlbum: true,
+      encodingType: Camera.EncodingType.JPEG
+  });
     }.bind(this));
 }
 
@@ -145,7 +129,14 @@ function _createGetPictureButton() {
     var context = this;
     navigator.camera.getPicture(function(data){
       onCameraSuccess(data, context)
-    }, onCameraFail, getPictureOptions);
+    }, onCameraFail, 
+    {
+      quality: 25,
+      destinationType : Camera.DestinationType.DATA_URL,
+      sourceType : Camera.PictureSourceType.PHOTOLIBRARY,
+      correctOrientation: true,
+      encodingType: Camera.EncodingType.JPEG
+  });
     }.bind(this));
 }
 
