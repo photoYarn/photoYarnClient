@@ -1,0 +1,32 @@
+{
+  "name": "photoYarnClient",
+  "version": "0.0.0",
+  "description": "Photo Yarn Client",
+  "main": "index.js",
+  "dependencies": {
+    "brfs": "^1.2.0",
+    "browserify": "^5.9.3",
+    "cssify": "^0.6.0",
+    "famous": "^0.2.2",
+    "famous-polyfills": "^0.2.2",
+    "insert-css": "^0.2.0",
+    "jquery": "^2.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "browserify app/src/main.js -t cssify -t brfs | uglifyjs > www/bundle.js",
+    "watch": "watchify app/src/main.js -t cssify -t brfs -o www/bundle.js --debug --verbose",
+    "serve": "serve --compress www"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/photoYarnClient/photoYarnClient.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/photoyarn/photoYarnClient/issues"
+  },
+  "homepage": "https://github.com/photoyarn/photoYarnClient"
+}

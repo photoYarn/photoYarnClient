@@ -1,0 +1,108 @@
+html {
+    background-color: #fff;
+    color: #000;
+}
+
+.double-sided {
+    -webkit-backface-visibility: visible;
+    backface-visibility: visible;
+}
+
+.header {
+  font-size: 30px;
+}
+
+.FeedEntryBackground {
+  border: 1px solid black;
+  text-indent: 5px;
+  font-weight: bold;
+}
+
+.Background {
+  background-color: #BBB;
+}
+
+.ProfileHeaderButton {
+  border-radius: 10px;
+  border: 2px solid white;
+  margin-top: 3px;
+  color: #FFF;
+  font: 14px Georgia, sans-serif;
+  font-weight: bold;
+}
+
+.ProfileUserLocation {
+  color: #777;
+  font: 16px Georgia, sans-serif;
+}
+
+.ProfileUsername {
+  color: #777;
+  font: 17px Georgia, sans-serif;
+  font-weight: bold;
+}
+
+.FeedEntryDivider {
+  /* fallback */
+  background-color: #CCC;
+  background: url(images/linear_bg_2.png);
+  background-repeat: repeat-x;
+
+  /* Safari 4-5, Chrome 1-9 */
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#CCC), to(#000));
+
+  /* Safari 5.1, Chrome 10+ */
+  background: -webkit-linear-gradient(top, #000, #CCC);
+
+  /* Firefox 3.6+ */
+  background: -moz-linear-gradient(top, #000, #CCC);
+
+  /* IE 10 */
+  background: -ms-linear-gradient(top, #000, #CCC);
+
+  /* Opera 11.10+ */
+  background: -o-linear-gradient(top, #000, #CCC);
+
+}
+
+.FeedEntryCaption {
+  color: #777;
+  font: 15px Georgia, sans-serif;
+  font-weight:bold;
+  margin-left: 5px;
+}
+
+.FeedEntryPhoto {
+  border-radius: 5px;
+  margin-left: 10px;
+}
+
+.AddPicViewPic {
+	border: 2px solid #FF6138;
+	border-radius: 5px;
+}
+
+.salmonBG{
+  background-color: #FF6138;
+}
+
+.yellowBG{
+  background-color: #FFFF9D; 
+}
+
+.lightgreenBG{
+  background-color: #BEEB9F;
+}
+
+.medgreenBG{
+  background-color: #79BD8F;
+}
+
+.darkgreenBG{
+  background-color: #00A388;
+}
+
+.customButton{
+  color: #FF6138;
+  font-weight: bold;
+}

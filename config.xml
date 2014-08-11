@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="io.cordova.hellocordova" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>photoYarn</name>
+    <description>
+        Spin a story with your friends through photos.
+    </description>
+    <author email="kiafathi@me.com" href="http://github.com/photYarn">
+        photoYarn Team
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+</widget>
