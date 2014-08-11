@@ -123,7 +123,6 @@ define(function(require, exports, module) {
 
     this.takePicture.on('click', function(){
       var context = this;
-      console.log(context.yarnData);
       navigator.camera.getPicture(function(data){
         onCameraSuccess(data, context)
       }, onCameraFail, takePictureOptions);
