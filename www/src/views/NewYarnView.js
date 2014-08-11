@@ -13,7 +13,7 @@ define(function(require, exports, module) {
   //Variables used by this view
   var captionData = '';
   var serverData = {};
-  var catGif = 'http://37.media.tumblr.com/35e8d0682251fa96580100ea6a182e13/tumblr_mst9derOy01re0m3eo1_r12_500.gif';
+  var catGif = 'assets/catGif.gif';
 
   if(navigator.camera){
     var takePictureOptions = {
