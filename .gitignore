@@ -4,3 +4,4 @@ plugins/android.json
 plugins/org.apache.cordova.camera
 plugins/org.apache.cordova.console
 node_modules
+www/bundle.js
