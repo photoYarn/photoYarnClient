@@ -173,30 +173,31 @@ function _setListeners() {
 
             // check against database to see if new user
             // or current user by sending request to
-            // $.ajax({
-            //     type: "GET",
-            //     url: "https://graph.facebook.com/me?access_token=" + response.token,
-            //     success: function(data) {
-            //         console.log(data)
-            //         var userData = {
-            //             id: data.id,
-            //             gender: data.gender.charAt(0),
-            //             name: data.name
-            //         }
-            //         console.log(userData)
-            //         // request to /users
-            //         $.ajax({
-            //             type: 'GET',
-            //             url: 'http://localhost:8100/users',
-            //             success: function(data) {
-            //                 console.log(data);
-            //             },
-            //             error: function(error) {
-            //                 console.log(error)
-            //             }
-            //         });
-            //     }
-            // })
+            $.ajax({
+                type: "GET",
+                url: "https://graph.facebook.com/me?access_token=" + response.token,
+                success: function(data) {
+                    console.log(data)
+                    var userData = {
+                        id: data.id,
+                        gender: data.gender.charAt(0),
+                        name: data.name
+                    }
+                    console.log(userData)
+                    // request to /users
+                    $.ajax({
+                        type: 'POST',
+                        url: 'http://photoyarn.azurewebsites.net/users',
+                        data: userData,
+                        success: function(data) {
+                            console.log(data);
+                        },
+                        error: function(error) {
+                            console.log(error)
+                        }
+                    });
+                }
+            })
 
             // redirect to home page here?
 

@@ -102,6 +102,7 @@ var oauth = (function() {
 
     var tokenStore = window.sessionStorage;
     var appId = 261431800718045; // this is considered public knowledge
+    // var appId;
 
     var loginCallback;
     var loginProcessed;
@@ -124,7 +125,7 @@ var oauth = (function() {
     // };
 
     var isLoggedIn = function() {
-        return tokenStore.hasOwnProperty('access_token');
+        return tokenStore.getItem('access_token') !== null;
     }
 
     var login = function(callback) {
@@ -137,12 +138,15 @@ var oauth = (function() {
         var loginWindowLoadHandler = function(event) {
             var url = event.url;
             console.log('im running in cordova, im in loginWindowHandler, here is url', url);
-            if (url.indexOf('access_token') !== -1 || url.indexOf('error') !== -1) {
-                var timeout = 600 - (new Date().getTime() - startTime);
-                setTimeout(function () {
-                    loginWindow.close();
-                }, timeout > 0 ? timeout : 0);
+            if (url.indexOf('access_token') !== -1) {
+                console.log('here is your access token')
+                // var timeout = 600 - (new Date().getTime() - startTime);
+                // setTimeout(function () {
+                loginWindow.close();
+                // }, timeout > 0 ? timeout : 0);
                 oauthCallback(url);
+            } else if (url.indexOf('error') !== -1) {
+                console.log('there is an error')
             }
         };
 
@@ -165,7 +169,8 @@ var oauth = (function() {
                     '&response_type=token&scope=public_profile', '_blank', 'location=no');
 
         if (runningInCordova) {
-            tokenStore = window.LocalStorage;
+            tokenStore = window.localStorage;
+            console.log(tokenStore);
             loginWindow.addEventListener('loadstart', loginWindowLoadHandler);
             loginWindow.addEventListener('exit', loginWindowExitHandler);
         }
@@ -173,8 +178,9 @@ var oauth = (function() {
     };
 
     var logout = function(callback) {
-        var access_token = tokenStore['access_token']
-        delete tokenStore['access_token'];
+        var access_token = tokenStore.getItem('access_token');
+        console.log('deleting access token')
+        tokenStore.removeItem('access_token');
         if (callback) {
             callback(access_token);
         }
@@ -190,8 +196,7 @@ var oauth = (function() {
         if (url.indexOf("access_token=") !== -1) {
             queryString = url.substr(url.indexOf('#') + 1);
             queryObj = $.deparam(queryString)
-            console.log(queryObj)
-            tokenStore.access_token = queryObj.access_token;
+            tokenStore.setItem('access_token', queryObj['access_token']);
             console.log(tokenStore)
             if (loginCallback) {
                 loginCallback({
@@ -228,3 +233,4 @@ var oauth = (function() {
 })();
 
 module.exports = oauth;
+
