@@ -36,14 +36,15 @@ NewYarnView.DEFAULT_OPTIONS = {
 function _createCaption(){
   this.caption = new InputSurface({
     size: [this.options.picSize[0], true],
-    placeholder: 'Your caption here'
+    placeholder: 'Your caption goes here',
+    classes: ['CaptionInput']
   });
-
+  
   this.captionModifier = new StateModifier({
     align: [0.5, 0],
     origin: [0.5, -4]
   });
-
+  
   this.captionButton = new Surface({
     size: [50, 50],
     content: 'Submit',
@@ -57,16 +58,20 @@ function _createCaption(){
       color: 'white',
     },
   });
-
+  
   var buttonModifier = new StateModifier({
     align: [0.5,1],
     origin: [0.5,1.5]
   });
-
+  
   var captionNode = this.add(this.captionModifier);
   captionNode.add(this.caption);
   captionNode.add(buttonModifier).add(this.captionButton);
-
+  
+  this.caption.on('click', function () {
+    document.getElementsByClassName('CaptionInput')[0].maxLength = 30;
+  });
+  
   this.captionButton.on('click', function(){
     if(this.caption.getValue() !== undefined && pictureFrame.getContent() !== catGif){
       this.yarnData.caption = this.caption.getValue();
@@ -75,7 +80,6 @@ function _createCaption(){
       this.options.serverRequests.postToImgur(this.yarnData, 'new');
     }
   }.bind(this));
-
 }
 
 
