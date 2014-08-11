@@ -140,29 +140,32 @@ function _createFooter(){
 function _setListeners() {
   // associate click events to display actions
   this.buttonRefs.viewFeed.on('click', function() {
-    this.feedView.createFeedEntriesFromServer(this.options.serverRequests.data);
+    this.feedView.trigger('refreshFeed', this.options.serverRequests.data);
     this.renderController.show(this.feedView);
-    // this.options.serverRequests.updateData();
-    // TODO reintegrate update event when displaying feedview
-    // this.feedView.trigger('update');
   }.bind(this));
+
   this.buttonRefs.createYarn.on('click', function() {
     this.renderController.show(this.newYarnView);
   }.bind(this));
+
   this.buttonRefs.viewProfile.on('click', function() {
     this.renderController.show(this.profileView);
   }.bind(this));
-  this.yarnView.on('showAddToYarn', function(data){
-    this.yarnView.yarnData = data;
+
+  // TODO decouple event and child trigger to sync with this.feedView
+  this.yarnView.on('showAddToYarn', function(data) {
+    this.addToYarnView.trigger('initYarnData', data);
     this.renderController.show(this.addToYarnView)
   }.bind(this))
+
   this.feedView.on('showYarnDetail', function(data) {
-    this.yarnView.yarnData = data;
-    this.yarnView.createDetail(data);
+    this.yarnView.trigger('initYarnData', data);
     this.renderController.show(this.yarnView);
   }.bind(this));
+
+  // TODO decouple event and child trigger to sync with this.yarnView
   this.feedView.on('showAddToYarn', function(data) {
-    this.addToYarnView.yarnData = data;
+    this.addToYarnView.trigger('initYarnData', data);
     this.renderController.show(this.addToYarnView);
   }.bind(this));
 

@@ -15,14 +15,16 @@ var catGif = './assets/catGif.gif';
 function NewYarnView(){
   View.apply(this, arguments);
 
+  // initialize class variables
   this.yarnData = {};
+  serverRequests = this.options.serverRequests;
 
+  // add elements
   _createTakePictureButton.call(this);
   _createGetPictureButton.call(this);
   _createCaption.call(this);
   _createPictureFrame.call(this);
-  serverRequests = this.options.serverRequests;
-
+  _setListeners.call(this);
 }
 
 NewYarnView.prototype = Object.create(View.prototype);
@@ -67,24 +69,10 @@ function _createCaption(){
   var captionNode = this.add(this.captionModifier);
   captionNode.add(this.caption);
   captionNode.add(buttonModifier).add(this.captionButton);
-  
-  this.caption.on('click', function () {
-    document.getElementsByClassName('CaptionInput')[0].maxLength = 30;
-  });
-  
-  this.captionButton.on('click', function(){
-    if(this.caption.getValue() !== undefined && pictureFrame.getContent() !== catGif){
-      this.yarnData.caption = this.caption.getValue();
-      this.caption.setValue('');
-      pictureFrame.setContent(catGif);
-      this.options.serverRequests.postToImgur(this.yarnData, 'new');
-    }
-  }.bind(this));
 }
 
 
 function _createTakePictureButton() {
-
   this.takePictureModifier = new StateModifier({
     align: [0.25,1],
     origin: [0.5,1.5]
@@ -104,20 +92,6 @@ function _createTakePictureButton() {
   });
 
   this.add(this.takePictureModifier).add(this.takePicture);
-
-  this.takePicture.on('click', function(){
-    var context = this;
-    navigator.camera.getPicture(function(data){
-      onCameraSuccess(data, context)
-    }, onCameraFail, {
-      destinationType : Camera.DestinationType.DATA_URL,
-      sourceType : Camera.PictureSourceType.CAMERA,
-      correctOrientation: true,
-      saveToPhotoAlbum: true,
-      encodingType: Camera.EncodingType.JPEG,
-      quality: 25
-  });
-    }.bind(this));
 }
 
 function _createGetPictureButton() {
@@ -140,20 +114,6 @@ function _createGetPictureButton() {
   });
 
   this.add(this.getPictureModifier).add(this.getPicture);
-
-  this.getPicture.on('click', function(){
-    var context = this;
-    navigator.camera.getPicture(function(data){
-      onCameraSuccess(data, context)
-    }, onCameraFail, 
-    {
-      destinationType : Camera.DestinationType.DATA_URL,
-      sourceType : Camera.PictureSourceType.PHOTOLIBRARY,
-      correctOrientation: true,
-      encodingType: Camera.EncodingType.JPEG,
-      quality: 25
-  });
-    }.bind(this));
 }
 
 function _createPictureFrame() {
@@ -171,6 +131,48 @@ function _createPictureFrame() {
   this.add(pictureFrameModifier).add(pictureFrame);
 }
 
+function _setListeners() {
+  this.caption.on('click', function () {
+    document.getElementsByClassName('CaptionInput')[0].maxLength = 30;
+  });
+  
+  this.captionButton.on('click', function(){
+    if(this.caption.getValue() !== undefined && pictureFrame.getContent() !== catGif){
+      this.yarnData.caption = this.caption.getValue();
+      this.caption.setValue('');
+      pictureFrame.setContent(catGif);
+      this.options.serverRequests.postToImgur(this.yarnData, 'new');
+    }
+  }.bind(this));
+
+  this.takePicture.on('click', function(){
+    var context = this;
+    navigator.camera.getPicture(function(data){
+      onCameraSuccess(data, context)
+    }, onCameraFail, {
+      destinationType : Camera.DestinationType.DATA_URL,
+      sourceType : Camera.PictureSourceType.CAMERA,
+      correctOrientation: true,
+      saveToPhotoAlbum: true,
+      encodingType: Camera.EncodingType.JPEG,
+      quality: 25
+    });
+  }.bind(this));
+
+  this.getPicture.on('click', function(){
+    var context = this;
+    navigator.camera.getPicture(function(data){
+      onCameraSuccess(data, context)
+    }, onCameraFail,
+    {
+      destinationType : Camera.DestinationType.DATA_URL,
+      sourceType : Camera.PictureSourceType.PHOTOLIBRARY,
+      correctOrientation: true,
+      encodingType: Camera.EncodingType.JPEG,
+      quality: 25
+    });
+  }.bind(this));
+}
 
 function onCameraSuccess(data, context){
   pictureFrame.setContent('data:image/jpeg;base64,' + data);
@@ -182,4 +184,3 @@ function onCameraFail(error){
 }
 
 module.exports = NewYarnView;
-
