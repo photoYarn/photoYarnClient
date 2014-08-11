@@ -96,7 +96,7 @@ define(function(require, exports, module) {
                 queryString = url.substr(url.indexOf('#') + 1);
                 queryObj = $.deparam(queryString)
                 console.log(queryObj)
-                tokenStore['access_token'] = queryObj['access_token'];
+                tokenStore.access_token = queryObj.access_token;
                 console.log(tokenStore)
                 if (loginCallback) {
                     loginCallback({

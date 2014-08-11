@@ -13,7 +13,10 @@ define(function(require, exports, module) {
   serverRequests.cache = {};
 
 
-
+  /*
+  getData fetches data from server and stores it in data array
+  Stores strings of _id in cache 
+  */
   serverRequests.getData = function(callback){
     $.ajax({
       type: 'GET',
@@ -35,6 +38,9 @@ define(function(require, exports, module) {
     });
   };
 
+  /*
+  Checks for updated data from server, updates cache and data array if new info found.
+  */
   serverRequests.updateData = function(){
     console.log('Updating Data');
     $.ajax({
@@ -60,6 +66,9 @@ define(function(require, exports, module) {
     });
   };
 
+  /*
+  Posts images to imgur, and then either updates 
+  */
   serverRequests.postToImgur = function(data, route){
     var serverData = {};
     serverData.caption = data.caption;
