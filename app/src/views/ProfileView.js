@@ -1,14 +1,16 @@
 'use strict';
+//import famo.us dependencies
 var View = require('famous/core/View');
 var Surface = require('famous/core/Surface');
 var Modifier = require('famous/core/Modifier');
 var ImageSurface = require('famous/surfaces/ImageSurface');
 
-var ServerRequests = require('../services/serverRequests');
+//import serverRequests
+var serverRequests = require('../services/serverRequests');
 
 function ProfileView(userId){
   View.apply(this, arguments);
-  var userData = ServerRequests.getUserDataFromServer(userId);
+  var userData = serverRequests.getUserDataFromServer(userId);
 
   _createBackground.call(this);
   _createProfileHeader.call(this, userData);
