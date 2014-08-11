@@ -12,10 +12,6 @@ define(function(require, exports, module) {
   //This is used 
   var serverRequests;
 
-  //Need some sort of yarnId and preset caption to post to /photo
-  //expecting yarnId and image link _id from post to DB!
-  var cameraData = {};  
-
   /*
   When this view is rendered it has a this.yarnData property
   this.yarnData has  caption, _id, and a creatorId properties
@@ -96,7 +92,6 @@ define(function(require, exports, module) {
     sendButtonNode.add(this.sendButton);
 
     this.sendButton.on('click', function(){
-      this.yarnData.b64image = cameraData.b64image;
       pictureFrame.setContent(catGif);
       serverRequests.postToImgur(this.yarnData, 'add');
     }.bind(this));
@@ -123,7 +118,10 @@ define(function(require, exports, module) {
     this.add(this.takePictureModifier).add(this.takePicture);
 
     this.takePicture.on('click', function(){
-      navigator.camera.getPicture(onCameraSuccess, onCameraFail, takePictureOptions);
+      var context = this;
+      navigator.camera.getPicture(function(data){
+        onCameraSuccess(data, context)
+      }, onCameraFail, takePictureOptions);
       }.bind(this));
   }
 
@@ -145,14 +143,17 @@ define(function(require, exports, module) {
     this.add(this.getPictureModifier).add(this.getPicture);
 
     this.getPicture.on('click', function(){
-      navigator.camera.getPicture(onCameraSuccess, onCameraFail, getPictureOptions);
+      var context = this;
+      navigator.camera.getPicture(function(data){
+        onCameraSuccess(data, context)
+      }, onCameraFail, getPictureOptions);
       }.bind(this));
   }
 
 
-  function onCameraSuccess(data){
+  function onCameraSuccess(data, context){
     pictureFrame.setContent('data:image/jpeg;base64,' + data);
-    cameraData.b64image = data;
+    context.yarnData.b64image = data;
   }
 
   function onCameraFail(error){
