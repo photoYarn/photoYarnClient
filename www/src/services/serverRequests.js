@@ -178,7 +178,7 @@ define(function(require, exports, module) {
     // for now I'm returning data before we set up the db to actually handle
     //  the real GET request commented out above - Kyle
     return {
-      profilePicUrl: 'https://cdn3.iconfinder.com/data/icons/cat-power-premium/120/cat_tied-512.png',
+      profilePicUrl: 'assets/catTied.png',
       username: 'exampleUserName',
       userLocation: 'San Francisco',
       numFollowers: 12,
