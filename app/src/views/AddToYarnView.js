@@ -47,12 +47,9 @@ AddToYarn.DEFAULT_OPTIONS = {
 };
 
 function _createSendButton(){
-  
-
   this.sendButtonModifier = new StateModifier({
     transform : Transform.translate(0, -200, 0)
   });
-
 
   this.sendButton = new Surface({
     size: [50, 20],
@@ -69,17 +66,10 @@ function _createSendButton(){
 
   var sendButtonNode = this.add(this.sendButtonModifier);
   sendButtonNode.add(this.sendButton);
-
-  this.sendButton.on('click', function(){
-    pictureFrame.setContent(catGif);
-    serverRequests.postToImgur(this.yarnData, 'add');
-  }.bind(this));
-
 }
 
 
 function _createTakePictureButton() {
-
   this.takePictureModifier = new StateModifier({
     align: [0.25,1],
     origin: [0.25,1]
@@ -95,21 +85,6 @@ function _createTakePictureButton() {
   });
 
   this.add(this.takePictureModifier).add(this.takePicture);
-
-  this.takePicture.on('click', function(){
-    var context = this;
-    navigator.camera.getPicture(function(data){
-      onCameraSuccess(data, context)
-    }, onCameraFail, 
-    {
-      quality: 25,
-      destinationType : Camera.DestinationType.DATA_URL,
-      sourceType : Camera.PictureSourceType.CAMERA,
-      correctOrientation: true,
-      saveToPhotoAlbum: true,
-      encodingType: Camera.EncodingType.JPEG
-  });
-    }.bind(this));
 }
 
 function _createGetPictureButton() {
@@ -128,8 +103,34 @@ function _createGetPictureButton() {
   });
 
   this.add(this.getPictureModifier).add(this.getPicture);
+}
 
-  this.getPicture.on('click', function(){
+function _setListeners() {
+  this._eventInput.on('initYarnData', function(data) {
+    this.yarnData = data;
+  }.bind(this));
+
+  this.sendButton.on('click', function() {
+    pictureFrame.setContent(catGif);
+    serverRequests.postToImgur(this.yarnData, 'add');
+  }.bind(this));
+
+  this.takePicture.on('click', function() {
+    var context = this;
+    navigator.camera.getPicture(function(data) {
+      onCameraSuccess(data, context)
+    }, onCameraFail, 
+    {
+      quality: 25,
+      destinationType : Camera.DestinationType.DATA_URL,
+      sourceType : Camera.PictureSourceType.CAMERA,
+      correctOrientation: true,
+      saveToPhotoAlbum: true,
+      encodingType: Camera.EncodingType.JPEG
+    });
+  }.bind(this));
+
+  this.getPicture.on('click', function() {
     var context = this;
     navigator.camera.getPicture(function(data){
       onCameraSuccess(data, context)
@@ -140,13 +141,7 @@ function _createGetPictureButton() {
       sourceType : Camera.PictureSourceType.PHOTOLIBRARY,
       correctOrientation: true,
       encodingType: Camera.EncodingType.JPEG
-  });
-    }.bind(this));
-}
-
-function _setListeners() {
-  this._eventInput.on('initYarnData', function(data) {
-    this.yarnData = data;
+    });
   }.bind(this));
 }
 
@@ -160,4 +155,3 @@ function onCameraFail(error){
 }
 
 module.exports = AddToYarn;
-
