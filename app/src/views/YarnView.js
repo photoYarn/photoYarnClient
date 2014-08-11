@@ -1,4 +1,6 @@
 'use strict';
+
+//import famo.us dependencies
 var View = require('famous/core/View');
 var StateModifier = require('famous/modifiers/StateModifier');
 var ImageSurface = require('famous/surfaces/ImageSurface');
@@ -7,13 +9,11 @@ var ViewSequence = require('famous/core/ViewSequence');
 var Transform = require('famous/core/Transform');
 var Surface = require('famous/core/Surface');
 
+//import serverRequests
 var serverRequests = require('../services/serverRequests');
-var dummyTarget = "53e5499be71a74d003372cc1";
 
 function YarnView(){
   View.apply(this, arguments);
-  console.log(serverRequests.data);
-  console.log('Yarn Data', this.yarnData);
 
   _createYarn.call(this);
   _setListeners.call(this);
@@ -36,7 +36,7 @@ function _createYarn(){
     margin: 10000
   })
   this.scrollModifier = new StateModifier({
-    size: [100,],
+    size: [100,125],
     align: [0.5, 0],
     origin: [0.5, 0],
     transform: Transform.translate(0,15,-10)
@@ -54,19 +54,32 @@ function _setListeners() {
 
 YarnView.prototype.createDetail = function(data){
 
-  var targetArray = data.links;
-  console.log(targetArray)
+  var imageLinks = data.links;
   this.sequence = [];
-  for(var i = 0; i < targetArray.length; i++){
-    var cur = targetArray[i];
-    console.log(cur);
+  for(var i = 0; i < imageLinks.length; i++){
+    var currentImage = imageLinks[i];
+    var imageView = new View();
+    var imageModifier = new StateModifier({
+      align: [0.5, 0.5],
+      origin: [0.5, 0.5]
+    });
     var image = new ImageSurface({
-      size: [100,125],
-      content: cur
+      content: currentImage
     })
+    imageView.add(imageModifier).add(image);
     image.pipe(this.scrollView);
-    this.sequence.push(image);      
-    console.log(this.sequence);
+    image.on('click', function(){
+      console.log('HI!');
+      this.setTransform(
+        Transform.moveThen([0,0,15],Transform.scale(3,3,100)),
+        {duration: 1500, curve: 'easeInOut'}
+      );
+      this.setTransform(
+        Transform.moveThen([0,0,-15],Transform.scale(1,1,1)),
+        {duration: 1500, curve: 'easeInOut'}
+      );
+    }.bind(imageModifier))
+    this.sequence.push(imageView);      
   }
 
   // imageSurface.setContent('assets/catgif.gif')
