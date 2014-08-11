@@ -20,10 +20,14 @@ When picture is added, it creates a b64image property to this.yarnData
 function AddToYarn(){
   View.apply(this, arguments);
 
+  // initialize class variables
+  serverRequests = this.options.serverRequests;
+
+  // add elements
   _createTakePictureButton.call(this);
   _createGetPictureButton.call(this);
   _createSendButton.call(this);
-  serverRequests = this.options.serverRequests;
+  _setListeners.call(this);
 
   this.add(pictureFrame);
 }
@@ -140,6 +144,11 @@ function _createGetPictureButton() {
     }.bind(this));
 }
 
+function _setListeners() {
+  this._eventInput.on('initYarnData', function(data) {
+    this.yarnData = data;
+  }.bind(this));
+}
 
 function onCameraSuccess(data, context){
   pictureFrame.setContent('data:image/jpeg;base64,' + data);

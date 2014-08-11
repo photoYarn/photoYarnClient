@@ -152,8 +152,9 @@ function _setListeners() {
     this.renderController.show(this.profileView);
   }.bind(this));
 
-  this.yarnView.on('showAddToYarn', function(data){
-    this.yarnView.yarnData = data;
+  // TODO decouple event and child trigger to sync with this.feedView
+  this.yarnView.on('showAddToYarn', function(data) {
+    this.addToYarnView.trigger('initYarnData', data);
     this.renderController.show(this.addToYarnView)
   }.bind(this))
 
@@ -163,8 +164,9 @@ function _setListeners() {
     this.renderController.show(this.yarnView);
   }.bind(this));
 
+  // TODO decouple event and child trigger to sync with this.yarnView
   this.feedView.on('showAddToYarn', function(data) {
-    this.addToYarnView.yarnData = data;
+    this.addToYarnView.trigger('initYarnData', data);
     this.renderController.show(this.addToYarnView);
   }.bind(this));
 
