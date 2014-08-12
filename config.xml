@@ -9,9 +9,9 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
-		
-		<preference name="orientation" value="portrait" />
-		
-		<!-- TODO: This is not currently working, not sure why -KC -->
-		<preference name="android-windowSoftInputMode" value="adjustPan" />
+    
+    <preference name="orientation" value="portrait" />
+    
+    <!-- TODO: This is not currently working, not sure why -KC -->
+    <preference name="android-windowSoftInputMode" value="adjustPan" />
 </widget>
