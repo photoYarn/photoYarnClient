@@ -16,6 +16,7 @@ function YarnView(){
   View.apply(this, arguments);
 
   _createYarn.call(this);
+  _createAddPhotoButton.call(this);
   _setListeners.call(this);
 }
 
@@ -45,11 +46,29 @@ function _createYarn(){
 
 }
 
+function _createAddPhotoButton() {
+  this.addPhotoButton = new Surface({
+      size: [100, 30],
+      content: '+',
+      properties: {
+        textSize: 30 + 'px',
+        backgroundColor: '#CCC',
+        textAlign: 'center',
+      }
+  });
+
+  // attach button to end of photo sequence in createDetail()
+}
+
 function _setListeners() {
   this._eventInput.on('initYarnData', function(data) {
     this.yarnData = data;
     this.createDetail(data);
   }.bind(this));
+
+  this.addPhotoButton.on('click', function(){
+    this._eventOutput.emit('showAddToYarn', this.yarnData);
+  }.bind(this))
 }
 
 YarnView.prototype.createDetail = function(data){
@@ -64,10 +83,11 @@ YarnView.prototype.createDetail = function(data){
       origin: [0.5, 0.5]
     });
     var image = new ImageSurface({
-      content: currentImage
-    })
+      content: currentImage,
+    });
     imageView.add(imageModifier).add(image);
-    image.pipe(this.scrollView);
+
+    // set event handlers
     image.on('click', function(){
       console.log('HI!');
       this.setTransform(
@@ -79,26 +99,15 @@ YarnView.prototype.createDetail = function(data){
         {duration: 1500, curve: 'easeInOut'}
       );
     }.bind(imageModifier))
+    // pipe events to ScrollView for scrolling
+    image.pipe(this.scrollView);
+
     this.sequence.push(imageView);      
   }
 
   // imageSurface.setContent('assets/catgif.gif')
 
-  var addPhotoButton = new Surface({
-      size: [100, 30],
-      content: '+',
-      properties: {
-        textSize: 30 + 'px',
-        backgroundColor: '#CCC',
-        textAlign: 'center',
-      }
-    });
-
-  this.sequence.push(addPhotoButton);
-
-  addPhotoButton.on('click', function(){
-    this._eventOutput.emit('showAddToYarn', this.yarnData);
-  }.bind(this))
+  this.sequence.push(this.addPhotoButton);
 
   this.scrollView.sequenceFrom(this.sequence);
 }
