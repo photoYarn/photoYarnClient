@@ -41,7 +41,7 @@ function _createYarn(){
     size: [100,125],
     align: [0.5, 0],
     origin: [0.5, 0],
-    transform: Transform.translate(0,15,-10)
+    transform: Transform.translate(0,15,-15)
   });
   this.add(this.scrollModifier).add(this.scrollView);
 
@@ -49,7 +49,7 @@ function _createYarn(){
 
   this.focusImageModifier = new StateModifier({
     align: [0.5,0.5],
-    transform: Transform.translate(0,0,-11),
+    transform: Transform.translate(0,0,-15),
     opacity: 0
   })
 
@@ -94,7 +94,7 @@ YarnView.prototype.toggle = function(content){
   if(!this.toggled){
     this.focusImage.setContent(content)
     this.scrollModifier.setOpacity(0, {duration: 1000});
-    this.scrollModifier.setTransform(Transform.scale(.1,.1,1), {duration: 1000});
+    this.scrollModifier.setTransform(Transform.scale(3,3,1), {duration: 1000});
     this.focusImageModifier.setOpacity(1, {duration: 1000});
     this.focusImageModifier.setTransform(Transform.scale(1,1,1), {duration: 1000});
 
@@ -102,7 +102,8 @@ YarnView.prototype.toggle = function(content){
   else {
     this.focusImage.setContent('');
     this.scrollModifier.setOpacity(1, {duration: 1000});
-    this.scrollModifier.setTransform(Transform.scale(1,1,1), {duration: 1000});
+    // this.scrollModifier.setTransform(Transform.scale(1,1,1), {duration: 1000});
+    this.scrollModifier.setTransform(Transform.moveThen([0,0,-15],Transform.scale(1,1,1)), {duration: 1000});
     this.focusImageModifier.setTransform(Transform.scale(.1,.1,1), {duration: 1000});
     this.focusImageModifier.setOpacity(0, {duration: 1000});
   }

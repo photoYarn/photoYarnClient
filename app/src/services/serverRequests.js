@@ -17,10 +17,11 @@ serverRequests.user;
 getData fetches data from server and stores it in data array
 Stores strings of _id in cache 
 */
+
 serverRequests.getData = function(callback){
   $.ajax({
     type: 'GET',
-    url: 'http://photoyarn.azurewebsites.net/getAllYarns',
+    url: 'http://photoyarn.azurewebsites.net/getAllYarns', //+ serverRequests.user.id,
     success: function (data) {
       for(var i = 0; i < data.length; i++){
         var cur = data[i];
@@ -46,7 +47,7 @@ serverRequests.updateData = function(){
   console.log('Updating Data');
   $.ajax({
     type: 'GET',
-    url: 'http://photoyarn.azurewebsites.net/getAllYarns',
+    url: 'http://photoyarn.azurewebsites.net/getAllYarns', //+ serverRequests.user.id,
     success: function (data) {
       for(var i = 0; i < data.length; i++){
         var cur = data[i];
@@ -76,7 +77,7 @@ serverRequests.postToImgur = function(data, route){
   var serverData = {};
   serverData.caption = data.caption;
   //serverData.creatorId is hard coded currently, as we do not have users implemented yet!
-  serverData.creatorId = serverRequests.userData.id
+  serverData.creatorId = serverRequests.user.id
   //updated due to success callback
   serverData.link;
   serverData.imgurId;
@@ -174,7 +175,7 @@ serverRequests.loginToFacebook = function(response){
               gender: data.gender.charAt(0),
               name: data.name
           }
-          serverRequests.userData = userData;
+          serverRequests.user = userData;
           console.log(userData)
           // request to /users
           $.ajax({
@@ -183,6 +184,7 @@ serverRequests.loginToFacebook = function(response){
               data: userData,
               success: function(data) {
                   console.log(data);
+                  serverRequests.getData();
               },
               error: function(error) {
                   console.log(error)
