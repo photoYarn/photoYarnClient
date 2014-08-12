@@ -8,6 +8,7 @@ var Scrollview = require('famous/views/Scrollview');
 var ViewSequence = require('famous/core/ViewSequence');
 var Transform = require('famous/core/Transform');
 var Surface = require('famous/core/Surface');
+var Easing = require('famous/transitions/Easing');
 
 //import serverRequests
 var serverRequests = require('../services/serverRequests');
@@ -31,9 +32,9 @@ YarnView.DEFAULT_OPTIONS = {
 
 function _createYarn(){
 
+  this.toggled = false;
+
   this.scrollView = new Scrollview({
-    align: [0.5, 0],
-    origin: [0.5, 0],
     margin: 10000
   })
   this.scrollModifier = new StateModifier({
@@ -44,6 +45,16 @@ function _createYarn(){
   });
   this.add(this.scrollModifier).add(this.scrollView);
 
+  this.hiddenImage = new ImageSurface({
+    content : 'assets/catTied.png'
+  });
+
+  this.hiddenImageMod = new StateModifier({
+    transform: Transform.translate(0,0,-11),
+    opacity: 0
+  })
+
+  this.add(this.hiddenImageMod).add(this.hiddenImage);
 }
 
 function _createAddPhotoButton() {
@@ -69,13 +80,35 @@ function _setListeners() {
   this.addPhotoButton.on('click', function(){
     this._eventOutput.emit('showAddToYarn', this.yarnData);
   }.bind(this))
+  this.hiddenImage.on('click', function(){
+    this.toggle();
+  }.bind(this));
 }
+
+YarnView.prototype.toggle = function(content){
+
+  if(!this.toggled){
+    this.hiddenImage.setContent(content)
+    this.scrollModifier.setTransform(Transform.moveThen([0,0,-11], Transform.scale(1,1,1)));
+    this.scrollModifier.setOpacity(0);
+    this.hiddenImageMod.setTransform(Transform.moveThen([0,0,-10], Transform.scale(1,1,1)));
+    this.hiddenImageMod.setOpacity(1);
+  } else {
+    this.scrollModifier.setTransform(Transform.moveThen([0,0,-10], Transform.scale(1,1,1)));
+    this.scrollModifier.setOpacity(1);
+    this.hiddenImageMod.setTransform(Transform.moveThen([0,0,-11], Transform.scale(1,1,1)));
+    this.hiddenImageMod.setOpacity(0);
+  }
+  this.toggled = !this.toggled;
+}
+
 
 YarnView.prototype.createDetail = function(data){
 
   var imageLinks = data.links;
   this.sequence = [];
   for(var i = 0; i < imageLinks.length; i++){
+    var context = this;
     var currentImage = imageLinks[i];
     var imageView = new View();
     var imageModifier = new StateModifier({
@@ -87,25 +120,16 @@ YarnView.prototype.createDetail = function(data){
     });
     imageView.add(imageModifier).add(image);
 
-    // set event handlers
-    image.on('click', function(){
-      console.log('HI!');
-      this.setTransform(
-        Transform.moveThen([0,0,15],Transform.scale(3,3,100)),
-        {duration: 1500, curve: 'easeInOut'}
-      );
-      this.setTransform(
-        Transform.moveThen([0,0,-15],Transform.scale(1,1,1)),
-        {duration: 1500, curve: 'easeInOut'}
-      );
-    }.bind(imageModifier))
-    // pipe events to ScrollView for scrolling
     image.pipe(this.scrollView);
+    
+    image.on('click', function(target){
+      var content = target.origin._imageUrl;
+      this.toggle(content);
+    }.bind(this));
 
     this.sequence.push(imageView);      
   }
 
-  // imageSurface.setContent('assets/catgif.gif')
 
   this.sequence.push(this.addPhotoButton);
 
