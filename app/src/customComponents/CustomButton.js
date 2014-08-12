@@ -4,6 +4,12 @@
 var View = require('famous/core/View');
 var Modifier = require('famous/core/Modifier');
 var Surface = require('famous/core/Surface');
+var Transform = require('famous/core/Transform');
+var Transitionable = require('famous/transitions/Transitionable');
+var SpringTransition = require('famous/transitions/SpringTransition');
+var Easing = require('famous/transitions/Easing');
+
+Transitionable.registerMethod('spring', SpringTransition);
 
 // CustomButton constructor
 function CustomButton(){
@@ -23,6 +29,12 @@ CustomButton.DEFAULT_OPTIONS = {
   origin: [0.5, 0.5],
   lineHeight: '50px',
   textAlign: 'center',
+  bounceScale: 0.8,
+  bounceTransition: {
+    method: 'spring',
+    period: 250,
+    dampingRatio: 0.5
+  },
 };
 
 // create root modifier
@@ -49,12 +61,16 @@ function _createButton(){
   this.rootNode.add(this.button);
 }
 
-// set listener to bubble up button events
 function _setListeners() {
-  // only explicitly bubbling up click event
   this.button.on('click', function() {
+    this._bounceBack();
     this._eventOutput.emit('click');
   }.bind(this));
 }
+
+CustomButton.prototype._bounceBack = function() {
+  this.rootModifier.setTransform(Transform.scale(this.options.bounceScale, this.options.bounceScale, 1));
+  this.rootModifier.setTransform(Transform.identity, this.options.bounceTransition);
+};
 
 module.exports = CustomButton;

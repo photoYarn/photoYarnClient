@@ -114,4 +114,6 @@ html {
 .customButton{
   color: #FF6138;
   font-weight: bold;
+  border: 1px solid #FF6138;
+  border-radius: 5px;
 }
