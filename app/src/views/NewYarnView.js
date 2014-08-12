@@ -38,17 +38,17 @@ NewYarnView.DEFAULT_OPTIONS = {
 function _createCaption(){
   this.caption = new InputSurface({
     size: [this.options.picSize[0], true],
-    placeholder: 'Your caption goes here',
+    placeholder: 'Your caption here',
     classes: ['CaptionInput']
   });
   
   this.captionModifier = new StateModifier({
     align: [0.5, 0],
-    origin: [0.5, -4]
+    origin: [0.5, -3]
   });
   
   this.captionButton = new Surface({
-    size: [50, 50],
+    size: [60, 50],
     content: 'Submit',
     classes: ['CaptionSubmitButton'],
     properties: {
@@ -74,12 +74,12 @@ function _createCaption(){
 
 function _createTakePictureButton() {
   this.takePictureModifier = new StateModifier({
-    align: [0.25,1],
+    align: [0.22,1],
     origin: [0.5,1.5]
   });
 
   this.takePicture = new Surface({
-    size: [100, 50],
+    size: [95, 50],
     content: this.options.takePictureMsg,
     properties: {
       borderRadius: '10px',
@@ -96,12 +96,12 @@ function _createTakePictureButton() {
 
 function _createGetPictureButton() {
   this.getPictureModifier = new StateModifier({
-    origin: [0.5, 1.5],
-    align: [0.75, 1]
+    align: [0.78, 1],
+    origin: [0.5, 1.5]
   });
 
   this.getPicture = new Surface({
-    size: [100, 50],
+    size: [95, 50],
     content: this.options.getPictureMsg,
     properties: {
       borderRadius: '10px',
@@ -120,7 +120,10 @@ function _createPictureFrame() {
   pictureFrame = new ImageSurface({
     content: catGif,
     size: [this.options.picSize[0], this.options.picSize[1]],
-    classes: ['AddPicViewPic']
+    classes: ['AddPicViewPic'],
+    properties: {
+      border: '1px solid #79BD8F'
+    }
   });
   
   var pictureFrameModifier = new StateModifier({

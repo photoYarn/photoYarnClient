@@ -3,19 +3,32 @@ html {
     color: #000;
 }
 
-.double-sided {
-    -webkit-backface-visibility: visible;
-    backface-visibility: visible;
+.customButton{
+  color: #FF6138;
+  font-weight: bold;
 }
 
 .header {
   font-size: 30px;
+  text-shadow: white 1px 1px 0px;
+  color: #FF6138;
+  border-bottom: 2px solid #79BD8F;
 }
 
 .FeedEntryBackground {
-  border: 1px solid black;
-  text-indent: 5px;
-  font-weight: bold;
+  border: 1px solid #79BD8F;
+  background-color: #EEE;
+  font: 16px Georgia, sans-serif;
+  padding-left: 10px;
+  padding-top: 5px;
+}
+
+.FeedEntryAddPhotoButton {
+   background-color: #DDD;
+   cursor: pointer;
+   text-align: center;
+   font: 20px Georgia;
+
 }
 
 .Background {
@@ -109,11 +122,4 @@ html {
 
 .darkgreenBG{
   background-color: #00A388;
-}
-
-.customButton{
-  color: #FF6138;
-  font-weight: bold;
-  border: 1px solid #FF6138;
-  border-radius: 5px;
 }
