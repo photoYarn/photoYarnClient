@@ -173,7 +173,7 @@ serverRequests.loginToFacebook = function(response){
       success: function(data) {
           var userData = {
               id: data.id,
-              // gender: data.gender.charAt(0),
+              // gender: data.gender.charAt(0) // do we need this?,
               name: data.name
           }
           serverRequests.user = userData;

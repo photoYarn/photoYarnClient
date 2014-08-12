@@ -155,7 +155,7 @@ var oauth = (function() {
 
         startTime = new Date().getTime(); 
         loginWindow = window.open(FB_LOGIN_URL + '?client_id=' + appId + '&redirect_uri=' + oauthRedirectURL +
-                    '&response_type=token&scope=public_profile', '_blank', 'location=no');
+                    '&response_type=token&scope=public_profile,user_friends', '_blank', 'location=no');
 
         if (runningInCordova) {
             tokenStore = window.localStorage;
