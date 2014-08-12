@@ -18,8 +18,9 @@ var photoCache = {};
 function FeedView(){
   View.apply(this, arguments);
   _createRootNode.call(this);
-  _createBackground.call(this);
-  _setListeners.call(this);
+  // _createBackground.call(this);
+  _createButtonPanel.call(this);
+  // _setListeners.call(this);
 }
 
 // set defaults
@@ -28,7 +29,9 @@ FeedView.prototype.constructor = FeedView;
 FeedView.DEFAULT_OPTIONS = {
   message: 'Default message',
   entryCount: 4,
-  entryHeight: 175
+  entryHeight: 175,
+  buttonPanelHeight: 50,
+  numSortButtons: 3
 };
 
 function _createBackground() {
@@ -47,6 +50,7 @@ function _createBackground() {
 
 // create root modifier node
 function _createRootNode() {
+  console.log('root node')
   this.rootModifier = new Modifier({
     align: [0, 0],
     origin: [0, 0]
@@ -55,9 +59,75 @@ function _createRootNode() {
   this.rootNode = this.add(this.rootModifier);
 }
 
+function _createButtonPanel() {
+  // network button
+  this.networkButton = new Surface({
+    size: [window.innerWidth / this.options.numSortButtons, this.options.buttonPanelHeight],
+    content: "Network",
+    classes: ['FeedViewSortButton'],
+    properties: {
+      lineHeight: this.options.buttonPanelHeight + 'px'
+    }
+  });
+  
+  var networkButtonModifier = new Modifier({
+    align: [0, 0],
+    origin: [0, 0]
+  });
+  
+  this.add(networkButtonModifier).add(this.networkButton);
+  
+  // popular button
+  this.popularButton = new Surface({
+    size: [window.innerWidth / this.options.numSortButtons, this.options.buttonPanelHeight],
+    content: "Popular",
+    classes: ['FeedViewSortButton'],
+    properties: {
+      lineHeight: this.options.buttonPanelHeight + 'px'
+    }
+  });
+
+  var popularButtonModifier = new Modifier({
+    align: [0.5, 0],
+    origin: [0.5, 0]
+  });
+  
+  this.add(popularButtonModifier).add(this.popularButton);
+  
+  // new button
+  this.newButton = new Surface({
+    size: [window.innerWidth / this.options.numSortButtons, this.options.buttonPanelHeight],
+    content: "New",
+    classes: ['FeedViewSortButton'],
+    properties: {
+      lineHeight: this.options.buttonPanelHeight + 'px'
+    }
+  });
+  
+  var newButtonModifier = new Modifier({
+    align: [1, 0],
+    origin: [1, 0]
+  });
+  
+  this.add(newButtonModifier).add(this.newButton);
+  
+}
+
 function _setListeners() {
   this._eventInput.on('refreshFeed', function(data) {
     this.createFeedEntriesFromServer(data);
+  }.bind(this));
+  
+  this.networkButton.on('click', function () {
+    // request feeds sorted by network from server
+  }.bind(this));
+  
+  this.popularButton.on('click', function () {
+    // request feeds sorted by popularity from server
+  }.bind(this));
+  
+  this.newButton.on('click', function () {
+    // request feeds sorted by creation date from server
   }.bind(this));
 }
 
@@ -78,7 +148,7 @@ FeedView.prototype.createFeedEntriesFromServer = function(data) {
     photoCache[data[i]._id] = newEntryView;
     this.entries.push(newEntryView);
   }
-  
+
   var feedModifier = new Modifier({
     transform: Transform.translate(0, 0, -10)
   });
