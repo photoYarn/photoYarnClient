@@ -10,6 +10,7 @@ serverRequests.cache is a hash with keys that correspond to _id of each yarn and
 correspond to the index those yarns are stored in the serverRequests.data array.
 */
 serverRequests.cache = {};
+serverRequests.user;
 
 
 /*
@@ -75,7 +76,7 @@ serverRequests.postToImgur = function(data, route){
   var serverData = {};
   serverData.caption = data.caption;
   //serverData.creatorId is hard coded currently, as we do not have users implemented yet!
-  serverData.creatorId = 21;
+  serverData.creatorId = serverRequests.userData.id
   //updated due to success callback
   serverData.link;
   serverData.imgurId;
@@ -148,7 +149,8 @@ serverRequests.postPhotoToServerYarn = function(data){
     url: 'http://photoyarn.azurewebsites.net/addToYarn',
     data: {
       yarnId: data.yarnId,
-      link: data.link
+      link: data.link,
+      creatorId: data.creatorId
     },
     success: function(res){
       console.log('Post to Server Success: ', res);
@@ -160,6 +162,36 @@ serverRequests.postPhotoToServerYarn = function(data){
     }
   });
 };
+
+
+serverRequests.loginToFacebook = function(response){
+  $.ajax({
+      type: "GET",
+      url: "https://graph.facebook.com/me?access_token=" + response.token,
+      success: function(data) {
+          var userData = {
+              id: data.id,
+              gender: data.gender.charAt(0),
+              name: data.name
+          }
+          serverRequests.userData = userData;
+          console.log(userData)
+          // request to /users
+          $.ajax({
+              type: 'POST',
+              url: 'http://photoyarn.azurewebsites.net/users',
+              data: userData,
+              success: function(data) {
+                  console.log(data);
+              },
+              error: function(error) {
+                  console.log(error)
+              }
+          });
+      }
+  })
+};
+
 
 serverRequests.getUserDataFromServer = function(userId){
   // $.ajax({
