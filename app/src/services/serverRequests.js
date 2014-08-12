@@ -18,11 +18,10 @@ getData fetches data from server and stores it in data array
 Stores strings of _id in cache 
 */
 
-
-serverRequests.getData = function(id){
+serverRequests.getData = function(callback){
   $.ajax({
     type: 'GET',
-    url: 'http://photoyarntest.azurewebsites.net/getAllYarns/' + id,
+    url: 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.userData.id,
     success: function (data) {
       for(var i = 0; i < data.length; i++){
         var cur = data[i];
@@ -49,7 +48,7 @@ serverRequests.updateData = function(){
   $.ajax({
     type: 'GET',
 
-    url: 'http://photoyarntest.azurewebsites.net/getAllYarns/' + serverRequests.userData.id,
+    url: 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.userData.id,
     success: function (data) {
       for(var i = 0; i < data.length; i++){
         var cur = data[i];
@@ -122,7 +121,7 @@ serverRequests.postYarnToServer = function(data){
   'posting new yarn to Server!'
   $.ajax({
     type: 'POST',
-    url: 'http://photoyarntest.azurewebsites.net/createNewYarn',
+    url: 'http://photoyarn.azurewebsites.net/createNewYarn',
     data: {
       imgurId: data.imgurId,
       link: data.link,
@@ -149,7 +148,7 @@ serverRequests.postPhotoToServerYarn = function(data){
   console.log('posting Photo to Yarn', data);
   $.ajax({
     type: 'POST',
-    url: 'http://photoyarntest.azurewebsites.net/addToYarn',
+    url: 'http://photoyarn.azurewebsites.net/addToYarn',
     data: {
       yarnId: data.yarnId,
       link: data.link,
@@ -182,12 +181,12 @@ serverRequests.loginToFacebook = function(response){
           // request to /users
           $.ajax({
               type: 'POST',
-              url: 'http://photoyarntest.azurewebsites.net/users',
+              url: 'http://photoyarn.azurewebsites.net/users',
               data: userData,
               success: function(data) {
                   console.log(data);
 
-                  serverRequests.getData(userData.id);
+                  serverRequests.getData();
               },
               error: function(error) {
                   console.log(error)
@@ -201,7 +200,7 @@ serverRequests.loginToFacebook = function(response){
 serverRequests.getUserDataFromServer = function(userId){
   // $.ajax({
   //   type: 'GET',
-  //   url: 'http://photoyarntest.azurewebsites.net/user/' + userId,
+  //   url: 'http://photoyarn.azurewebsites.net/user/' + userId,
   //   success: function(res){
   //     console.log('Post to Server Success!', res);
   //        return res;
