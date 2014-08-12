@@ -8,6 +8,7 @@ var Scrollview = require('famous/views/Scrollview');
 var ViewSequence = require('famous/core/ViewSequence');
 var Transform = require('famous/core/Transform');
 var Surface = require('famous/core/Surface');
+var Easing = require('famous/transitions/Easing');
 
 //import serverRequests
 var serverRequests = require('../services/serverRequests');
@@ -31,19 +32,30 @@ YarnView.DEFAULT_OPTIONS = {
 
 function _createYarn(){
 
+  this.toggled = false;
+
   this.scrollView = new Scrollview({
-    align: [0.5, 0],
-    origin: [0.5, 0],
-    margin: 10000
+    margin: 10000,
   })
   this.scrollModifier = new StateModifier({
     size: [100,125],
     align: [0.5, 0],
     origin: [0.5, 0],
-    transform: Transform.translate(0,15,-10)
+    transform: Transform.translate(0,15,-15)
   });
   this.add(this.scrollModifier).add(this.scrollView);
 
+  this.focusImage = new ImageSurface({});
+
+  this.focusImageModifier = new StateModifier({
+    align: [0.5,0.5],
+    transform: Transform.translate(0,0,-15),
+    opacity: 0
+  })
+
+  this.focusImageModifier.setTransform(Transform.scale(.1,.1,1));
+
+  this.add(this.focusImageModifier).add(this.focusImage);
 }
 
 function _createAddPhotoButton() {
@@ -67,45 +79,59 @@ function _setListeners() {
   }.bind(this));
 
   this.addPhotoButton.on('click', function(){
-    this._eventOutput.emit('showAddToYarn', this.yarnData);
+    if(this.toggled === false){
+      this._eventOutput.emit('showAddToYarn', this.yarnData);
+    }
   }.bind(this))
+
+  this.focusImage.on('click', function(){
+    this.toggle();
+  }.bind(this));
 }
+
+YarnView.prototype.toggle = function(content){
+
+  if(!this.toggled){
+    this.focusImage.setContent(content)
+    this.scrollModifier.setOpacity(0, {duration: 1000});
+    this.scrollModifier.setTransform(Transform.scale(3,3,1), {duration: 1000});
+    this.focusImageModifier.setOpacity(1, {duration: 1000});
+    this.focusImageModifier.setTransform(Transform.scale(1,1,1), {duration: 1000});
+
+  } 
+  else {
+    this.focusImage.setContent('');
+    this.scrollModifier.setOpacity(1, {duration: 1000});
+    // this.scrollModifier.setTransform(Transform.scale(1,1,1), {duration: 1000});
+    this.scrollModifier.setTransform(Transform.moveThen([0,0,-15],Transform.scale(1,1,1)), {duration: 1000});
+    this.focusImageModifier.setTransform(Transform.scale(.1,.1,1), {duration: 1000});
+    this.focusImageModifier.setOpacity(0, {duration: 1000});
+  }
+  this.toggled = !this.toggled;
+}
+
 
 YarnView.prototype.createDetail = function(data){
 
   var imageLinks = data.links;
   this.sequence = [];
   for(var i = 0; i < imageLinks.length; i++){
+    var context = this;
     var currentImage = imageLinks[i];
-    var imageView = new View();
-    var imageModifier = new StateModifier({
-      align: [0.5, 0.5],
-      origin: [0.5, 0.5]
-    });
     var image = new ImageSurface({
       content: currentImage,
     });
-    imageView.add(imageModifier).add(image);
 
-    // set event handlers
-    image.on('click', function(){
-      console.log('HI!');
-      this.setTransform(
-        Transform.moveThen([0,0,15],Transform.scale(3,3,100)),
-        {duration: 1500, curve: 'easeInOut'}
-      );
-      this.setTransform(
-        Transform.moveThen([0,0,-15],Transform.scale(1,1,1)),
-        {duration: 1500, curve: 'easeInOut'}
-      );
-    }.bind(imageModifier))
-    // pipe events to ScrollView for scrolling
     image.pipe(this.scrollView);
+    
+    image.on('click', function(target){
+      var content = target.origin._imageUrl;
+      this.toggle(content);
+    }.bind(this));
 
-    this.sequence.push(imageView);      
+    this.sequence.push(image);      
   }
 
-  // imageSurface.setContent('assets/catgif.gif')
 
   this.sequence.push(this.addPhotoButton);
 
