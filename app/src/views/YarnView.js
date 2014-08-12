@@ -35,26 +35,25 @@ function _createYarn(){
   this.toggled = false;
 
   this.scrollView = new Scrollview({
-    margin: 10000
+    margin: 10000,
   })
   this.scrollModifier = new StateModifier({
     size: [100,125],
-    align: [0.5, 0],
-    origin: [0.5, 0],
+    align: [0.5, 0.5],
+    origin: [0.5, 0.5],
     transform: Transform.translate(0,15,-10)
   });
   this.add(this.scrollModifier).add(this.scrollView);
 
-  this.hiddenImage = new ImageSurface({
-    content : 'assets/catTied.png'
-  });
+  this.focusImage = new ImageSurface({});
 
-  this.hiddenImageMod = new StateModifier({
+  this.focusImageModifier = new StateModifier({
+    align: [0.5,0.5],
     transform: Transform.translate(0,0,-11),
     opacity: 0
   })
 
-  this.add(this.hiddenImageMod).add(this.hiddenImage);
+  this.add(this.focusImageModifier).add(this.focusImage);
 }
 
 function _createAddPhotoButton() {
@@ -80,7 +79,8 @@ function _setListeners() {
   this.addPhotoButton.on('click', function(){
     this._eventOutput.emit('showAddToYarn', this.yarnData);
   }.bind(this))
-  this.hiddenImage.on('click', function(){
+
+  this.focusImage.on('click', function(){
     this.toggle();
   }.bind(this));
 }
@@ -88,16 +88,14 @@ function _setListeners() {
 YarnView.prototype.toggle = function(content){
 
   if(!this.toggled){
-    this.hiddenImage.setContent(content)
-    this.scrollModifier.setTransform(Transform.moveThen([0,0,-11], Transform.scale(1,1,1)));
+    this.focusImage.setContent(content)
     this.scrollModifier.setOpacity(0);
-    this.hiddenImageMod.setTransform(Transform.moveThen([0,0,-10], Transform.scale(1,1,1)));
-    this.hiddenImageMod.setOpacity(1);
-  } else {
-    this.scrollModifier.setTransform(Transform.moveThen([0,0,-10], Transform.scale(1,1,1)));
+    this.focusImageModifier.setOpacity(1);
+  } 
+  else {
+    this.focusImage.setContent('');
     this.scrollModifier.setOpacity(1);
-    this.hiddenImageMod.setTransform(Transform.moveThen([0,0,-11], Transform.scale(1,1,1)));
-    this.hiddenImageMod.setOpacity(0);
+    this.focusImageModifier.setOpacity(0);
   }
   this.toggled = !this.toggled;
 }
