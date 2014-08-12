@@ -4,9 +4,14 @@
     <description>
         Spin a story with your friends through photos.
     </description>
-    <author email="kiafathi@me.com" href="http://github.com/photYarn">
+    <author email="kiafathi@me.com" href="http://github.com/photoYarn">
         photoYarn Team
     </author>
     <content src="index.html" />
     <access origin="*" />
+		
+		<preference name="orientation" value="portrait" />
+		
+		<!-- TODO: This is not currently working, not sure why -KC -->
+		<preference name="android-windowSoftInputMode" value="adjustPan" />
 </widget>
