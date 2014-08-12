@@ -39,8 +39,8 @@ function _createYarn(){
   })
   this.scrollModifier = new StateModifier({
     size: [100,125],
-    align: [0.5, 0.5],
-    origin: [0.5, 0.5],
+    align: [0.5, 0],
+    origin: [0.5, 0],
     transform: Transform.translate(0,15,-10)
   });
   this.add(this.scrollModifier).add(this.scrollView);
@@ -52,6 +52,8 @@ function _createYarn(){
     transform: Transform.translate(0,0,-11),
     opacity: 0
   })
+
+  this.focusImageModifier.setTransform(Transform.scale(.1,.1,1));
 
   this.add(this.focusImageModifier).add(this.focusImage);
 }
@@ -77,7 +79,9 @@ function _setListeners() {
   }.bind(this));
 
   this.addPhotoButton.on('click', function(){
-    this._eventOutput.emit('showAddToYarn', this.yarnData);
+    if(this.toggled === false){
+      this._eventOutput.emit('showAddToYarn', this.yarnData);
+    }
   }.bind(this))
 
   this.focusImage.on('click', function(){
@@ -89,13 +93,18 @@ YarnView.prototype.toggle = function(content){
 
   if(!this.toggled){
     this.focusImage.setContent(content)
-    this.scrollModifier.setOpacity(0);
-    this.focusImageModifier.setOpacity(1);
+    this.scrollModifier.setOpacity(0, {duration: 1000});
+    this.scrollModifier.setTransform(Transform.scale(.1,.1,1), {duration: 1000});
+    this.focusImageModifier.setOpacity(1, {duration: 1000});
+    this.focusImageModifier.setTransform(Transform.scale(1,1,1), {duration: 1000});
+
   } 
   else {
     this.focusImage.setContent('');
-    this.scrollModifier.setOpacity(1);
-    this.focusImageModifier.setOpacity(0);
+    this.scrollModifier.setOpacity(1, {duration: 1000});
+    this.scrollModifier.setTransform(Transform.scale(1,1,1), {duration: 1000});
+    this.focusImageModifier.setTransform(Transform.scale(.1,.1,1), {duration: 1000});
+    this.focusImageModifier.setOpacity(0, {duration: 1000});
   }
   this.toggled = !this.toggled;
 }
@@ -108,15 +117,9 @@ YarnView.prototype.createDetail = function(data){
   for(var i = 0; i < imageLinks.length; i++){
     var context = this;
     var currentImage = imageLinks[i];
-    var imageView = new View();
-    var imageModifier = new StateModifier({
-      align: [0.5, 0.5],
-      origin: [0.5, 0.5]
-    });
     var image = new ImageSurface({
       content: currentImage,
     });
-    imageView.add(imageModifier).add(image);
 
     image.pipe(this.scrollView);
     
@@ -125,7 +128,7 @@ YarnView.prototype.createDetail = function(data){
       this.toggle(content);
     }.bind(this));
 
-    this.sequence.push(imageView);      
+    this.sequence.push(image);      
   }
 
 
