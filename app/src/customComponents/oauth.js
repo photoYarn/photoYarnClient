@@ -102,7 +102,6 @@ var oauth = (function() {
 
     var tokenStore = window.sessionStorage;
     var appId = 261431800718045; // this is considered public knowledge
-    // var appId;
 
     var loginCallback;
     var loginProcessed;
@@ -113,16 +112,6 @@ var oauth = (function() {
     }, false);
 
     var oauthRedirectURL = 'http://localhost:8100/oauthcallback.html';
-
-    // i don't think this is necessary
-    // var init = function(params) {
-    //     if (params.appId) {
-    //         appId = params.appId;
-    //         console.log('init called, appId', appId)
-    //     } else {
-    //         throw 'appId param not set';
-    //     }
-    // };
 
     var isLoggedIn = function() {
         return tokenStore.getItem('access_token') !== null;
@@ -226,7 +215,6 @@ var oauth = (function() {
         login: login,
         logout: logout,
         isLoggedIn: isLoggedIn,
-        // init: init,
         oauthCallback: oauthCallback,
     }
 

@@ -18,10 +18,11 @@ getData fetches data from server and stores it in data array
 Stores strings of _id in cache 
 */
 
-serverRequests.getData = function(callback){
+
+serverRequests.getData = function(id){
   $.ajax({
     type: 'GET',
-    url: 'http://photoyarn.azurewebsites.net/getAllYarns', //+ serverRequests.user.id,
+    url: 'http://photoyarn.azurewebsites.net/getAllYarns/' + id,
     success: function (data) {
       for(var i = 0; i < data.length; i++){
         var cur = data[i];
@@ -184,7 +185,8 @@ serverRequests.loginToFacebook = function(response){
               data: userData,
               success: function(data) {
                   console.log(data);
-                  serverRequests.getData();
+
+                  serverRequests.getData(userData.id);
               },
               error: function(error) {
                   console.log(error)
