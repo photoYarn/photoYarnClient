@@ -21,7 +21,7 @@ Stores strings of _id in cache
 serverRequests.getData = function(callback){
   $.ajax({
     type: 'GET',
-    url: 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.userData.id,
+    url: 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.user.id,
     success: function (data) {
       for(var i = 0; i < data.length; i++){
         var cur = data[i];
@@ -48,7 +48,7 @@ serverRequests.updateData = function(){
   $.ajax({
     type: 'GET',
 
-    url: 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.userData.id,
+    url: 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.user.id,
     success: function (data) {
       for(var i = 0; i < data.length; i++){
         var cur = data[i];
