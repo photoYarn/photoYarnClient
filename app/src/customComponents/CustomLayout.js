@@ -87,8 +87,8 @@ function _createContent(){
 function _createHeader(){
   // add title bar to header display
   this.header.add(new Surface({
-    content: 'PhotoYarn',
-    classes: ['customButton', 'medgreenBG', 'header'],
+    content: 'Photo Yarn',
+    classes: ['customButton', 'lightgreenBG', 'header'],
     properties: {
       lineHeight: this.options.headerSize + 'px',
       textAlign: 'center'

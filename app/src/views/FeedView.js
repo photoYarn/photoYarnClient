@@ -34,9 +34,7 @@ FeedView.DEFAULT_OPTIONS = {
 function _createBackground() {
   this.background = new Surface({
     size: [,],
-    properties: {
-      backgroundColor: '#BADA55',
-    }
+    classes: ['FeedViewBG']
   });
   
   var bgMod = new Modifier({

@@ -29,14 +29,20 @@ function AddToYarn(){
   _createSendButton.call(this);
   _setListeners.call(this);
 
-  this.add(pictureFrame);
+  this.add(pictureFrameModifier).add(pictureFrame);
 }
 
 var pictureFrame = new ImageSurface({
   content: catGif,
-  align: [0.5, 0.5],
-  origin: [0.5, 0.5],
-  size: [200, true]
+  size: [175, 220],
+  properties: {
+    border: '1px solid #79BD8F'
+  }
+});
+
+var pictureFrameModifier = new StateModifier({
+  align: [0.5, 0.45],
+  origin: [0.5, 0.5]
 });
 
 AddToYarn.prototype = Object.create(View.prototype);
@@ -48,15 +54,22 @@ AddToYarn.DEFAULT_OPTIONS = {
 
 function _createSendButton(){
   this.sendButtonModifier = new StateModifier({
-    transform : Transform.translate(0, -200, 0)
+    align: [0.5,.95],
+    origin: [0.5,1.5]
   });
 
   this.sendButton = new Surface({
-    size: [50, 20],
+    size: [60, 50],
     content: 'Submit',
+    classes: ['CaptionSubmitButton'],
     properties: {
-      backgroundColor: 'red'
-    }
+      borderRadius: '10px',
+      fontWeight: 'bold',
+      textAlign: 'center',
+      lineHeight: '50px',
+      backgroundColor: '#FF6138',
+      color: 'white',
+    },
   });
 
   var buttonModifier = new StateModifier({
@@ -71,15 +84,19 @@ function _createSendButton(){
 
 function _createTakePictureButton() {
   this.takePictureModifier = new StateModifier({
-    align: [0.25,1],
-    origin: [0.25,1]
+    align: [0.22,.95],
+    origin: [0.5,1.5]
   });
 
   this.takePicture = new Surface({
-    size: [100, true],
+    size: [95, 50],
     content: this.options.takePictureMsg,
     properties: {
-      backgroundColor: '#fa5c4f',
+      borderRadius: '10px',
+      fontWeight: 'bold',
+      textAlign: 'center',
+      lineHeight: '50px',
+      backgroundColor: '#79BD8F',
       color: 'white',
     },
   });
@@ -89,15 +106,19 @@ function _createTakePictureButton() {
 
 function _createGetPictureButton() {
   this.getPictureModifier = new StateModifier({
-    origin: [0.75,1],
-    align: [0.75, 1]
+    align: [0.78, .95],
+    origin: [0.5, 1.5]
   });
 
   this.getPicture = new Surface({
-    size: [100, true],
+    size: [95, 50],
     content: this.options.getPictureMsg,
     properties: {
-      backgroundColor: '#fa5c4f',
+      borderRadius: '10px',
+      lineHeight: '50px',
+      fontWeight: 'bold',
+      textAlign: 'center',
+      backgroundColor: '#79BD8F',
       color: 'white',
     },
   });
