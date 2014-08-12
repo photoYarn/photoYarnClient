@@ -140,10 +140,10 @@ var oauth = (function() {
             console.log('im running in cordova, im in loginWindowHandler, here is url', url);
             if (url.indexOf('access_token') !== -1) {
                 console.log('here is your access token')
-                // var timeout = 600 - (new Date().getTime() - startTime);
-                // setTimeout(function () {
-                loginWindow.close();
-                // }, timeout > 0 ? timeout : 0);
+                var timeout = 600 - (new Date().getTime() - startTime);
+                setTimeout(function () {
+                  loginWindow.close();
+                }, timeout > 0 ? timeout : 0);
                 oauthCallback(url);
             } else if (url.indexOf('error') !== -1) {
                 console.log('there is an error')
