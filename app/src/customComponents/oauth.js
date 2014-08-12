@@ -102,7 +102,6 @@ var oauth = (function() {
 
     var tokenStore = window.sessionStorage;
     var appId = 261431800718045; // this is considered public knowledge
-    // var appId;
 
     var loginCallback;
     var loginProcessed;
@@ -113,16 +112,6 @@ var oauth = (function() {
     }, false);
 
     var oauthRedirectURL = 'http://localhost:8100/oauthcallback.html';
-
-    // i don't think this is necessary
-    // var init = function(params) {
-    //     if (params.appId) {
-    //         appId = params.appId;
-    //         console.log('init called, appId', appId)
-    //     } else {
-    //         throw 'appId param not set';
-    //     }
-    // };
 
     var isLoggedIn = function() {
         return tokenStore.getItem('access_token') !== null;
@@ -140,10 +129,10 @@ var oauth = (function() {
             console.log('im running in cordova, im in loginWindowHandler, here is url', url);
             if (url.indexOf('access_token') !== -1) {
                 console.log('here is your access token')
-                // var timeout = 600 - (new Date().getTime() - startTime);
-                // setTimeout(function () {
-                loginWindow.close();
-                // }, timeout > 0 ? timeout : 0);
+                var timeout = 600 - (new Date().getTime() - startTime);
+                setTimeout(function () {
+                  loginWindow.close();
+                }, timeout > 0 ? timeout : 0);
                 oauthCallback(url);
             } else if (url.indexOf('error') !== -1) {
                 console.log('there is an error')
@@ -226,7 +215,6 @@ var oauth = (function() {
         login: login,
         logout: logout,
         isLoggedIn: isLoggedIn,
-        // init: init,
         oauthCallback: oauthCallback,
     }
 

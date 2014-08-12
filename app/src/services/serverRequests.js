@@ -10,7 +10,7 @@ serverRequests.cache is a hash with keys that correspond to _id of each yarn and
 correspond to the index those yarns are stored in the serverRequests.data array.
 */
 serverRequests.cache = {};
-serverRequests.user;
+serverRequests.user = {};
 
 
 /*
@@ -21,7 +21,7 @@ Stores strings of _id in cache
 serverRequests.getData = function(callback){
   $.ajax({
     type: 'GET',
-    url: 'http://photoyarn.azurewebsites.net/getAllYarns', //+ serverRequests.user.id,
+    url: 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.user.id,
     success: function (data) {
       for(var i = 0; i < data.length; i++){
         var cur = data[i];
@@ -29,9 +29,9 @@ serverRequests.getData = function(callback){
         this.cache[id] = this.data.length;
         this.data.push(cur);
       }
-      if(callback){
-        callback(this.data);
-      }
+      // if(callback){
+      //   callback(this.data);
+      // }
     }.bind(this),
     error: function (error) {
       console.log('Get Data Error: ', error);
@@ -47,7 +47,8 @@ serverRequests.updateData = function(){
   console.log('Updating Data');
   $.ajax({
     type: 'GET',
-    url: 'http://photoyarn.azurewebsites.net/getAllYarns', //+ serverRequests.user.id,
+
+    url: 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.user.id,
     success: function (data) {
       for(var i = 0; i < data.length; i++){
         var cur = data[i];
@@ -172,7 +173,7 @@ serverRequests.loginToFacebook = function(response){
       success: function(data) {
           var userData = {
               id: data.id,
-              gender: data.gender.charAt(0),
+              // gender: data.gender.charAt(0),
               name: data.name
           }
           serverRequests.user = userData;
@@ -184,6 +185,7 @@ serverRequests.loginToFacebook = function(response){
               data: userData,
               success: function(data) {
                   console.log(data);
+
                   serverRequests.getData();
               },
               error: function(error) {
