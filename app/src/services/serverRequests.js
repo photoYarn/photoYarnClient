@@ -10,7 +10,7 @@ serverRequests.cache is a hash with keys that correspond to _id of each yarn and
 correspond to the index those yarns are stored in the serverRequests.data array.
 */
 serverRequests.cache = {};
-serverRequests.user;
+serverRequests.user = {};
 
 
 /*
