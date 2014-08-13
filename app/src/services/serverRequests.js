@@ -257,6 +257,9 @@ serverRequests.getUserDataFromServer = function(userId){
     userLocation: 'San Francisco',
     numFollowers: 12,
     numFollowing: 33,
+    feeds: [1,2,3,4,5,6,7,8,9], 
+    friends: ['adam', 'bob', 'carl', 'doug', 'emily'],
+    photosAdded: 42,
     likes: 11
   };
 };
