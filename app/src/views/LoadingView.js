@@ -30,13 +30,13 @@ function _createSurface(){
     origin: [0.5, 0.5]
   });
 
-   var centerSpinModifier = new Modifier({
-      align: [0.5, 0.5],
-      origin: [0.5, 0.5],
-      transform: function() {
-        return Transform.rotateZ(.002 * (Date.now() - initialTime));
-      }
-    });
+  var centerSpinModifier = new Modifier({
+    align: [0.5, 0.5],
+    origin: [0.5, 0.5],
+    transform: function() {
+      return Transform.rotateZ(.002 * (Date.now() - initialTime));
+    }
+  });
 
   this.loadingTextModifier = new Modifier({
     transform: Transform.translate(0,15,0)

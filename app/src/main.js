@@ -8,6 +8,8 @@ var Engine = require('famous/core/Engine');
 // import layout
 var CustomLayout = require('./customComponents/CustomLayout');
 
+
+//test
 // import serverRequests to passed down to each view
 var serverRequests = require('./services/serverRequests');
 
