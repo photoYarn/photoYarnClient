@@ -50,6 +50,13 @@ Checks for updated data from server, updates cache and data array if new info fo
 Should emit an update event when update is succesful, to dictate state changes
 */
 serverRequests.updateData = function(){
+  var getURL;
+  if(serverRequests.user.id){
+    getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.user.id;
+  }
+  else {
+    getURL = 'http://photoyarn.azurewebsites.net/getYarnsBrowser';
+  }
   console.log('Updating Data');
   $.ajax({
     type: 'GET',

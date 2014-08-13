@@ -10,10 +10,10 @@ var CustomLayout = require('./customComponents/CustomLayout');
 
 // import serverRequests to passed down to each view
 var serverRequests = require('./services/serverRequests');
-// serverRequests.getData();
 
 var oauth = require('./customComponents/oauth');
 
+//enable this eventListener and disable the serverRequests.getData call below for on device use
 document.addEventListener('deviceready', function() {
   var runningInCordova = true;
   oauth.login(function(response) {
@@ -29,6 +29,8 @@ document.addEventListener('deviceready', function() {
   });      
 }, false);
 
+//Enable below get method to enable on computer testing
+// serverRequests.getData();
 
 // create display context
 var mainContext = Engine.createContext();
