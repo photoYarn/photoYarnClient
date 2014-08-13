@@ -20,11 +20,13 @@ var FeedView = require('../views/FeedView');
 var ProfileView = require('../views/ProfileView');
 var YarnView = require('../views/YarnView');
 var AddToYarnView = require('../views/AddToYarnView');
+var LoadingView = require('../views/LoadingView');
 
 // CustomLayout constructor
 function CustomLayout(){
   HeaderFooterLayout.apply(this, arguments);
 
+  this.serverRequests = serverRequests;
   // adding elements
   _createContent.call(this);
   _createHeader.call(this);
@@ -76,6 +78,7 @@ function _createContent(){
   this.addToYarnView = new AddToYarnView({
     serverRequests: this.options.serverRequests
   });
+  this.loadingView = new LoadingView();
 
   // initialize and attach RenderController to content display
   this.renderController = new RenderController();
@@ -191,6 +194,20 @@ function _setListeners() {
     this.addToYarnView.trigger('initYarnData', data);
     this.renderController.show(this.addToYarnView);
   }.bind(this));
+
+  this.serverRequests.emitter.on('Loading', function(){
+    console.log('LOADING IS HAPPENING!');
+    this.renderController.show(this.loadingView);
+    console.log(this.renderController);
+  }.bind(this))
+
+  this.serverRequests.emitter.on('Loaded', function(){
+    console.log('LOADING HAPPENED!');
+    this._activateButton(this.buttonRefs.viewFeed);
+    this.feedView.trigger('refreshFeed', this.options.serverRequests.data);
+    this.renderController.show(this.feedView);
+  }.bind(this))
+
 }
 
 // Activate given button and deactivate others

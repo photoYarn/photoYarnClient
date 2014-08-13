@@ -29,20 +29,19 @@ function _createYarn(){
   this.toggled = false;
   this.toggleCount = 0;
 
-  this.scrollView = new Scrollview({
-    margin: 10000,
-  })
+  this.scrollView = new Scrollview({});
   this.scrollModifier = new StateModifier({
-    size: [100,125],
+    size: [320/2,443/2],
     align: [0.5, 0],
     origin: [0.5, 0],
-    transform: Transform.translate(0,15,-15)
+    transform: Transform.translate(0,15,-15),
   });
   this.add(this.scrollModifier).add(this.scrollView);
 
   this.focusImage = new ImageSurface({});
 
   this.focusImageModifier = new StateModifier({
+    size: [320, 443],
     align: [0.5,0],
     origin: [0.5,0],
     transform: Transform.moveThen([-200,0,-15], Transform.rotateZ(Math.PI/2)),
@@ -54,16 +53,15 @@ function _createYarn(){
 
 function _createAddPhotoButton() {
   this.addPhotoButton = new Surface({
-      size: [100, 30],
+      size: [320/2, 60],
       content: '+',
       properties: {
-        textSize: 30 + 'px',
+        fontSize: '60px',
         backgroundColor: '#CCC',
         textAlign: 'center',
+        lineHeight: '60px'
       }
   });
-
-  // attach button to end of photo sequence in createDetail()
 }
 
 function _setListeners() {
@@ -108,10 +106,12 @@ YarnView.prototype.createDetail = function(data){
   var imageLinks = data.links;
   this.sequence = [];
   for(var i = 0; i < imageLinks.length; i++){
-    var context = this;
     var currentImage = imageLinks[i];
     var image = new ImageSurface({
       content: currentImage,
+      properties: {
+        padding: '5px'
+      }
     });
 
     image.pipe(this.scrollView);

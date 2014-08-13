@@ -15,6 +15,7 @@ var oauth = require('./customComponents/oauth');
 
 //enable this eventListener and disable the serverRequests.getData call below for on device use
 document.addEventListener('deviceready', function() {
+  console.log('device ready!');
   var runningInCordova = true;
   oauth.login(function(response) {
     if (response.status === 'connected') {
@@ -29,8 +30,7 @@ document.addEventListener('deviceready', function() {
   });      
 }, false);
 
-//Enable below get method to enable on computer testing
-// serverRequests.getData();
+
 
 // create display context
 var mainContext = Engine.createContext();
@@ -44,3 +44,6 @@ var layout = new CustomLayout({
 
 // attach layout to display context
 mainContext.add(layout);
+
+// //Enable below get method to enable on computer testing
+// serverRequests.getData();

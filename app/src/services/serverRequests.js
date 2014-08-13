@@ -2,6 +2,12 @@
 var $ = require('jquery');
 var serverRequests = {};
 
+var EventEmitter = require('famous/core/EventEmitter');
+
+serverRequests.emitter = new EventEmitter();
+serverRequests.loademitter = new EventEmitter();
+
+
 //serverRequests.data stores yarn data from server
 serverRequests.data = [];
 
@@ -74,6 +80,7 @@ serverRequests.updateData = function(){
           this.data.splice([this.cache[id]],1, cur);
         }
       }
+      serverRequests.emitter.emit('Loaded');
     }.bind(this),
     error: function (error) {
       console.log('Update Data Error: ', error);
@@ -87,6 +94,7 @@ Requires a data object with a caption, and a ._id which is the yarns unique id.
 Requires a b64 string of the image to post to imgur, data.b64image.
 */
 serverRequests.postToImgur = function(data, route){
+  serverRequests.emitter.emit('Loading');
   var serverData = {};
   serverData.caption = data.caption;
   //serverData.creatorId is hard coded currently, as we do not have users implemented yet!
