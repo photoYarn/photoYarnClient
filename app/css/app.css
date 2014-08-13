@@ -113,6 +113,13 @@ html {
   font-weight: bold;
 }
 
+.ProfileStat {
+  color: #777;
+  font: 20px Georgia, sans-serif;
+  font-weight: bold;
+  text-align: center;
+}
+
 .FeedEntryDivider {
   /* fallback */
   background-color: #CCC;
