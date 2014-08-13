@@ -40,8 +40,8 @@ function _createSurface(){
   });
 
   this.loadingImage = new ImageSurface({
-    size: [300,200],
-    content: 'assets/yarnHeart.png'
+    size: [200,200],
+    content: 'assets/catTied.png'
   });
   var rootNode = this.add(this.rootMod);
   rootNode.add(this.loadingText);

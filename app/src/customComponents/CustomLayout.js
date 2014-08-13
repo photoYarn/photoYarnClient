@@ -78,12 +78,12 @@ function _createContent(){
   this.addToYarnView = new AddToYarnView({
     serverRequests: this.options.serverRequests
   });
-  this.loadingView = new LoadingView({});
+  this.loadingView = new LoadingView();
 
   // initialize and attach RenderController to content display
   this.renderController = new RenderController();
   this.content.add(centerModifier).add(this.renderController);
-  this.renderController.show(this.loadingView);
+  this.renderController.show(this.logo);
 }
 
 // create header component
@@ -197,11 +197,15 @@ function _setListeners() {
 
   this.serverRequests.emitter.on('Loading', function(){
     console.log('LOADING IS HAPPENING!');
-  })
+    this.renderController.show(this.loadingView);
+    console.log(this.renderController);
+  }.bind(this))
 
   this.serverRequests.emitter.on('Loaded', function(){
     console.log('LOADING HAPPENED!');
-  })
+    this.feedView.trigger('refreshFeed', this.options.serverRequests.data);
+    this.renderController.show(this.feedView);
+  }.bind(this))
 
 }
 

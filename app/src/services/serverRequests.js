@@ -5,6 +5,8 @@ var serverRequests = {};
 var EventEmitter = require('famous/core/EventEmitter');
 
 serverRequests.emitter = new EventEmitter();
+serverRequests.loademitter = new EventEmitter();
+
 
 //serverRequests.data stores yarn data from server
 serverRequests.data = [];
