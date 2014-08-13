@@ -2,7 +2,7 @@
 orange: #EA8100
 faded orange: #E0D7CE
 dk brown: #662C00
-lt orange: #FFB34A
+lt orange: #FAA970
 dk orange: #FF6138
 */
 
@@ -19,12 +19,20 @@ html {
   background-color: #EA8100;
 }
 
+.secondaryBGColor {
+  background-color: #FAA970;
+}
+
 .focusBGColor {
   background-color: #FF6138;
 }
 
 .primaryTextColor {
   color: #EA8100;
+}
+
+.secondaryTextColor {
+  color: #FAA970;
 }
 
 .dkGrayBGColor {
@@ -70,19 +78,16 @@ html {
   border-radius: 10px;
   border: 2px solid white;
   margin-top: 3px;
-  color: #FFF;
-  font: 14px Georgia, sans-serif;
+  font-size: 14px;
   font-weight: bold;
 }
 
 .ProfileUserLocation {
-  color: #777;
-  font: 16px Georgia, sans-serif;
+  font-size: 16px;
 }
 
 .ProfileUsername {
-  color: #777;
-  font: 17px Georgia, sans-serif;
+  font-size: 17px;
   font-weight: bold;
 }
 

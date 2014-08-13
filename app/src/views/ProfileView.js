@@ -49,11 +49,7 @@ function _createProfileHeader(userData) {
   var username = new Surface({
     size: [window.innerWidth - this.options.profilePicSize[0], this.options.profilePicSize[1] / 4],
     content: userData.username,
-    classes: ['ProfileUsername'],
-    properties: {
-      backgroundColor: '#CFC',
-      fontWeight: 'bold'
-    }
+    classes: ['ProfileUsername', 'primaryTextColor'],
   });
   
   var usernameModifier = new Modifier({
@@ -68,9 +64,6 @@ function _createProfileHeader(userData) {
     size: [window.innerWidth - this.options.profilePicSize[0], this.options.profilePicSize[1] / 4],
     content: userData.userLocation,
     classes: ['ProfileUserLocation'],
-    properties: {
-      backgroundColor: '#EEE'
-    }
   });
   
   var userLocationModifier = new Modifier({
@@ -85,9 +78,8 @@ function _createProfileHeader(userData) {
   var followersButton = new Surface({
     size: [(window.innerWidth - this.options.profilePicSize[0]) / 3, this.options.profilePicSize[1] / 2],
     content: userData.numFollowers + ' Followers',
-    classes: ['ProfileViewFollowersButton', 'ProfileHeaderButton'],
+    classes: ['ProfileHeaderButton', 'secondaryBGColor', 'whiteTextColor'],
     properties: {
-      backgroundColor: '#ACA',
       textAlign: 'center'
     }
   });
@@ -102,9 +94,8 @@ function _createProfileHeader(userData) {
   var followingButton = new Surface({
     size: [(window.innerWidth - this.options.profilePicSize[0]) / 3, this.options.profilePicSize[1] / 2],
     content: userData.numFollowing + ' Following',
-    classes: ['ProfileViewFollowingButton', 'ProfileHeaderButton'],
+    classes: ['ProfileHeaderButton', 'secondaryBGColor', 'whiteTextColor'],
     properties: {
-      backgroundColor: '#ACA',
       textAlign: 'center'
     }
   });
@@ -119,9 +110,8 @@ function _createProfileHeader(userData) {
   var likesButton = new Surface({
     size: [(window.innerWidth - this.options.profilePicSize[0]) / 3, this.options.profilePicSize[1] / 2],
     content: userData.likes + ' Likes',
-    classes: ['ProfileViewLikesButton', 'ProfileHeaderButton'],
+    classes: ['ProfileHeaderButton', 'secondaryBGColor', 'whiteTextColor'],
     properties: {
-      backgroundColor: '#ACA',
       textAlign: 'center'
     }
   });
@@ -132,8 +122,6 @@ function _createProfileHeader(userData) {
   });
   
   this.add(likesButtonModifier).add(likesButton);
-
 }
 
 module.exports = ProfileView;
-
