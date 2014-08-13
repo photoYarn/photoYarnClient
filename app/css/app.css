@@ -3,6 +3,7 @@ orange: #EA8100
 whited orange: #E0D7CE
 dk brown: #662C00
 lt orange: #FFB34A
+dk orange: #FF6138
 */
 
 html {
@@ -15,6 +16,10 @@ html {
 
 .primaryBGColor {
   background-color: #EA8100;
+}
+
+.focusBGColor {
+  background-color: #FF6138;
 }
 
 .primaryTextColor {
@@ -38,8 +43,8 @@ html {
 }
 
 .FeedEntryBackground {
-  border: 1px solid #79BD8F;
-  background-color: #EEE;
+  border: 1px solid #662C00;
+  background-color: #E0D7CE;
   font: 16px Georgia, sans-serif;
   padding-left: 10px;
   padding-top: 5px;
@@ -111,9 +116,8 @@ html {
   margin-left: 10px;
 }
 
-.AddViewPictureFrame {
-  border: 2px solid #FF6138;
-  border-radius: 5px;
+.AddPhotoViewPicFrame {
+  border: 1px solid #662C00;
 }
 
 .AddViewButton {
