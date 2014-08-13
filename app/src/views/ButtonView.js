@@ -59,12 +59,26 @@ Button.prototype.setContent = function(content) {
     return this.surface.setContent(content);
 };
 
+Button.prototype.isActive = function() {
+    return this.options.active;
+}
+
+Button.prototype.toggleOn = function() {
+    this.options.active = true;
+    this.surface.addClass('primaryBGColor');
+};
+
+Button.prototype.toggleOff = function() {
+    this.options.active = false;
+    this.surface.removeClass('primaryBGColor');
+};
+
 Button.prototype.toggle = function(cb) {
     this.options.active = !this.options.active;
     if (this.options.active) {
-        this.surface.addClass('primaryBGColor');
+        this.toggleOn();
     } else {
-        this.surface.removeClass('primaryBGColor');
+        this.toggleOff();
     }
 };
 

@@ -157,18 +157,20 @@ function _setListeners() {
     this.renderController.show(this.logo);
   }.bind(this));
 
-  // associate click events to display actions
+  // associate button clicks to display actions
   this.buttonRefs.viewFeed.on('click', function() {
-    this.buttonRefs.viewFeed.toggle();
+    this._activateButton(this.buttonRefs.viewFeed);
     this.feedView.trigger('refreshFeed', this.options.serverRequests.data);
     this.renderController.show(this.feedView);
   }.bind(this));
 
   this.buttonRefs.createYarn.on('click', function() {
+    this._activateButton(this.buttonRefs.createYarn);
     this.renderController.show(this.newYarnView);
   }.bind(this));
 
   this.buttonRefs.viewProfile.on('click', function() {
+    this._activateButton(this.buttonRefs.viewProfile);
     this.renderController.show(this.profileView);
   }.bind(this));
 
@@ -188,6 +190,16 @@ function _setListeners() {
     this.addToYarnView.trigger('initYarnData', data);
     this.renderController.show(this.addToYarnView);
   }.bind(this));
+}
+
+// Activate given button and deactivate others
+CustomLayout.prototype._activateButton = function(button) {
+  if (!button.isActive()) {
+    for (var i = 0; i < this.buttons.length; i++) {
+      this.buttons[i].toggleOff();
+    }
+    button.toggleOn();
+  }
 }
 
 module.exports = CustomLayout;
