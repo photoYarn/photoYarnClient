@@ -31,7 +31,7 @@ FeedView.DEFAULT_OPTIONS = {
   message: 'Default message',
   entryCount: 4,
   entryHeight: 175,
-  buttonPanelHeight: 50,
+  buttonPanelHeight: 40,
   numSortButtons: 3
 };
 
@@ -51,7 +51,6 @@ function _createBackground() {
 
 // create root modifier node
 function _createRootNode() {
-  console.log('root node')
   this.rootModifier = new Modifier({
     align: [0, this.options.buttonPanelHeight / (window.innerHeight - this.options.headerSize - this.options.footerSize)],
     origin: [0, 0]
