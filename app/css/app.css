@@ -4,6 +4,7 @@ faded orange: #E0D7CE
 dk brown: #662C00
 lt orange: #FAA970
 dk orange: #FF6138
+lt gray: #999999
 */
 
 html {
@@ -39,8 +40,16 @@ html {
   background-color: #666666;
 }
 
+.ltGrayBGColor {
+  background-color: #999999;
+}
+
 .darkBorder {
   border: 1px solid #662C00;
+}
+
+.darkTopBorder {
+  border-top: 1px solid #662C00;
 }
 
 .navButton {

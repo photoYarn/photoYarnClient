@@ -9,6 +9,7 @@ var GridLayout = require('famous/views/GridLayout');
 var RenderController = require('famous/views/RenderController');
 
 // import components/utilities
+var ButtonView = require('../views/ButtonView');
 var CustomButton = require('./CustomButton');
 var $ = require('jquery');
 var serverRequests = require('../services/serverRequests.js')
@@ -100,23 +101,36 @@ function _createHeader(){
 
 // create footer component
 function _createFooter(){
+  // add footer background
+  var footerBG = new Surface({
+    classes: ['darkTopBorder', 'ltGrayBGColor'],
+  });
+
   // create buttons
   this.buttonRefs = {
-    viewFeed: new CustomButton({
-      name: 'Feed',
-      classes: ['navButton', 'whiteTextColor', 'dkGrayBGColor'],
+    viewFeed: new ButtonView({
+      type: 'image',
+      content: 'assets/feedIcon.png',
+      size: [true,],
+      origin: [0.5, 0.5],
+      align: [0.5, 0.5],
+      classes: ['navButton', 'whiteTextColor'],
     }),
-    createYarn: new CustomButton({
-      name: 'New Yarn',
-      classes: ['navButton', 'whiteTextColor', 'dkGrayBGColor'],
+    createYarn: new ButtonView({
+      type: 'image',
+      content: 'assets/newYarnIcon.png',
+      size: [true,],
+      origin: [0.5, 0.5],
+      align: [0.5, 0.5],
+      classes: ['navButton', 'whiteTextColor'],
     }),
-    viewProfile: new CustomButton({
-      name: 'Profile',
-      classes: ['navButton', 'whiteTextColor', 'dkGrayBGColor'],
-    }),
-    yarnView: new CustomButton({
-      name: 'YarnView',
-      classes: ['navButton', 'whiteTextColor', 'dkGrayBGColor']
+    viewProfile: new ButtonView({
+      type: 'image',
+      content: 'assets/profileIcon.png',
+      size: [true,],
+      origin: [0.5, 0.5],
+      align: [0.5, 0.5],
+      classes: ['navButton', 'whiteTextColor'],
     }),
   };
 
@@ -126,13 +140,13 @@ function _createFooter(){
     this.buttonRefs.createYarn,
     this.buttonRefs.viewProfile,
   ];
-
   this.buttonGrid = new GridLayout({
-    dimensions: [this.buttons.length, 1]
+    dimensions: [this.buttons.length, 1],
   });
   this.buttonGrid.sequenceFrom(this.buttons);
 
-  // add gridded buttons to footer display
+  // add background and gridded buttons to footer
+  this.footer.add(footerBG);
   this.footer.add(this.buttonGrid);
 }
 
@@ -140,20 +154,24 @@ function _createFooter(){
 function _setListeners() {
   // bind header click event
   this.title.on('click', function() {
+    this._activateButton();
     this.renderController.show(this.logo);
   }.bind(this));
 
-  // associate click events to display actions
+  // associate button clicks to display actions
   this.buttonRefs.viewFeed.on('click', function() {
+    this._activateButton(this.buttonRefs.viewFeed);
     this.feedView.trigger('refreshFeed', this.options.serverRequests.data);
     this.renderController.show(this.feedView);
   }.bind(this));
 
   this.buttonRefs.createYarn.on('click', function() {
+    this._activateButton(this.buttonRefs.createYarn);
     this.renderController.show(this.newYarnView);
   }.bind(this));
 
   this.buttonRefs.viewProfile.on('click', function() {
+    this._activateButton(this.buttonRefs.viewProfile);
     this.renderController.show(this.profileView);
   }.bind(this));
 
@@ -173,6 +191,16 @@ function _setListeners() {
     this.addToYarnView.trigger('initYarnData', data);
     this.renderController.show(this.addToYarnView);
   }.bind(this));
+}
+
+// Activate given button and deactivate others
+CustomLayout.prototype._activateButton = function(button) {
+  for (var i = 0; i < this.buttons.length; i++) {
+    this.buttons[i].toggleOff();
+  }
+  if (button && !button.isActive()) {
+    button.toggleOn();
+  }
 }
 
 module.exports = CustomLayout;

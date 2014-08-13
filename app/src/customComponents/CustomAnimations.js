@@ -8,6 +8,7 @@ var Easing = require('famous/transitions/Easing');
 Transitionable.registerMethod('spring', SpringTransition);
 
 var bounceBack = function(modNode) {
+  modNode.halt();
   modNode.setTransform(Transform.scale(0.8, 0.8, 1));
   modNode.setTransform(Transform.identity, {
     method: 'spring',
