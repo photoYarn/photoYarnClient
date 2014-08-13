@@ -12,13 +12,7 @@ correspond to the index those yarns are stored in the serverRequests.data array.
 serverRequests.cache = {};
 serverRequests.user = {};
 
-var getURL;
-if(serverRequests.user.id){
-  getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.user.id;
-}
-else {
-  getURL = 'http://photoyarn.azurewebsites.net/getYarnsBrowser';
-}
+
 
 
 /*
@@ -27,6 +21,13 @@ Stores strings of _id in cache
 */
 
 serverRequests.getData = function(){
+  var getURL;
+  if(serverRequests.user.id){
+    getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.user.id;
+  }
+  else {
+    getURL = 'http://photoyarn.azurewebsites.net/getYarnsBrowser';
+  }
   $.ajax({
     type: 'GET',
     url: getURL,

@@ -10,7 +10,6 @@ var RenderController = require('famous/views/RenderController');
 
 // import components/utilities
 var CustomButton = require('./CustomButton');
-var oauth = require('./oauth');
 var $ = require('jquery');
 var serverRequests = require('../services/serverRequests.js')
 
@@ -115,10 +114,6 @@ function _createFooter(){
       name: 'Profile',
       classes: ['navButton', 'whiteTextColor', 'dkGrayBGColor'],
     }),
-    login: new CustomButton({
-      name: 'Login',
-      classes: ['navButton', 'whiteTextColor', 'dkGrayBGColor']
-    }),
     yarnView: new CustomButton({
       name: 'YarnView',
       classes: ['navButton', 'whiteTextColor', 'dkGrayBGColor']
@@ -130,8 +125,8 @@ function _createFooter(){
     this.buttonRefs.viewFeed,
     this.buttonRefs.createYarn,
     this.buttonRefs.viewProfile,
-    this.buttonRefs.login,
   ];
+
   this.buttonGrid = new GridLayout({
     dimensions: [this.buttons.length, 1]
   });
@@ -178,19 +173,6 @@ function _setListeners() {
     this.addToYarnView.trigger('initYarnData', data);
     this.renderController.show(this.addToYarnView);
   }.bind(this));
-
-  this.buttonRefs.login.on('click', function() {
-    oauth.login(function(response) {
-        if (response.status === 'connected') {
-            console.log('fb login success, received access token');
-            // check against database to see if new user
-            // or current user by sending request to
-            serverRequests.loginToFacebook(response);
-        } else {
-            console.log('login failed', response.error);
-        }
-    });
-  })
 }
 
 module.exports = CustomLayout;
