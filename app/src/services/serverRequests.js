@@ -27,7 +27,6 @@ Stores strings of _id in cache
 */
 
 serverRequests.getData = function(){
-  serverRequests.emitter.emit('Loading');
   var getURL;
   if(serverRequests.user.id){
     getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.user.id;
@@ -45,7 +44,6 @@ serverRequests.getData = function(){
         this.cache[id] = this.data.length;
         this.data.push(cur);
       }
-      serverRequests.emitter.emit('Loaded');
     }.bind(this),
     error: function (error) {
       console.log('Get Data Error: ', error);
@@ -58,7 +56,6 @@ Checks for updated data from server, updates cache and data array if new info fo
 Should emit an update event when update is succesful, to dictate state changes
 */
 serverRequests.updateData = function(){
-  serverRequests.emitter.emit('Loading');
   var getURL;
   if(serverRequests.user.id){
     getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.user.id;
@@ -97,6 +94,7 @@ Requires a data object with a caption, and a ._id which is the yarns unique id.
 Requires a b64 string of the image to post to imgur, data.b64image.
 */
 serverRequests.postToImgur = function(data, route){
+  serverRequests.emitter.emit('Loading');
   var serverData = {};
   serverData.caption = data.caption;
   //serverData.creatorId is hard coded currently, as we do not have users implemented yet!
