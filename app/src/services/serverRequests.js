@@ -12,16 +12,24 @@ correspond to the index those yarns are stored in the serverRequests.data array.
 serverRequests.cache = {};
 serverRequests.user = {};
 
+var getURL;
+if(serverRequests.user.id){
+  getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.user.id;
+}
+else {
+  getURL = 'http://photoyarn.azurewebsites.net/getYarnsBrowser';
+}
+
 
 /*
 getData fetches data from server and stores it in data array
 Stores strings of _id in cache 
 */
 
-serverRequests.getData = function(callback){
+serverRequests.getData = function(){
   $.ajax({
     type: 'GET',
-    url: 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.user.id,
+    url: getURL,
     success: function (data) {
       for(var i = 0; i < data.length; i++){
         var cur = data[i];
@@ -29,9 +37,6 @@ serverRequests.getData = function(callback){
         this.cache[id] = this.data.length;
         this.data.push(cur);
       }
-      // if(callback){
-      //   callback(this.data);
-      // }
     }.bind(this),
     error: function (error) {
       console.log('Get Data Error: ', error);
@@ -47,8 +52,7 @@ serverRequests.updateData = function(){
   console.log('Updating Data');
   $.ajax({
     type: 'GET',
-
-    url: 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.user.id,
+    url: getURL,
     success: function (data) {
       for(var i = 0; i < data.length; i++){
         var cur = data[i];
@@ -79,6 +83,7 @@ serverRequests.postToImgur = function(data, route){
   serverData.caption = data.caption;
   //serverData.creatorId is hard coded currently, as we do not have users implemented yet!
   serverData.creatorId = serverRequests.user.id
+  // console.log('server creator', serverData.creatorId)
   //updated due to success callback
   serverData.link;
   serverData.imgurId;
