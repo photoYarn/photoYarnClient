@@ -5,17 +5,11 @@ var View = require('famous/core/View');
 var StateModifier = require('famous/modifiers/StateModifier');
 var ImageSurface = require('famous/surfaces/ImageSurface');
 var Scrollview = require('famous/views/Scrollview');
-var ViewSequence = require('famous/core/ViewSequence');
 var Transform = require('famous/core/Transform');
 var Surface = require('famous/core/Surface');
-var Easing = require('famous/transitions/Easing');
-
-//import serverRequests
-var serverRequests = require('../services/serverRequests');
 
 function YarnView(){
   View.apply(this, arguments);
-
   _createYarn.call(this);
   _createAddPhotoButton.call(this);
   _setListeners.call(this);
@@ -26,13 +20,14 @@ YarnView.prototype = Object.create(View.prototype);
 YarnView.prototype.constructor = YarnView;
 YarnView.DEFAULT_OPTIONS = {
   entryHeight: 175
-}
+};
 
 
 
 function _createYarn(){
 
   this.toggled = false;
+  this.toggleCount = 0;
 
   this.scrollView = new Scrollview({
     margin: 10000,
@@ -48,12 +43,11 @@ function _createYarn(){
   this.focusImage = new ImageSurface({});
 
   this.focusImageModifier = new StateModifier({
-    align: [0.5,0.5],
-    transform: Transform.translate(0,0,-15),
-    opacity: 0
-  })
+    align: [0.5,0],
+    origin: [0.5,0],
+    transform: Transform.moveThen([-200,0,-15], Transform.rotateZ(Math.PI/2)),
+  });
 
-  this.focusImageModifier.setTransform(Transform.scale(.1,.1,1));
 
   this.add(this.focusImageModifier).add(this.focusImage);
 }
@@ -82,7 +76,7 @@ function _setListeners() {
     if(this.toggled === false){
       this._eventOutput.emit('showAddToYarn', this.yarnData);
     }
-  }.bind(this))
+  }.bind(this));
 
   this.focusImage.on('click', function(){
     this.toggle();
@@ -90,25 +84,23 @@ function _setListeners() {
 }
 
 YarnView.prototype.toggle = function(content){
-
   if(!this.toggled){
-    this.focusImage.setContent(content)
-    this.scrollModifier.setOpacity(0, {duration: 1000});
-    this.scrollModifier.setTransform(Transform.scale(3,3,1), {duration: 1000});
-    this.focusImageModifier.setOpacity(1, {duration: 1000});
-    this.focusImageModifier.setTransform(Transform.scale(1,1,1), {duration: 1000});
-
+    this.focusImage.setContent(content);
+    this.scrollModifier.setTransform(Transform.translate(0,2*window.innerHeight,-15), {duration: 500});
+    this.focusImageModifier.setTransform(Transform.moveThen([0,0,-10], Transform.rotateX(0)), {duration: 500});
   } 
   else {
     this.focusImage.setContent('');
-    this.scrollModifier.setOpacity(1, {duration: 1000});
-    // this.scrollModifier.setTransform(Transform.scale(1,1,1), {duration: 1000});
-    this.scrollModifier.setTransform(Transform.moveThen([0,0,-15],Transform.scale(1,1,1)), {duration: 1000});
-    this.focusImageModifier.setTransform(Transform.scale(.1,.1,1), {duration: 1000});
-    this.focusImageModifier.setOpacity(0, {duration: 1000});
+    this.scrollModifier.setTransform(Transform.translate(0,0,-15), {duration: 500});
+    if(this.toggleCount % 2){
+      this.focusImageModifier.setTransform(Transform.moveThen([200,-window.innerHeight,-10], Transform.rotateZ(3*Math.PI/2)), {duration: 500});
+    } else {
+      this.focusImageModifier.setTransform(Transform.moveThen([-200,-window.innerHeight,-10], Transform.rotateZ(Math.PI/2)), {duration: 500});
+    }
+    this.toggleCount++;
   }
   this.toggled = !this.toggled;
-}
+};
 
 
 YarnView.prototype.createDetail = function(data){
@@ -136,6 +128,6 @@ YarnView.prototype.createDetail = function(data){
   this.sequence.push(this.addPhotoButton);
 
   this.scrollView.sequenceFrom(this.sequence);
-}
+};
 
 module.exports = YarnView;
