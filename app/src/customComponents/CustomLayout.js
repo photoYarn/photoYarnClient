@@ -83,6 +83,8 @@ function _createContent(){
   this.feedView = new FeedView({
     message: 'custom feed view',
     serverRequests: this.options.serverRequests,
+    headerSize: this.options.headerSize,
+    footerSize: this.options.footerSize
    });
   this.newYarnView = new NewYarnView({
     message: 'custom new yarn view',
