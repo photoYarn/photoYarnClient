@@ -2,6 +2,10 @@
 var $ = require('jquery');
 var serverRequests = {};
 
+var EventEmitter = require('famous/core/EventEmitter');
+
+serverRequests.emitter = new EventEmitter();
+
 //serverRequests.data stores yarn data from server
 serverRequests.data = [];
 
@@ -21,6 +25,7 @@ Stores strings of _id in cache
 */
 
 serverRequests.getData = function(){
+  serverRequests.emitter.emit('Loading');
   var getURL;
   if(serverRequests.user.id){
     getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.user.id;
@@ -38,6 +43,7 @@ serverRequests.getData = function(){
         this.cache[id] = this.data.length;
         this.data.push(cur);
       }
+      serverRequests.emitter.emit('Loaded');
     }.bind(this),
     error: function (error) {
       console.log('Get Data Error: ', error);
@@ -50,6 +56,7 @@ Checks for updated data from server, updates cache and data array if new info fo
 Should emit an update event when update is succesful, to dictate state changes
 */
 serverRequests.updateData = function(){
+  serverRequests.emitter.emit('Loading');
   var getURL;
   if(serverRequests.user.id){
     getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.user.id;
@@ -74,6 +81,7 @@ serverRequests.updateData = function(){
           this.data.splice([this.cache[id]],1, cur);
         }
       }
+      serverRequests.emitter.emit('Loaded');
     }.bind(this),
     error: function (error) {
       console.log('Update Data Error: ', error);

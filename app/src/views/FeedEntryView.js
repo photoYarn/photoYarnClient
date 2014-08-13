@@ -107,7 +107,7 @@ function _createPhotos(yarnData) {
       // instantiate photo elem
       var elem = new ImageSurface({
         size: [this.options.photoSize[0], this.options.photoSize[1]],
-        content: yarnData.links[i],
+        content: yarnData.links[i]+'t',
         classes: ['FeedEntryPhoto'],
         properties: {
           'pointer-events': 'none',
