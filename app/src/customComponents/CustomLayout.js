@@ -9,6 +9,7 @@ var GridLayout = require('famous/views/GridLayout');
 var RenderController = require('famous/views/RenderController');
 
 // import components/utilities
+var ButtonView = require('../views/ButtonView');
 var CustomButton = require('./CustomButton');
 var $ = require('jquery');
 var serverRequests = require('../services/serverRequests.js')
@@ -100,23 +101,36 @@ function _createHeader(){
 
 // create footer component
 function _createFooter(){
+  // add footer background
+  var footerBG = new Surface({
+    classes: ['darkTopBorder', 'dkGrayBGColor'],
+  });
+
   // create buttons
   this.buttonRefs = {
-    viewFeed: new CustomButton({
-      name: 'Feed',
+    viewFeed: new ButtonView({
+      type: 'image',
+      content: 'assets/feedIcon.png',
+      size: [true,],
+      origin: [0.5, 0.5],
+      align: [0.5, 0.5],
+      classes: ['navButton', 'whiteTextColor', 'primaryBGColor'],
+    }),
+    createYarn: new ButtonView({
+      type: 'image',
+      content: 'assets/newYarnIcon.png',
+      size: [true,],
+      origin: [0.5, 0.5],
+      align: [0.5, 0.5],
       classes: ['navButton', 'whiteTextColor', 'dkGrayBGColor'],
     }),
-    createYarn: new CustomButton({
-      name: 'New Yarn',
+    viewProfile: new ButtonView({
+      type: 'image',
+      content: 'assets/profileIcon.png',
+      size: [true,],
+      origin: [0.5, 0.5],
+      align: [0.5, 0.5],
       classes: ['navButton', 'whiteTextColor', 'dkGrayBGColor'],
-    }),
-    viewProfile: new CustomButton({
-      name: 'Profile',
-      classes: ['navButton', 'whiteTextColor', 'dkGrayBGColor'],
-    }),
-    yarnView: new CustomButton({
-      name: 'YarnView',
-      classes: ['navButton', 'whiteTextColor', 'dkGrayBGColor']
     }),
   };
 
@@ -126,13 +140,13 @@ function _createFooter(){
     this.buttonRefs.createYarn,
     this.buttonRefs.viewProfile,
   ];
-
   this.buttonGrid = new GridLayout({
-    dimensions: [this.buttons.length, 1]
+    dimensions: [this.buttons.length, 1],
   });
   this.buttonGrid.sequenceFrom(this.buttons);
 
-  // add gridded buttons to footer display
+  // add background and gridded buttons to footer
+  this.footer.add(footerBG);
   this.footer.add(this.buttonGrid);
 }
 
