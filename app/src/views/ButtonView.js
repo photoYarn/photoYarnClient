@@ -5,11 +5,8 @@ var Surface = require('famous/core/Surface');
 var ImageSurface = require('famous/surfaces/ImageSurface');
 var StateModifier = require('famous/modifiers/StateModifier');
 var Transform = require('famous/core/Transform');
-var Transitionable = require('famous/transitions/Transitionable');
-var SpringTransition = require('famous/transitions/SpringTransition');
 var Easing = require('famous/transitions/Easing');
-
-Transitionable.registerMethod('spring', SpringTransition);
+var Animation = require('../customComponents/CustomAnimations');
 
 function Button() {
     View.apply(this, arguments);
@@ -47,20 +44,14 @@ Button.prototype.constructor = Button;
 
 Button.DEFAULT_OPTIONS = {
     type: undefined,
-    size: undefined,
     content: undefined,
-    properties: undefined,
+    size: undefined,
     origin: undefined,
+    align: undefined,
+    visible: true,
+    properties: undefined,
     transform: undefined,
     classes: [],
-    bounceBack: true,
-    bounceTransition: {
-        method: 'spring',
-        period: 250,
-        dampingRatio: 0.5
-    },
-    bounceScale: 0.8,
-    visible: true,
     showTransition: {
         curve: Easing.outExpo,
         duration: 500
@@ -68,19 +59,13 @@ Button.DEFAULT_OPTIONS = {
 };
 
 Button.prototype.events = function events() {
-    this.surface.on('click', this._bounceBack.bind(this));
+    this.surface.on('click', function() {
+        Animation.bounceBack(this.modifier);
+    }.bind(this));
 };
 
 Button.prototype.setContent = function(content) {
     return this.surface.setContent(content);
-};
-
-Button.prototype._bounceBack = function(content) {
-    if (!this.options.bounceBack) return;
-
-    this.centerMod.halt();
-    this.centerMod.setTransform(Transform.scale(this.options.bounceScale, this.options.bounceScale, 1));
-    this.centerMod.setTransform(Transform.identity, this.options.bounceTransition);
 };
 
 Button.prototype.hide = function(cb, transition) {
