@@ -50,14 +50,11 @@ function _createCaption(){
   this.captionButton = new Surface({
     size: [60, 50],
     content: 'Submit',
-    classes: ['CaptionSubmitButton'],
+    classes: ['CaptionSubmitButton', 'focusBGColor', 'whiteTextColor', 'darkBorder'],
     properties: {
       borderRadius: '10px',
-      fontWeight: 'bold',
       textAlign: 'center',
       lineHeight: '50px',
-      backgroundColor: '#FF6138',
-      color: 'white',
     },
   });
   
@@ -81,13 +78,11 @@ function _createTakePictureButton() {
   this.takePicture = new Surface({
     size: [95, 50],
     content: this.options.takePictureMsg,
+    classes: ['primaryBGColor', 'whiteTextColor', 'darkBorder'],
     properties: {
       borderRadius: '10px',
-      fontWeight: 'bold',
       textAlign: 'center',
       lineHeight: '50px',
-      backgroundColor: '#79BD8F',
-      color: 'white',
     },
   });
 
@@ -103,13 +98,11 @@ function _createGetPictureButton() {
   this.getPicture = new Surface({
     size: [95, 50],
     content: this.options.getPictureMsg,
+    classes: ['primaryBGColor', 'whiteTextColor', 'darkBorder'],
     properties: {
       borderRadius: '10px',
       lineHeight: '50px',
-      fontWeight: 'bold',
       textAlign: 'center',
-      backgroundColor: '#79BD8F',
-      color: 'white',
     },
   });
 
@@ -120,10 +113,7 @@ function _createPictureFrame() {
   pictureFrame = new ImageSurface({
     content: catGif,
     size: [this.options.picSize[0], this.options.picSize[1]],
-    classes: ['AddPicViewPic'],
-    properties: {
-      border: '1px solid #79BD8F'
-    }
+    classes: ['AddPhotoViewPicFrame'],
   });
   
   var pictureFrameModifier = new StateModifier({
