@@ -43,7 +43,7 @@ create Layout that includes all custom components. Pass serverRequests objects t
 */
 var layout = new CustomLayout({
   headerSize: 75,
-  footerSize: 50,
+  footerSize: 50,	
   serverRequests: serverRequests
 });
 
