@@ -103,7 +103,7 @@ function _createHeader(){
 function _createFooter(){
   // add footer background
   var footerBG = new Surface({
-    classes: ['darkTopBorder', 'dkGrayBGColor'],
+    classes: ['darkTopBorder', 'ltGrayBGColor'],
   });
 
   // create buttons
@@ -154,6 +154,7 @@ function _createFooter(){
 function _setListeners() {
   // bind header click event
   this.title.on('click', function() {
+    this._activateButton();
     this.renderController.show(this.logo);
   }.bind(this));
 
@@ -194,10 +195,10 @@ function _setListeners() {
 
 // Activate given button and deactivate others
 CustomLayout.prototype._activateButton = function(button) {
-  if (!button.isActive()) {
-    for (var i = 0; i < this.buttons.length; i++) {
-      this.buttons[i].toggleOff();
-    }
+  for (var i = 0; i < this.buttons.length; i++) {
+    this.buttons[i].toggleOff();
+  }
+  if (button && !button.isActive()) {
     button.toggleOn();
   }
 }
