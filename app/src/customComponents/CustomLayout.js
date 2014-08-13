@@ -114,7 +114,7 @@ function _createFooter(){
       size: [true,],
       origin: [0.5, 0.5],
       align: [0.5, 0.5],
-      classes: ['navButton', 'whiteTextColor', 'primaryBGColor'],
+      classes: ['navButton', 'whiteTextColor'],
     }),
     createYarn: new ButtonView({
       type: 'image',
@@ -122,7 +122,7 @@ function _createFooter(){
       size: [true,],
       origin: [0.5, 0.5],
       align: [0.5, 0.5],
-      classes: ['navButton', 'whiteTextColor', 'dkGrayBGColor'],
+      classes: ['navButton', 'whiteTextColor'],
     }),
     viewProfile: new ButtonView({
       type: 'image',
@@ -130,7 +130,7 @@ function _createFooter(){
       size: [true,],
       origin: [0.5, 0.5],
       align: [0.5, 0.5],
-      classes: ['navButton', 'whiteTextColor', 'dkGrayBGColor'],
+      classes: ['navButton', 'whiteTextColor'],
     }),
   };
 
@@ -159,6 +159,7 @@ function _setListeners() {
 
   // associate click events to display actions
   this.buttonRefs.viewFeed.on('click', function() {
+    this.buttonRefs.viewFeed.toggle();
     this.feedView.trigger('refreshFeed', this.options.serverRequests.data);
     this.renderController.show(this.feedView);
   }.bind(this));

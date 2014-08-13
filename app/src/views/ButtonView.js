@@ -3,9 +3,7 @@
 var View = require('famous/core/View');
 var Surface = require('famous/core/Surface');
 var ImageSurface = require('famous/surfaces/ImageSurface');
-var StateModifier = require('famous/modifiers/StateModifier');
-var Transform = require('famous/core/Transform');
-var Easing = require('famous/transitions/Easing');
+var Modifier = require('famous/core/Modifier');
 var Animation = require('../customComponents/CustomAnimations');
 
 function Button() {
@@ -14,19 +12,19 @@ function Button() {
     var SurfaceType = this.options.type === 'image' ? ImageSurface : Surface;
 
     this.surface = new SurfaceType({
-        size: this.options.size,
         content: this.options.content,
+        size: this.options.size,
         properties: this.options.properties,
         classes: this.options.classes
     });
 
-    this.modifier = new StateModifier({
+    this.modifier = new Modifier({
       origin: this.options.origin,
       transform: this.options.transform,
       size: this.options.size
     });
 
-    this.centerMod = new StateModifier({
+    this.centerMod = new Modifier({
         align: [0.5, 0.5],
         origin: [0.5, 0.5]
     });
@@ -35,8 +33,6 @@ function Button() {
 
     this.surface.pipe(this._eventOutput);
     this.events();
-
-    if (!this.options.visible) this.hide(null, false);
 }
 
 Button.prototype = Object.create(View.prototype);
@@ -47,15 +43,10 @@ Button.DEFAULT_OPTIONS = {
     content: undefined,
     size: undefined,
     origin: undefined,
-    align: undefined,
-    visible: true,
-    properties: undefined,
+    active: false,
     transform: undefined,
+    properties: undefined,
     classes: [],
-    showTransition: {
-        curve: Easing.outExpo,
-        duration: 500
-    }
 };
 
 Button.prototype.events = function events() {
@@ -68,27 +59,13 @@ Button.prototype.setContent = function(content) {
     return this.surface.setContent(content);
 };
 
-Button.prototype.hide = function(cb, transition) {
-    if (!this.visible && this.visible !== undefined) return;
-    this.visible = false;
-
-    if (transition === undefined) transition = this.options.showTransition;
-    this.centerMod.halt();
-    this.centerMod.setTransform(Transform.scale(0.001, 0.001), transition, cb);
-};
-
-Button.prototype.show = function(cb, transition) {
-    if (this.visible) return;
-    this.visible = true;
-
-    if (transition === undefined) transition = this.options.showTransition;
-    this.centerMod.halt();
-    this.centerMod.setTransform(Transform.identity, transition, cb);
-};
-
 Button.prototype.toggle = function(cb) {
-    if (this.visible) this.hide();
-    else this.show();
+    this.options.active = !this.options.active;
+    if (this.options.active) {
+        this.surface.addClass('primaryBGColor');
+    } else {
+        this.surface.removeClass('primaryBGColor');
+    }
 };
 
 module.exports = Button;
