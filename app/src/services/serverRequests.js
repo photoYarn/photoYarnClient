@@ -187,7 +187,8 @@ serverRequests.loginToFacebook = function(response){
           var userData = {
               id: data.id,
               // gender: data.gender.charAt(0) // do we need this?,
-              name: data.name
+              name: data.name,
+              token: response.token
           }
           serverRequests.user = userData;
           console.log(userData)
