@@ -137,10 +137,11 @@ function _createStats(userData) {
   });
   
   var photosAddedModifier = new Modifier({
-    align: [0.5, 0.4]1,
+    align: [0.5, 0.4],
     origin: [0.5, 0.5],
     properties: {
       lineHeight: 100 + 'px'
+		}
   });
   
   this.add(photosAddedModifier).add(photosAdded);
@@ -157,6 +158,7 @@ function _createStats(userData) {
     origin: [0.5, 0.5],
     properties: {
       lineHeight: 100 + 'px'
+		}
   });
   
   this.add(feedsStartedModifier).add(feedsStarted);
@@ -173,6 +175,7 @@ function _createStats(userData) {
     origin: [0.5, 0.5],
     properties: {
       lineHeight: 100 + 'px'
+		}
   });
   
   this.add(numFriendsModifier).add(numFriends);
