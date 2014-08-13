@@ -1,6 +1,6 @@
 /*
 orange: #EA8100
-whited orange: #E0D7CE
+faded orange: #E0D7CE
 dk brown: #662C00
 lt orange: #FFB34A
 dk orange: #FF6138
@@ -8,6 +8,7 @@ dk orange: #FF6138
 
 html {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    background-color: #E0D7CE;
 }
 
 .whiteTextColor {
@@ -28,6 +29,10 @@ html {
 
 .dkGrayBGColor {
   background-color: #666666;
+}
+
+.darkBorder {
+  border: 1px solid #662C00;
 }
 
 .navButton {

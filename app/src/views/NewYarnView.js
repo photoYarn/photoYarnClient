@@ -50,7 +50,7 @@ function _createCaption(){
   this.captionButton = new Surface({
     size: [60, 50],
     content: 'Submit',
-    classes: ['CaptionSubmitButton', 'focusBGColor', 'whiteTextColor'],
+    classes: ['CaptionSubmitButton', 'focusBGColor', 'whiteTextColor', 'darkBorder'],
     properties: {
       borderRadius: '10px',
       textAlign: 'center',
@@ -78,7 +78,7 @@ function _createTakePictureButton() {
   this.takePicture = new Surface({
     size: [95, 50],
     content: this.options.takePictureMsg,
-    classes: ['primaryBGColor', 'whiteTextColor'],
+    classes: ['primaryBGColor', 'whiteTextColor', 'darkBorder'],
     properties: {
       borderRadius: '10px',
       textAlign: 'center',
@@ -98,7 +98,7 @@ function _createGetPictureButton() {
   this.getPicture = new Surface({
     size: [95, 50],
     content: this.options.getPictureMsg,
-    classes: ['primaryBGColor', 'whiteTextColor'],
+    classes: ['primaryBGColor', 'whiteTextColor', 'darkBorder'],
     properties: {
       borderRadius: '10px',
       lineHeight: '50px',
