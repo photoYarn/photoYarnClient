@@ -17,10 +17,11 @@ var photoCache = {};
 // FeedView constructor
 function FeedView(){
   View.apply(this, arguments);
+  
   _createRootNode.call(this);
-  // _createBackground.call(this);
+  _createBackground.call(this);
   _createButtonPanel.call(this);
-  // _setListeners.call(this);
+  _setListeners.call(this);
 }
 
 // set defaults
@@ -30,7 +31,7 @@ FeedView.DEFAULT_OPTIONS = {
   message: 'Default message',
   entryCount: 4,
   entryHeight: 175,
-  buttonPanelHeight: 50,
+  buttonPanelHeight: 40,
   numSortButtons: 3
 };
 
@@ -50,9 +51,8 @@ function _createBackground() {
 
 // create root modifier node
 function _createRootNode() {
-  console.log('root node')
   this.rootModifier = new Modifier({
-    align: [0, 0],
+    align: [0, this.options.buttonPanelHeight / (window.innerHeight - this.options.headerSize - this.options.footerSize)],
     origin: [0, 0]
   });
 
@@ -133,6 +133,7 @@ function _setListeners() {
 
 FeedView.prototype.createFeedEntriesFromServer = function(data) {
   this.feed = this.feed || new Scrollview({
+    clipSize: (window.innerHeight - this.options.headerSize - this.options.footerSize - this.options.buttonPanelHeight),
     direction: 1,
     margin: 10000 // without this some entries would stop rendering on a hard scroll (fix from https://github.com/Famous/views/issues/11)
   });

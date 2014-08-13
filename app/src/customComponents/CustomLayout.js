@@ -41,7 +41,7 @@ CustomLayout.DEFAULT_OPTIONS = {
   origin: [0, 0],
   align: [0,0],
   headerSize: 75,
-  footerSize: 50,
+  footerSize: 50
 };
 
 // create content component
@@ -62,6 +62,8 @@ function _createContent(){
   this.feedView = new FeedView({
     message: 'custom feed view',
     serverRequests: this.options.serverRequests,
+    headerSize: this.options.headerSize,
+    footerSize: this.options.footerSize
    });
   this.newYarnView = new NewYarnView({
     message: 'custom new yarn view',
