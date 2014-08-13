@@ -1,18 +1,40 @@
+/*
+orange: #EA8100
+whited orange: #E0D7CE
+dk brown: #662C00
+lt orange: #FFB34A
+*/
+
 html {
-    background-color: #fff;
-    color: #000;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
 }
 
-.customButton{
-  color: #FF6138;
-  font-weight: bold;
+.whiteTextColor {
+  color: #FFFFFF;
+}
+
+.primaryBGColor {
+  background-color: #EA8100;
+}
+
+.primaryTextColor {
+  color: #EA8100;
+}
+
+.dkGrayBGColor {
+  background-color: #666666;
+}
+
+.navButton {
+  text-shadow: #662C00 1px 1px 0px;
+  border-top: 1px solid #662C00;
 }
 
 .header {
+  color: #FFFFFF;
+  text-shadow: #662C00 1px 1px 0px;
   font-size: 30px;
-  text-shadow: white 1px 1px 0px;
-  color: #FF6138;
-  border-bottom: 2px solid #79BD8F;
+  border-bottom: 2px solid #662C00;
 }
 
 .FeedEntryBackground {
@@ -28,7 +50,6 @@ html {
    cursor: pointer;
    text-align: center;
    font: 20px Georgia;
-
 }
 
 .Background {
@@ -109,7 +130,7 @@ html {
 }
 
 .yellowBG{
-  background-color: #FFFF9D; 
+  background-color: #FFFF9D;
 }
 
 .lightgreenBG{

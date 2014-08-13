@@ -85,15 +85,18 @@ function _createContent(){
 
 // create header component
 function _createHeader(){
-  // add title bar to header display
-  this.header.add(new Surface({
+  // instantiate title
+  this.title = new Surface({
     content: 'Photo Yarn',
-    classes: ['customButton', 'lightgreenBG', 'header'],
+    classes: ['header', 'primaryBGColor'],
     properties: {
       lineHeight: this.options.headerSize + 'px',
       textAlign: 'center'
     }
-  }));
+  });
+
+  // add title to header display
+  this.header.add(this.title);
 }
 
 // create footer component
@@ -102,24 +105,24 @@ function _createFooter(){
   this.buttonRefs = {
     viewFeed: new CustomButton({
       name: 'Feed',
-      classes: ['customButton', 'lightgreenBG'],
+      classes: ['navButton', 'whiteTextColor', 'dkGrayBGColor'],
     }),
     createYarn: new CustomButton({
       name: 'New Yarn',
-      classes: ['customButton', 'lightgreenBG'],
+      classes: ['navButton', 'whiteTextColor', 'dkGrayBGColor'],
     }),
     viewProfile: new CustomButton({
       name: 'Profile',
-      classes: ['customButton', 'lightgreenBG'],
+      classes: ['navButton', 'whiteTextColor', 'dkGrayBGColor'],
     }),
     login: new CustomButton({
       name: 'Login',
-      classes: ['customButton', 'lightgreenBG']
+      classes: ['navButton', 'whiteTextColor', 'dkGrayBGColor']
     }),
     yarnView: new CustomButton({
       name: 'YarnView',
-      classes: ['customButton', 'lightgreenBG']
-    })
+      classes: ['navButton', 'whiteTextColor', 'dkGrayBGColor']
+    }),
   };
 
   // create grid layout for buttons
@@ -140,6 +143,11 @@ function _createFooter(){
 
 // set listeners for buttons in footer nav and in content views
 function _setListeners() {
+  // bind header click event
+  this.title.on('click', function() {
+    this.renderController.show(this.logo);
+  }.bind(this));
+
   // associate click events to display actions
   this.buttonRefs.viewFeed.on('click', function() {
     this.feedView.trigger('refreshFeed', this.options.serverRequests.data);
