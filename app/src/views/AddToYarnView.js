@@ -25,6 +25,7 @@ function AddToYarn(){
   serverRequests = this.options.serverRequests;
 
   // add elements
+  _createCaption.call(this);
   _createTakePictureButton.call(this);
   _createGetPictureButton.call(this);
   _createSendButton.call(this);
@@ -39,6 +40,26 @@ AddToYarn.DEFAULT_OPTIONS = {
   takePictureMsg: 'Take Picture',
   picSize: [175, 220],
 };
+
+function _createCaption() {
+  this.caption = new Surface({
+    content: '(no caption)',
+    size: [this.options.picSize[0], true],
+    classes: ['CaptionInput', 'focusTextColor'],
+    properties: {
+      textAlign: 'center',
+      fontWeight: 'bold',
+      fontSize: '24px',
+    },
+  });
+
+  this.captionModifier = new StateModifier({
+    origin: [0.5, 1],
+    align: [0.5, 0.2],
+  });
+
+  this.add(this.captionModifier).add(this.caption);
+}
 
 function _createSendButton(){
   this.sendButtonModifier = new StateModifier({
@@ -125,6 +146,7 @@ function _createPictureFrame() {
 function _setListeners() {
   this._eventInput.on('initYarnData', function(data) {
     this.yarnData = data;
+    this.caption.setContent(this.yarnData.caption);
   }.bind(this));
 
   this.sendButton.on('click', function() {
