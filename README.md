@@ -29,6 +29,7 @@ cordova run <platform>
 ```
 
 
+
 ## Requirements
 
 - Famo.us
@@ -47,7 +48,20 @@ From within the root directory:
 ```sh
 npm install -g browserify
 npm install -g watchify
+npm install -g cordova
 npm install
+```
+
+To add cordova platforms:
+
+```sh
+cordova platform add <platform name>
+```
+
+To install cordova plugins:
+
+```sh
+cordova plugin add <plugin name>
 ```
 
 ### Tasks
