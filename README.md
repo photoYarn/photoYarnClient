@@ -5,9 +5,9 @@
 ## Team
 
   - [Justin Cheung] (https://github.com/Jygsaw)
-  – [Kyle Kraft](https://github.com/craftjk)
-  – [Kia Fathi] (https://github.com/KiaFathi)
-  – [Paul Yi] (https://github.com/paulyi326)
+  - [Kyle Kraft](https://github.com/craftjk)
+  - [Kia Fathi] (https://github.com/KiaFathi)
+  - [Paul Yi] (https://github.com/paulyi326)
 
 ## Table of Contents
 
@@ -21,7 +21,13 @@
 
 ## Usage
 
-> Some usage instructions
+After installing dependencies, enter the following in the root directory:
+
+```sh
+npm run watch
+cordova run <platform>
+```
+
 
 ## Requirements
 
@@ -42,7 +48,6 @@ From within the root directory:
 npm install -g browserify
 npm install -g watchify
 npm install
-npm run watch
 ```
 
 ### Tasks
