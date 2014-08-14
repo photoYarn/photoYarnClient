@@ -33,8 +33,8 @@ cordova run <platform>
 
 - Famo.us
 - Browserify
-– Watchify
-– Cordova with Plugins: org.apache.cordova.camera and org.apache.cordova.inAppBrowser
+- Watchify
+- Cordova with Plugins: org.apache.cordova.camera and org.apache.cordova.inAppBrowser
 - jQuery
 
 
