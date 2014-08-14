@@ -10,6 +10,7 @@ var catGif = 'assets/catGif.gif';
 
 //This is used 
 var serverRequests;
+var pictureFrame;
 
 /*
 When this view is rendered it has a this.yarnData property
@@ -24,33 +25,41 @@ function AddToYarn(){
   serverRequests = this.options.serverRequests;
 
   // add elements
+  _createCaption.call(this);
   _createTakePictureButton.call(this);
   _createGetPictureButton.call(this);
   _createSendButton.call(this);
+  _createPictureFrame.call(this);
   _setListeners.call(this);
-
-  this.add(pictureFrameModifier).add(pictureFrame);
 }
-
-var pictureFrame = new ImageSurface({
-  content: catGif,
-  size: [175, 220],
-  properties: {
-    border: '1px solid #79BD8F'
-  }
-});
-
-var pictureFrameModifier = new StateModifier({
-  align: [0.5, 0.45],
-  origin: [0.5, 0.5]
-});
 
 AddToYarn.prototype = Object.create(View.prototype);
 AddToYarn.prototype.constructor = AddToYarn;
 AddToYarn.DEFAULT_OPTIONS = {
   getPictureMsg: 'Get Picture',
-  takePictureMsg: 'Take Picture'    
+  takePictureMsg: 'Take Picture',
+  picSize: [175, 220],
 };
+
+function _createCaption() {
+  this.caption = new Surface({
+    content: '(no caption)',
+    size: [this.options.picSize[0], true],
+    classes: ['CaptionInput', 'focusTextColor'],
+    properties: {
+      textAlign: 'center',
+      fontWeight: 'bold',
+      fontSize: '24px',
+    },
+  });
+
+  this.captionModifier = new StateModifier({
+    origin: [0.5, 1],
+    align: [0.5, 0.2],
+  });
+
+  this.add(this.captionModifier).add(this.caption);
+}
 
 function _createSendButton(){
   this.sendButtonModifier = new StateModifier({
@@ -61,14 +70,11 @@ function _createSendButton(){
   this.sendButton = new Surface({
     size: [60, 50],
     content: 'Submit',
-    classes: ['CaptionSubmitButton'],
+    classes: ['CaptionSubmitButton', 'focusBGColor', 'whiteTextColor'],
     properties: {
       borderRadius: '10px',
-      fontWeight: 'bold',
       textAlign: 'center',
       lineHeight: '50px',
-      backgroundColor: '#FF6138',
-      color: 'white',
     },
   });
 
@@ -91,13 +97,11 @@ function _createTakePictureButton() {
   this.takePicture = new Surface({
     size: [95, 50],
     content: this.options.takePictureMsg,
+    classes: ['primaryBGColor', 'whiteTextColor', 'darkBorder'],
     properties: {
       borderRadius: '10px',
-      fontWeight: 'bold',
       textAlign: 'center',
       lineHeight: '50px',
-      backgroundColor: '#79BD8F',
-      color: 'white',
     },
   });
 
@@ -113,22 +117,36 @@ function _createGetPictureButton() {
   this.getPicture = new Surface({
     size: [95, 50],
     content: this.options.getPictureMsg,
+    classes: ['primaryBGColor', 'whiteTextColor', 'darkBorder'],
     properties: {
       borderRadius: '10px',
       lineHeight: '50px',
-      fontWeight: 'bold',
       textAlign: 'center',
-      backgroundColor: '#79BD8F',
-      color: 'white',
     },
   });
 
   this.add(this.getPictureModifier).add(this.getPicture);
 }
 
+function _createPictureFrame() {
+  pictureFrame = new ImageSurface({
+    content: catGif,
+    size: [this.options.picSize[0], this.options.picSize[1]],
+    classes: ['AddPhotoViewPicFrame'],
+  });
+
+  var pictureFrameModifier = new StateModifier({
+    align: [0.5, 0.5],
+    origin: [0.5, 0.5]
+  });
+
+  this.add(pictureFrameModifier).add(pictureFrame);
+}
+
 function _setListeners() {
   this._eventInput.on('initYarnData', function(data) {
     this.yarnData = data;
+    this.caption.setContent(this.yarnData.caption);
   }.bind(this));
 
   this.sendButton.on('click', function() {
