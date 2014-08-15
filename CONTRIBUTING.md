@@ -106,6 +106,7 @@ as possible.
 Once you are done fixing conflicts for a specific commit, run:
 
 ```
+git add .
 git rebase --continue
 ```
 
