@@ -116,7 +116,7 @@ function _createHeader(){
 
   // create title bar
   this.title = new Surface({
-    content: 'Photo Yarn',
+    content: 'KC Photo Yarn',
     classes: ['header', 'primaryBGColor'],
     properties: {
       lineHeight: this.options.headerSize + 'px',

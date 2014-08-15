@@ -23,6 +23,12 @@ getData fetches data from server and stores it in data array
 Stores strings of _id in cache 
 */
 
+var kyleTestData = {
+  link: 'http://upload.wikimedia.org/wikipedia/commons/thumb/0/06/NC_88.svg/600px-NC_88.svg.png',
+  caption: '88 sign',
+  creatorId: 'kclltest'
+}
+
 serverRequests.getData = function(){
   var getURL;
   if(window.localStorage.getItem('facebookId')) {
@@ -110,6 +116,11 @@ serverRequests.postToImgur = function(data, route){
   serverData.link;
   serverData.imgurId;
   serverData.yarnId = data._id;
+  console.log(data);
+  
+  // TODO: remove after testing
+  data.b64image = 'http://upload.wikimedia.org/wikipedia/commons/thumb/0/06/NC_88.svg/600px-NC_88.svg.png';
+
  $.ajax({
     type: 'POST',
     url: 'https://api.imgur.com/3/upload',
@@ -239,7 +250,7 @@ serverRequests.loginToFacebook = function(response){
 serverRequests.getUserDataFromServer = function(userId){
   // $.ajax({
   //   type: 'GET',
-  //   url: 'http://photoyarn.azurewebsites.net/user/' + userId,
+  //   url: 'http://photoyarnlazyloadtest.azurewebsites.net/user/' + userId,
   //   success: function(res){
   //     console.log('Post to Server Success!', res);
   //        return res;
