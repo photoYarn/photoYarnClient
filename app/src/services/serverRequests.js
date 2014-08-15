@@ -26,7 +26,8 @@ Stores strings of _id in cache
 serverRequests.getData = function(){
   var getURL;
   if(serverRequests.user.id){
-    getURL = 'http://photoyarntest.azurewebsites.net/getAllYarns/' + serverRequests.user.id;
+    getURL = 'http://photoyarntest.azurewebsites.net/getAllYarns/' + serverRequests.user.id + 
+                                                                '?token=' + window.localStorage.getItem('serverToken');
   }
   else {
     getURL = 'http://photoyarntest.azurewebsites.net/getYarnsBrowser';
@@ -56,7 +57,8 @@ Emits a 'Loaded' event when data is loaded.
 serverRequests.updateData = function(){
   var getURL;
   if(serverRequests.user.id){
-    getURL = 'http://photoyarntest.azurewebsites.net/getAllYarns/' + serverRequests.user.id;
+    getURL = 'http://photoyarntest.azurewebsites.net/getAllYarns/' + serverRequests.user.id + 
+                                                            '?token=' + window.localStorage.getItem('serverToken');
   }
   else {
     getURL = 'http://photoyarntest.azurewebsites.net/getYarnsBrowser';
@@ -140,7 +142,7 @@ Requires a data object with imgurId, link, caption, and creatorId properties
 serverRequests.postYarnToServer = function(data){
   $.ajax({
     type: 'POST',
-    url: 'http://photoyarntest.azurewebsites.net/createNewYarn',
+    url: 'http://photoyarntest.azurewebsites.net/createNewYarn?token=' + window.localStorage.getItem('serverToken'),
     data: {
       imgurId: data.imgurId,
       link: data.link,
@@ -167,7 +169,7 @@ serverRequests.postPhotoToServerYarn = function(data){
   console.log('posting Photo to Yarn', data);
   $.ajax({
     type: 'POST',
-    url: 'http://photoyarntest.azurewebsites.net/addToYarn',
+    url: 'http://photoyarntest.azurewebsites.net/addToYarn?token=' + window.localStorage.getItem('serverToken');,
     data: {
       yarnId: data.yarnId,
       link: data.link,
@@ -206,6 +208,7 @@ serverRequests.loginToFacebook = function(response){
               url: 'http://photoyarntest.azurewebsites.net/users',
               data: userData,
               success: function(data) {
+                  window.localStorage.setItem('serverToken', data.serverToken);
                   serverRequests.getData();
               },
               error: function(error) {
