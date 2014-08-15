@@ -1,4 +1,5 @@
 'use strict';
+
 // include styles
 require('../css');
 
@@ -8,14 +9,16 @@ var Engine = require('famous/core/Engine');
 // import layout
 var CustomLayout = require('./customComponents/CustomLayout');
 
-
-//test
 // import serverRequests to passed down to each view
 var serverRequests = require('./services/serverRequests');
 
+//client side oauth with facebook. 
 var oauth = require('./customComponents/oauth');
 
-//enable this eventListener and disable the serverRequests.getData call below for on device use
+/*
+Uncomment this eventListener and disable the serverRequests.getData call below for on device use
+Logins w/ oauth through facebook
+*/
 document.addEventListener('deviceready', function() {
   console.log('device ready!');
   var runningInCordova = true;
@@ -32,12 +35,12 @@ document.addEventListener('deviceready', function() {
   });      
 }, false);
 
-
-
 // create display context
 var mainContext = Engine.createContext();
 
-// create Layout
+/*
+create Layout that includes all custom components. Pass serverRequests objects to child components
+*/
 var layout = new CustomLayout({
   headerSize: 75,
   footerSize: 50,
@@ -47,5 +50,5 @@ var layout = new CustomLayout({
 // attach layout to display context
 mainContext.add(layout);
 
-// //Enable below get method to enable on computer testing
+// Uncomment below get method to enable on computer testing
 // serverRequests.getData();
