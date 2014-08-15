@@ -8,6 +8,8 @@ var Surface = require('famous/core/Surface');
 var HeaderFooterLayout = require('famous/views/HeaderFooterLayout');
 var GridLayout = require('famous/views/GridLayout');
 var RenderController = require('famous/views/RenderController');
+var Transform = require('famous/core/Transform');
+var Easing = require('famous/transitions/Easing');
 
 // import components/utilities
 var ButtonView = require('../views/ButtonView');
@@ -42,9 +44,14 @@ CustomLayout.prototype = Object.create(View.prototype);
 CustomLayout.prototype.constructor = CustomLayout;
 CustomLayout.DEFAULT_OPTIONS = {
   origin: [0, 0],
-  align: [0,0],
+  align: [0, 0],
   headerSize: 75,
   footerSize: 50,
+  hideDuration: 500,
+  hideTransition: {
+    curve: Easing.outExpo,
+    duration: 500,
+  },
 };
 
 // create layout template
@@ -97,7 +104,10 @@ function _createContent(){
 
 // create header component
 function _createHeader(){
-  // instantiate title
+  // create header mod
+  this.headerMod = new Modifier();
+
+  // create title bar
   this.title = new Surface({
     content: 'Photo Yarn',
     classes: ['header', 'primaryBGColor'],
@@ -108,12 +118,15 @@ function _createHeader(){
   });
 
   // add title to header display
-  this.layout.header.add(this.title);
+  this.layout.header.add(this.headerMod).add(this.title);
 }
 
 // create footer component
 function _createFooter(){
-  // add footer background
+  // create footer modifier
+  this.footerMod = new Modifier();
+
+  // create footer background
   var footerBG = new Surface({
     classes: ['darkTopBorder', 'ltGrayBGColor'],
   });
@@ -157,9 +170,10 @@ function _createFooter(){
   });
   this.buttonGrid.sequenceFrom(this.buttons);
 
-  // add background and gridded buttons to footer
-  this.layout.footer.add(footerBG);
-  this.layout.footer.add(this.buttonGrid);
+  // add footer elements to footer
+  this.footerNode = this.layout.footer.add(this.footerMod);
+  this.footerNode.add(footerBG);
+  this.footerNode.add(this.buttonGrid);
 }
 
 // set listeners for buttons in footer nav and in content views
@@ -168,6 +182,12 @@ function _setListeners() {
   this.title.on('click', function() {
     this._activateButton();
     this.renderController.show(this.logo);
+    this.headerMod.setTransform(
+      Transform.translate(1, -this.options.headerSize, 1),
+      this.options.hideTransition);
+    this.footerMod.setTransform(
+      Transform.translate(1, this.options.footerSize, 1),
+      this.options.hideTransition);
   }.bind(this));
 
   // associate button clicks to display actions
