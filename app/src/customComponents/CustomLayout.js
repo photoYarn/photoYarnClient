@@ -195,12 +195,14 @@ function _setListeners() {
     this.renderController.show(this.addToYarnView);
   }.bind(this));
 
+  //Event triggered by serverRequests to show loading view
   this.serverRequests.emitter.on('Loading', function(){
     console.log('LOADING IS HAPPENING!');
     this.renderController.show(this.loadingView);
     console.log(this.renderController);
   }.bind(this))
 
+  //Event triggered by serverRequests to transition from loading view to feedview
   this.serverRequests.emitter.on('Loaded', function(){
     console.log('LOADING HAPPENED!');
     this._activateButton(this.buttonRefs.viewFeed);

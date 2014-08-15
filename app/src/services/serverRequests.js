@@ -18,9 +18,6 @@ correspond to the index those yarns are stored in the serverRequests.data array.
 serverRequests.cache = {};
 serverRequests.user = {};
 
-
-
-
 /*
 getData fetches data from server and stores it in data array
 Stores strings of _id in cache 
@@ -53,7 +50,7 @@ serverRequests.getData = function(){
 
 /*
 Checks for updated data from server, updates cache and data array if new info found.
-Should emit an update event when update is succesful, to dictate state changes
+Emits a 'Loaded' event when data is loaded.
 */
 serverRequests.updateData = function(){
   var getURL;
@@ -92,18 +89,19 @@ serverRequests.updateData = function(){
 Posts images to imgur, and then either adds to a yarn or creates a new yarn.
 Requires a data object with a caption, and a ._id which is the yarns unique id.
 Requires a b64 string of the image to post to imgur, data.b64image.
+Triggers loading event that will show loading screen
 */
 serverRequests.postToImgur = function(data, route){
   serverRequests.emitter.emit('Loading');
   var serverData = {};
   serverData.caption = data.caption;
   //serverData.creatorId is hard coded currently, as we do not have users implemented yet!
-  serverData.creatorId = serverRequests.user.id
+  serverData.creatorId = serverRequests.user.id;
   // console.log('server creator', serverData.creatorId)
   //updated due to success callback
   serverData.link;
   serverData.imgurId;
-  serverData.yarnId = data._id
+  serverData.yarnId = data._id;
  $.ajax({
     type: 'POST',
     url: 'https://api.imgur.com/3/upload',
@@ -118,7 +116,7 @@ serverRequests.postToImgur = function(data, route){
     success: function (res) {
       console.log('Post to Imgur Success: ', res.data);
       serverData.link = res.data.link;
-      serverData.imgurId = res.data.id
+      serverData.imgurId = res.data.id;
       console.log('Server data', serverData);
       if(route === 'add'){
         serverRequests.postPhotoToServerYarn(serverData);
@@ -139,7 +137,6 @@ On success will invoke the update function
 Requires a data object with imgurId, link, caption, and creatorId properties
 */
 serverRequests.postYarnToServer = function(data){
-  'posting new yarn to Server!'
   $.ajax({
     type: 'POST',
     url: 'http://photoyarn.azurewebsites.net/createNewYarn',
@@ -186,7 +183,9 @@ serverRequests.postPhotoToServerYarn = function(data){
   });
 };
 
-
+/*
+Logs in to Facebook, on success will get yarnData from server
+*/
 serverRequests.loginToFacebook = function(response){
   $.ajax({
       type: "GET",
@@ -197,27 +196,24 @@ serverRequests.loginToFacebook = function(response){
               // gender: data.gender.charAt(0) // do we need this?,
               name: data.name,
               token: response.token
-          }
+          };
           serverRequests.user = userData;
-          console.log(userData)
+          console.log(userData);
           // request to /users
           $.ajax({
               type: 'POST',
               url: 'http://photoyarn.azurewebsites.net/users',
               data: userData,
               success: function(data) {
-                  console.log(data);
-
                   serverRequests.getData();
               },
               error: function(error) {
-                  console.log(error)
+                  console.log(error);
               }
           });
       }
-  })
+  });
 };
-
 
 serverRequests.getUserDataFromServer = function(userId){
   // $.ajax({
@@ -241,7 +237,7 @@ serverRequests.getUserDataFromServer = function(userId){
     numFollowers: 12,
     numFollowing: 33,
     likes: 11
-  }
+  };
 };
 
 module.exports = serverRequests;

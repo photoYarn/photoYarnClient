@@ -17,7 +17,7 @@ var oauth = require('./customComponents/oauth');
 
 /*
 Uncomment this eventListener and disable the serverRequests.getData call below for on device use
-Logins w/ oauth through facebook
+Logs in w/ oauth through facebook
 */
 document.addEventListener('deviceready', function() {
   console.log('device ready!');
