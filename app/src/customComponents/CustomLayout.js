@@ -1,6 +1,7 @@
 'use strict';
 
 // import famo.us dependencies
+var View = require('famous/core/View');
 var Modifier = require('famous/core/Modifier');
 var ImageSurface = require('famous/surfaces/ImageSurface');
 var Surface = require('famous/core/Surface');
@@ -23,11 +24,13 @@ var AddToYarnView = require('../views/AddToYarnView');
 var LoadingView = require('../views/LoadingView');
 
 // CustomLayout constructor
-function CustomLayout(){
-  HeaderFooterLayout.apply(this, arguments);
+function CustomLayout() {
+  View.apply(this, arguments);
 
   this.serverRequests = serverRequests;
+
   // adding elements
+  _createLayout.call(this);
   _createContent.call(this);
   _createHeader.call(this);
   _createFooter.call(this);
@@ -35,7 +38,7 @@ function CustomLayout(){
 }
 
 // set defaults
-CustomLayout.prototype = Object.create(HeaderFooterLayout.prototype);
+CustomLayout.prototype = Object.create(View.prototype);
 CustomLayout.prototype.constructor = CustomLayout;
 CustomLayout.DEFAULT_OPTIONS = {
   origin: [0, 0],
@@ -44,9 +47,15 @@ CustomLayout.DEFAULT_OPTIONS = {
   footerSize: 50,
 };
 
+// create layout template
+function _createLayout() {
+  this.layout = new HeaderFooterLayout(this.options);
+
+  this.add(this.layout);
+}
+
 // create content component
 function _createContent(){
-
   // famo.us logo because famo.us is cool!
   this.logo = new ImageSurface({
     size: [200, 200],
@@ -82,7 +91,7 @@ function _createContent(){
 
   // initialize and attach RenderController to content display
   this.renderController = new RenderController();
-  this.content.add(centerModifier).add(this.renderController);
+  this.layout.content.add(centerModifier).add(this.renderController);
   this.renderController.show(this.logo);
 }
 
@@ -99,7 +108,7 @@ function _createHeader(){
   });
 
   // add title to header display
-  this.header.add(this.title);
+  this.layout.header.add(this.title);
 }
 
 // create footer component
@@ -149,8 +158,8 @@ function _createFooter(){
   this.buttonGrid.sequenceFrom(this.buttons);
 
   // add background and gridded buttons to footer
-  this.footer.add(footerBG);
-  this.footer.add(this.buttonGrid);
+  this.layout.footer.add(footerBG);
+  this.layout.footer.add(this.buttonGrid);
 }
 
 // set listeners for buttons in footer nav and in content views
