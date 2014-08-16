@@ -128,7 +128,6 @@ var oauth = (function() {
             var url = event.url;
             console.log('im running in cordova, im in loginWindowHandler, here is url', url);
             if (url.indexOf('access_token') !== -1) {
-                console.log('here is your access token')
                 var timeout = 600 - (new Date().getTime() - startTime);
                 setTimeout(function () {
                   loginWindow.close();
