@@ -1,21 +1,86 @@
+/*
+orange: #EA8100
+faded orange: #E0D7CE
+dk brown: #662C00
+lt orange: #FAA970
+dk orange: #FF6138
+lt gray: #999999
+*/
+
 html {
-    background-color: #fff;
-    color: #000;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    background-color: #E0D7CE;
 }
 
-.double-sided {
-    -webkit-backface-visibility: visible;
-    backface-visibility: visible;
+.whiteTextColor {
+  color: #FFFFFF;
+}
+
+.primaryBGColor {
+  background-color: #EA8100;
+}
+
+.secondaryBGColor {
+  background-color: #FAA970;
+}
+
+.focusBGColor {
+  background-color: #FF6138;
+}
+
+.primaryTextColor {
+  color: #EA8100;
+}
+
+.secondaryTextColor {
+  color: #FAA970;
+}
+
+.focusTextColor {
+  color: #FF6138;
+}
+
+.dkGrayBGColor {
+  background-color: #666666;
+}
+
+.ltGrayBGColor {
+  background-color: #999999;
+}
+
+.darkBorder {
+  border: 1px solid #662C00;
+}
+
+.darkTopBorder {
+  border-top: 1px solid #662C00;
+}
+
+.navButton {
+  text-shadow: #662C00 1px 1px 0px;
+  border-top: 1px solid #662C00;
 }
 
 .header {
+  color: #FFFFFF;
+  text-shadow: #662C00 1px 1px 0px;
   font-size: 30px;
+  border-bottom: 2px solid #662C00;
 }
 
 .FeedEntryBackground {
-  border: 1px solid black;
-  text-indent: 5px;
-  font-weight: bold;
+  border: 1px solid #662C00;
+  background-color: #E0D7CE;
+  font: 16px Georgia, sans-serif;
+  padding-left: 10px;
+  padding-top: 5px;
+}
+
+.FeedEntryAddPhotoButton {
+   background-color: #DDD;
+   cursor: pointer;
+   text-align: center;
+   font: 20px Georgia;
 }
 
 .Background {
@@ -26,19 +91,16 @@ html {
   border-radius: 10px;
   border: 2px solid white;
   margin-top: 3px;
-  color: #FFF;
-  font: 14px Georgia, sans-serif;
+  font-size: 14px;
   font-weight: bold;
 }
 
 .ProfileUserLocation {
-  color: #777;
-  font: 16px Georgia, sans-serif;
+  font-size: 16px;
 }
 
 .ProfileUsername {
-  color: #777;
-  font: 17px Georgia, sans-serif;
+  font-size: 17px;
   font-weight: bold;
 }
 
@@ -77,9 +139,17 @@ html {
   margin-left: 10px;
 }
 
-.AddPicViewPic {
-	border: 2px solid #FF6138;
-	border-radius: 5px;
+.AddPhotoViewPicFrame {
+  border: 1px solid #662C00;
+}
+
+.AddViewButton {
+  border-radius: 10px;
+  line-height: 50px;
+  font-weight: bold;
+  text-align: center;
+  background-color: #79BD8F;
+  color: 'white';
 }
 
 .salmonBG{
@@ -87,7 +157,7 @@ html {
 }
 
 .yellowBG{
-  background-color: #FFFF9D; 
+  background-color: #FFFF9D;
 }
 
 .lightgreenBG{
@@ -100,9 +170,4 @@ html {
 
 .darkgreenBG{
   background-color: #00A388;
-}
-
-.customButton{
-  color: #FF6138;
-  font-weight: bold;
 }

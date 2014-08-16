@@ -30,9 +30,9 @@ FeedEntryView.DEFAULT_OPTIONS = {
   defaultCaption: 'This is the default caption',
   captionSize: [undefined, 25],
   photosToShow: 5,
-  photoSize: [50, 67],
+  photoSize: [52, 70],
   textAlign: 'center',
-  entryButtonSize: [100, 25],
+  entryButtonSize: [82, 25],
   dividerHeight: 1,
   photoPadding: 10,
   showNum: 4,
@@ -55,10 +55,7 @@ function _createBackground(yarnData) {
   this.background = new Surface({
     content: yarnData.caption,
     size: [this.options.entrySize[0], this.options.entrySize[1]],
-    classes: ['FeedEntryBackground'],
-    properties: {
-      backgroundColor: '#DDD',
-    }
+    classes: ['FeedEntryBackground']
   });
 
   this.rootNode.add(this.background);
@@ -68,19 +65,20 @@ function _createBackground(yarnData) {
 function _createHeaders(yarnData) {
   this.yarnDetailButton = new Surface({
     size: [this.options.entryButtonSize[0], this.options.entryButtonSize[1]],
-    content: yarnData.links.length + ' photos ' + '\u2794',
+    content: yarnData.links.length + ' pics ' + '\u2794',
     properties: {
       backgroundColor: '#FF6138',
-      lineHeight: this.options.captionSize[1] + 'px',
+      lineHeight: this.options.entryButtonSize[1] + 'px',
       textAlign: this.options.textAlign,
       borderRadius: '5px',
       cursor: 'pointer',
+      font: '16px Georgia, sans-serif'
     }
   });
 
   var yarnDetailButtonModifier = new Modifier({
     transform: Transform.translate(-3,3,2),
-    align: [1,0],
+    align: [1,0.03],
     origin: [1,0]
   });
 
@@ -98,13 +96,10 @@ function _createPhotos(yarnData) {
       var elem = new Surface({
         size: [this.options.photoSize[0], this.options.photoSize[1]],
         content: '+',
-        classes: ['FeedEntryPhoto'],
+        classes: ['FeedEntryPhoto', 'FeedEntryAddPhotoButton'],
         properties: {
-          textSize: 30 + 'px',
-          backgroundColor: '#CCC',
-          textAlign: 'center',
           lineHeight: this.options.photoSize[1] + 'px',
-          cursor: 'pointer',
+          border: '1px dashed gray'
         }
       });
       this.addPhotoButton = elem;
@@ -112,7 +107,7 @@ function _createPhotos(yarnData) {
       // instantiate photo elem
       var elem = new ImageSurface({
         size: [this.options.photoSize[0], this.options.photoSize[1]],
-        content: yarnData.links[i],
+        content: yarnData.links[i]+'t',
         classes: ['FeedEntryPhoto'],
         properties: {
           'pointer-events': 'none',

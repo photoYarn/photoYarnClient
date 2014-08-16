@@ -34,9 +34,7 @@ FeedView.DEFAULT_OPTIONS = {
 function _createBackground() {
   this.background = new Surface({
     size: [,],
-    properties: {
-      backgroundColor: '#BADA55',
-    }
+    classes: ['FeedViewBG']
   });
   
   var bgMod = new Modifier({
@@ -55,6 +53,12 @@ function _createRootNode() {
   });
 
   this.rootNode = this.add(this.rootModifier);
+}
+
+function _setListeners() {
+  this._eventInput.on('refreshFeed', function(data) {
+    this.createFeedEntriesFromServer(data);
+  }.bind(this));
 }
 
 FeedView.prototype.createFeedEntriesFromServer = function(data) {
@@ -82,8 +86,5 @@ FeedView.prototype.createFeedEntriesFromServer = function(data) {
   this.rootNode.add(feedModifier).add(this.feed);
 } 
 
-function _setListeners() {
-
-}
 
 module.exports = FeedView;

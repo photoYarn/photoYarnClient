@@ -2,6 +2,12 @@
 var $ = require('jquery');
 var serverRequests = {};
 
+var EventEmitter = require('famous/core/EventEmitter');
+
+serverRequests.emitter = new EventEmitter();
+serverRequests.loademitter = new EventEmitter();
+
+
 //serverRequests.data stores yarn data from server
 serverRequests.data = [];
 
@@ -10,25 +16,30 @@ serverRequests.cache is a hash with keys that correspond to _id of each yarn and
 correspond to the index those yarns are stored in the serverRequests.data array.
 */
 serverRequests.cache = {};
-
+serverRequests.user = {};
 
 /*
 getData fetches data from server and stores it in data array
 Stores strings of _id in cache 
 */
-serverRequests.getData = function(callback){
+
+serverRequests.getData = function(){
+  var getURL;
+  if(serverRequests.user.id){
+    getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.user.id;
+  }
+  else {
+    getURL = 'http://photoyarn.azurewebsites.net/getYarnsBrowser';
+  }
   $.ajax({
     type: 'GET',
-    url: 'http://photoyarn.azurewebsites.net/getAllYarns',
+    url: getURL,
     success: function (data) {
       for(var i = 0; i < data.length; i++){
         var cur = data[i];
         var id = data[i]._id;
         this.cache[id] = this.data.length;
         this.data.push(cur);
-      }
-      if(callback){
-        callback(this.data);
       }
     }.bind(this),
     error: function (error) {
@@ -39,13 +50,20 @@ serverRequests.getData = function(callback){
 
 /*
 Checks for updated data from server, updates cache and data array if new info found.
-Should emit an update event when update is succesful, to dictate state changes
+Emits a 'Loaded' event when data is loaded.
 */
 serverRequests.updateData = function(){
+  var getURL;
+  if(serverRequests.user.id){
+    getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.user.id;
+  }
+  else {
+    getURL = 'http://photoyarn.azurewebsites.net/getYarnsBrowser';
+  }
   console.log('Updating Data');
   $.ajax({
     type: 'GET',
-    url: 'http://photoyarn.azurewebsites.net/getAllYarns',
+    url: getURL,
     success: function (data) {
       for(var i = 0; i < data.length; i++){
         var cur = data[i];
@@ -59,6 +77,7 @@ serverRequests.updateData = function(){
           this.data.splice([this.cache[id]],1, cur);
         }
       }
+      serverRequests.emitter.emit('Loaded');
     }.bind(this),
     error: function (error) {
       console.log('Update Data Error: ', error);
@@ -70,16 +89,19 @@ serverRequests.updateData = function(){
 Posts images to imgur, and then either adds to a yarn or creates a new yarn.
 Requires a data object with a caption, and a ._id which is the yarns unique id.
 Requires a b64 string of the image to post to imgur, data.b64image.
+Triggers loading event that will show loading screen
 */
 serverRequests.postToImgur = function(data, route){
+  serverRequests.emitter.emit('Loading');
   var serverData = {};
   serverData.caption = data.caption;
   //serverData.creatorId is hard coded currently, as we do not have users implemented yet!
-  serverData.creatorId = 21;
+  serverData.creatorId = serverRequests.user.id;
+  // console.log('server creator', serverData.creatorId)
   //updated due to success callback
   serverData.link;
   serverData.imgurId;
-  serverData.yarnId = data._id
+  serverData.yarnId = data._id;
  $.ajax({
     type: 'POST',
     url: 'https://api.imgur.com/3/upload',
@@ -94,7 +116,7 @@ serverRequests.postToImgur = function(data, route){
     success: function (res) {
       console.log('Post to Imgur Success: ', res.data);
       serverData.link = res.data.link;
-      serverData.imgurId = res.data.id
+      serverData.imgurId = res.data.id;
       console.log('Server data', serverData);
       if(route === 'add'){
         serverRequests.postPhotoToServerYarn(serverData);
@@ -115,7 +137,6 @@ On success will invoke the update function
 Requires a data object with imgurId, link, caption, and creatorId properties
 */
 serverRequests.postYarnToServer = function(data){
-  'posting new yarn to Server!'
   $.ajax({
     type: 'POST',
     url: 'http://photoyarn.azurewebsites.net/createNewYarn',
@@ -148,7 +169,8 @@ serverRequests.postPhotoToServerYarn = function(data){
     url: 'http://photoyarn.azurewebsites.net/addToYarn',
     data: {
       yarnId: data.yarnId,
-      link: data.link
+      link: data.link,
+      creatorId: data.creatorId
     },
     success: function(res){
       console.log('Post to Server Success: ', res);
@@ -158,6 +180,38 @@ serverRequests.postPhotoToServerYarn = function(data){
       console.log('Post to Server Error: ', error);
       console.log('Post to Server Error Response: ', res);
     }
+  });
+};
+
+/*
+Logs in to Facebook, on success will get yarnData from server
+*/
+serverRequests.loginToFacebook = function(response){
+  $.ajax({
+      type: "GET",
+      url: "https://graph.facebook.com/me?access_token=" + response.token,
+      success: function(data) {
+          var userData = {
+              id: data.id,
+              // gender: data.gender.charAt(0) // do we need this?,
+              name: data.name,
+              token: response.token
+          };
+          serverRequests.user = userData;
+          console.log(userData);
+          // request to /users
+          $.ajax({
+              type: 'POST',
+              url: 'http://photoyarn.azurewebsites.net/users',
+              data: userData,
+              success: function(data) {
+                  serverRequests.getData();
+              },
+              error: function(error) {
+                  console.log(error);
+              }
+          });
+      }
   });
 };
 
@@ -183,7 +237,7 @@ serverRequests.getUserDataFromServer = function(userId){
     numFollowers: 12,
     numFollowing: 33,
     likes: 11
-  }
+  };
 };
 
 module.exports = serverRequests;
