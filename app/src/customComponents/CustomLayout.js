@@ -10,6 +10,13 @@ var GridLayout = require('famous/views/GridLayout');
 var RenderController = require('famous/views/RenderController');
 var Transform = require('famous/core/Transform');
 var Easing = require('famous/transitions/Easing');
+var GenericSync = require('famous/inputs/GenericSync');
+var MouseSync = require('famous/inputs/MouseSync');
+var TouchSync = require('famous/inputs/TouchSync');
+GenericSync.register({
+    mouse: MouseSync,
+    touch: TouchSync,
+});
 
 // import components/utilities
 var ButtonView = require('../views/ButtonView');
@@ -37,6 +44,7 @@ function CustomLayout() {
   _createHeader.call(this);
   _createFooter.call(this);
   _setListeners.call(this);
+  _setHideLayoutListeners.call(this);
 }
 
 // set defaults
@@ -176,18 +184,47 @@ function _createFooter(){
   this.footerNode.add(this.buttonGrid);
 }
 
+// handle scroll events for header/footer hide
+function _setHideLayoutListeners() {
+  console.log("setting sync listeners");
+
+  // TODO use Scrollview sync object from FeedView to sync hide transition
+  var sync = new GenericSync(['mouse', 'touch'], {
+      direction: GenericSync.DIRECTION_Y,
+  });
+
+  // TODO change pipe source to feedView events for sync
+  this.logo.pipe(sync);
+
+  sync.on('update', function(data) {
+    this.headerMod.halt();
+    this.headerMod.setTransform(
+      Transform.translate(1, -this.options.headerSize, 1),
+      this.options.hideTransition);
+    this.footerMod.halt();
+    this.footerMod.setTransform(
+      Transform.translate(1, this.options.footerSize, 1),
+      this.options.hideTransition);
+  }.bind(this));
+
+  sync.on('end', function(data) {
+    this.headerMod.halt();
+    this.headerMod.setTransform(
+      Transform.identity,
+      this.options.hideTransition);
+    this.footerMod.halt();
+    this.footerMod.setTransform(
+      Transform.identity,
+      this.options.hideTransition);
+  }.bind(this));
+}
+
 // set listeners for buttons in footer nav and in content views
 function _setListeners() {
   // bind header click event
   this.title.on('click', function() {
     this._activateButton();
     this.renderController.show(this.logo);
-    this.headerMod.setTransform(
-      Transform.translate(1, -this.options.headerSize, 1),
-      this.options.hideTransition);
-    this.footerMod.setTransform(
-      Transform.translate(1, this.options.footerSize, 1),
-      this.options.hideTransition);
   }.bind(this));
 
   // associate button clicks to display actions
