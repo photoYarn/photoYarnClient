@@ -26,7 +26,9 @@ Stores strings of _id in cache
 serverRequests.getData = function(){
   var getURL;
   if(serverRequests.user.id){
-    getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.user.id;
+    getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.user.id + 
+                                                                '?token=' + window.localStorage.getItem('serverToken');
+    console.log(window.localStorage.getItem('serverToken'));
   }
   else {
     getURL = 'http://photoyarn.azurewebsites.net/getYarnsBrowser';
@@ -35,6 +37,7 @@ serverRequests.getData = function(){
     type: 'GET',
     url: getURL,
     success: function (data) {
+      console.log(data)
       for(var i = 0; i < data.length; i++){
         var cur = data[i];
         var id = data[i]._id;
@@ -55,7 +58,8 @@ Emits a 'Loaded' event when data is loaded.
 serverRequests.updateData = function(){
   var getURL;
   if(serverRequests.user.id){
-    getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.user.id;
+    getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.user.id + 
+                                                            '?token=' + window.localStorage.getItem('serverToken');
   }
   else {
     getURL = 'http://photoyarn.azurewebsites.net/getYarnsBrowser';
@@ -139,7 +143,7 @@ Requires a data object with imgurId, link, caption, and creatorId properties
 serverRequests.postYarnToServer = function(data){
   $.ajax({
     type: 'POST',
-    url: 'http://photoyarn.azurewebsites.net/createNewYarn',
+    url: 'http://photoyarn.azurewebsites.net/createNewYarn?token=' + window.localStorage.getItem('serverToken'),
     data: {
       imgurId: data.imgurId,
       link: data.link,
@@ -166,7 +170,7 @@ serverRequests.postPhotoToServerYarn = function(data){
   console.log('posting Photo to Yarn', data);
   $.ajax({
     type: 'POST',
-    url: 'http://photoyarn.azurewebsites.net/addToYarn',
+    url: 'http://photoyarn.azurewebsites.net/addToYarn?token=' + window.localStorage.getItem('serverToken'),
     data: {
       yarnId: data.yarnId,
       link: data.link,
@@ -205,6 +209,8 @@ serverRequests.loginToFacebook = function(response){
               url: 'http://photoyarn.azurewebsites.net/users',
               data: userData,
               success: function(data) {
+                  console.log(data);
+                  window.localStorage.setItem('serverToken', data.token);
                   serverRequests.getData();
               },
               error: function(error) {
