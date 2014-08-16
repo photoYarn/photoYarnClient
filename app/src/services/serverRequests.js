@@ -210,7 +210,7 @@ serverRequests.loginToFacebook = function(response){
               data: userData,
               success: function(data) {
                   console.log(data);
-                  window.localStorage.setItem('serverToken', data.token);
+                  window.localStorage.setItem('serverToken', data.serverToken);
                   serverRequests.getData();
               },
               error: function(error) {
