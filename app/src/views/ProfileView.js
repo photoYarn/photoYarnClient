@@ -14,6 +14,7 @@ function ProfileView(userId){
 
   _createBackground.call(this);
   _createProfileHeader.call(this, userData);
+  
 }
 
 ProfileView.prototype = Object.create(View.prototype);
