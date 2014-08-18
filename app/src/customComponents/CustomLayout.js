@@ -55,8 +55,11 @@ CustomLayout.DEFAULT_OPTIONS = {
   align: [0, 0],
   headerSize: 75,
   footerSize: 50,
-  hideDuration: 500,
   hideTransition: {
+    curve: Easing.outExpo,
+    duration: 500,
+  },
+  showTransition: {
     curve: Easing.outExpo,
     duration: 500,
   },
@@ -194,7 +197,7 @@ function _setHideLayoutListeners() {
   });
 
   // TODO change pipe source to feedView events for sync
-  this.logo.pipe(sync);
+  sync.subscribe(this.logo);
 
   sync.on('update', function(data) {
     this.headerMod.halt();
@@ -227,13 +230,38 @@ function _setListeners() {
     this.renderController.show(this.logo);
   }.bind(this));
 
-  // associate button clicks to display actions
+  // associate nav buttons to display actions
   this.buttonRefs.viewFeed.on('click', function() {
     this._activateButton(this.buttonRefs.viewFeed);
     this.feedView.trigger('refreshFeed', this.options.serverRequests.data);
+
+    // attaching events to newly created feedView.feed Scrollview
+    this.feedView.feed._eventInput.on('start', function() {
+      this.headerMod.halt();
+      this.headerMod.setTransform(
+        Transform.translate(1, -this.options.headerSize, 1),
+        this.options.hideTransition);
+      this.footerMod.halt();
+      this.footerMod.setTransform(
+        Transform.translate(1, this.options.footerSize, 1),
+        this.options.hideTransition);
+    }.bind(this));
+
+    this.feedView.feed._eventInput.on('end', function() {
+      this.headerMod.halt();
+      this.headerMod.setTransform(
+        Transform.identity,
+        this.options.showTransition);
+      this.footerMod.halt();
+      this.footerMod.setTransform(
+        Transform.identity,
+        this.options.showTransition);
+    }.bind(this));
+
     this.renderController.show(this.feedView);
   }.bind(this));
 
+  // associate nav buttons to display actions
   this.buttonRefs.createYarn.on('click', function() {
     this._activateButton(this.buttonRefs.createYarn);
     this.renderController.show(this.newYarnView);
