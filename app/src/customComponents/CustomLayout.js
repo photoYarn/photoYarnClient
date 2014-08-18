@@ -76,8 +76,8 @@ function _createContent(){
   });
 
   var centerModifier = new Modifier({
-    origin: [0.5, 0.5],
-    align: [0.5, 0.5]
+    origin: [0.5, 0],
+    align: [0.5, 0]
   });
 
   // initialize content views
@@ -198,6 +198,11 @@ function _setListeners() {
     this._showLayout();
     this._activateButton(this.buttonRefs.viewFeed);
     this.feedView.trigger('refreshFeed', this.options.serverRequests.data);
+
+    //if yarnView was showing focused image, that image should be hidden.
+    if(this.yarnView.toggled){
+      this.yarnView.toggle();
+    }
 
     // attaching events to newly created feedView.feed Scrollview
     this.feedView.feed._eventInput.on('start', function() {

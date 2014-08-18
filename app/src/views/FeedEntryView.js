@@ -96,10 +96,11 @@ function _createPhotos(yarnData) {
       var elem = new Surface({
         size: [this.options.photoSize[0], this.options.photoSize[1]],
         content: '+',
-        classes: ['FeedEntryPhoto', 'FeedEntryAddPhotoButton'],
+        classes: ['photoEntry', 'FeedEntryAddPhotoButton'],
         properties: {
           lineHeight: this.options.photoSize[1] + 'px',
-          border: '1px dashed gray'
+          border: '1px dashed gray',
+          'margin-left': '5px'
         }
       });
       this.addPhotoButton = elem;
@@ -108,9 +109,10 @@ function _createPhotos(yarnData) {
       var elem = new ImageSurface({
         size: [this.options.photoSize[0], this.options.photoSize[1]],
         content: yarnData.links[i]+'t',
-        classes: ['FeedEntryPhoto'],
+        classes: ['photoEntry'],
         properties: {
           'pointer-events': 'none',
+          'margin-left': '5px'
         },
       });
     }
