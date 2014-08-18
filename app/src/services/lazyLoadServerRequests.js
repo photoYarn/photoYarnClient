@@ -24,7 +24,7 @@ Stores strings of _id in cache
 */
 
 serverRequests.getData = function(callback, feedInstance){
-  var getURL = 'http://localhost:8100/getYarnsBrowser';
+  var getURL = 'http://photoyarn.azurewebsites.net/getYarnsBrowser';
   if (feedInstance) feedInstance.loadingPictures = true;
   $.ajax({
     type: 'GET',
@@ -55,7 +55,7 @@ Checks for updated data from server, updates cache and data array if new info fo
 Emits a 'Loaded' event when data is loaded.
 */
 serverRequests.updateData = function(){
-  var getURL = 'http://localhost:8100/getYarnsBrowser';
+  var getURL = 'http://photoyarn.azurewebsites.net/getYarnsBrowser';
 
   console.log('Updating Data');
   $.ajax({
@@ -138,7 +138,7 @@ Requires a data object with imgurId, link, caption, and creatorId properties
 serverRequests.postYarnToServer = function(data){
   $.ajax({
     type: 'POST',
-    url: 'http://localhost:8100/createNewYarn',
+    url: 'http://photoyarn.azurewebsites.net/createNewYarn',
     data: {
       imgurId: data.imgurId,
       link: data.link,
@@ -165,7 +165,7 @@ serverRequests.postPhotoToServerYarn = function(data){
   console.log('posting Photo to Yarn', data);
   $.ajax({
     type: 'POST',
-    url: 'http://localhost:8100/addToYarn',
+    url: 'http://photoyarn.azurewebsites.net/addToYarn',
     data: {
       yarnId: data.yarnId,
       link: data.link,
@@ -221,7 +221,7 @@ serverRequests.loginToFacebook = function(response){
 serverRequests.getUserDataFromServer = function(userId){
   // $.ajax({
   //   type: 'GET',
-  //   url: 'http://photoyarnlazyloadtest.azurewebsites.net/user/' + userId,
+  //   url: 'http://photoyarn.azurewebsites.net/user/' + userId,
   //   success: function(res){
   //     console.log('Post to Server Success!', res);
   //        return res;

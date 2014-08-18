@@ -63,7 +63,7 @@ function _createBackground() {
 // create root modifier node
 function _createRootNode() {
   this.rootModifier = new Modifier({
-    align: [0, this.options.buttonPanelHeight / (window.innerHeight - this.options.headerSize - this.options.footerSize)],
+    align: [0, 0],
     origin: [0, 0]
   });
 
