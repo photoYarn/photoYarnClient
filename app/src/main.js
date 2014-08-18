@@ -63,4 +63,4 @@ var layout = new CustomLayout({
 mainContext.add(layout);
 
 // Uncomment below get method to enable on computer testing
-serverRequests.getData();
+// serverRequests.getData();
