@@ -24,18 +24,14 @@ var yarnsLoaded = 0;
 function FeedView(){
   View.apply(this, arguments);
   
-<<<<<<< HEAD
-=======
   this.feedHeight = 0;
   this.scrollHeight = 0;
   this.maxScroll = 0;
   this.loadingPictures = false;
   this.doneLoading = false;
   
->>>>>>> feat/lazyLoad
   _createRootNode.call(this);
   _createBackground.call(this);
-  _createButtonPanel.call(this);
   _setListeners.call(this);
 }
 
@@ -132,18 +128,6 @@ function _setListeners() {
   this._eventInput.on('refreshFeed', function(data) {
     this.createFeedEntriesFromServer(data);
   }.bind(this));
-  
-  this.networkButton.on('click', function () {
-    // request feeds sorted by network from server
-  }.bind(this));
-  
-  this.popularButton.on('click', function () {
-    // request feeds sorted by popularity from server
-  }.bind(this));
-  
-  this.newButton.on('click', function () {
-    // request feeds sorted by creation date from server
-  }.bind(this));
 }
 
 FeedView.prototype.createFeedEntriesFromServer = function(data) {
@@ -179,8 +163,6 @@ FeedView.prototype.createFeedEntriesFromServer = function(data) {
   
     newEntryView.pipe(this.sync);
   }
-<<<<<<< HEAD
-=======
   
   this.maxScroll = this.feedHeight - 
                     window.innerHeight - 
@@ -205,7 +187,6 @@ FeedView.prototype.createFeedEntriesFromServer = function(data) {
       serverRequests.getData(this.createFeedEntriesFromServer, this);      
     }
   }.bind(this));
->>>>>>> feat/lazyLoad
 
   var feedModifier = new Modifier({
     transform: Transform.translate(0, 0, -10)
