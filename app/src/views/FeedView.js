@@ -13,6 +13,7 @@ var FeedEntryView = require('./FeedEntryView');
 
 // initialize class variables
 var photoCache = {};
+var yarnsLoaded = 0;
 
 // FeedView constructor
 function FeedView(){
@@ -148,6 +149,7 @@ FeedView.prototype.createFeedEntriesFromServer = function(data) {
     newEntryView.pipe(this._eventOutput); 
     photoCache[data[i]._id] = newEntryView;
     this.entries.push(newEntryView);
+    yarnsLoaded++;
   }
 
   var feedModifier = new Modifier({

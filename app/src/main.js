@@ -10,7 +10,7 @@ var Engine = require('famous/core/Engine');
 var CustomLayout = require('./customComponents/CustomLayout');
 
 // import serverRequests to passed down to each view
-var serverRequests = require('./services/serverRequests');
+var serverRequests = require('./services/lazyLoadServerRequests');
 
 //client side oauth with facebook. 
 var oauth = require('./customComponents/oauth');

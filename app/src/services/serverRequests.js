@@ -23,12 +23,6 @@ getData fetches data from server and stores it in data array
 Stores strings of _id in cache 
 */
 
-var kyleTestData = {
-  link: 'http://upload.wikimedia.org/wikipedia/commons/thumb/0/06/NC_88.svg/600px-NC_88.svg.png',
-  caption: '88 sign',
-  creatorId: 'kclltest'
-}
-
 serverRequests.getData = function(){
   var getURL;
   if(window.localStorage.getItem('facebookId')) {
@@ -118,9 +112,6 @@ serverRequests.postToImgur = function(data, route){
   serverData.yarnId = data._id;
   console.log(data);
   
-  // TODO: remove after testing
-  data.b64image = 'http://upload.wikimedia.org/wikipedia/commons/thumb/0/06/NC_88.svg/600px-NC_88.svg.png';
-
  $.ajax({
     type: 'POST',
     url: 'https://api.imgur.com/3/upload',
@@ -208,49 +199,41 @@ Logs in to Facebook, on success will get yarnData from server
 serverRequests.loginToFacebook = function(response){
   console.log('response', response);
   $.ajax({
-    type: "GET",
-    url: "https://graph.facebook.com/me?access_token=" + response.token,
-    success: function(data) {
-      console.log('graph facebook success!');
-      var userData = {
-        id: data.id,
-        // gender: data.gender.charAt(0) // do we need this?,
-        name: data.name,
-        token: response.token
-      };
-      // serverRequests.user = userData;
-      console.log(userData);
-      // request to /users
-      $.ajax({
-        type: 'POST',
-        url: 'http://photoyarn.azurewebsites.net/users',
-        data: userData,
-        success: function(data) {
-          console.log('data',data);
-            // this should all probably be changed to userData.blah instead of data.blah
-            // i don't think there is a good reason for server to send back the user
-          window.localStorage.setItem('serverToken', data.serverToken);
-          window.localStorage.setItem('facebookId', data.user.id);
-          window.localStorage.setItem('facebookName', data.user.name);
-          serverRequests.getData();
-        },
-        error: function(error) {
-          console.log(error);
-        }
-      });
-    }, 
-    error: function(data1, data2){
-      console.log('facebook error!');
-      console.log('data1', data1);
-      console.log('data2', data2);
-    }
+      type: "GET",
+      url: "https://graph.facebook.com/me?access_token=" + response.token,
+      success: function(data) {
+          var userData = {
+              id: data.id,
+              // gender: data.gender.charAt(0) // do we need this?,
+              name: data.name,
+              token: response.token
+          };
+          serverRequests.user = userData;
+          console.log(userData);
+          // request to /users
+          $.ajax({
+              type: 'POST',
+              url: 'http://photoyarn.azurewebsites.net/users',
+              data: userData,
+              success: function(data) {
+                  console.log(data);
+                  if (data.serverToken) {
+                    window.localStorage.setItem('serverToken', data.serverToken);
+                  }
+                  serverRequests.getData();
+              },
+              error: function(error) {
+                  console.log(error);
+              }
+          });
+      }
   });
 };
 
 serverRequests.getUserDataFromServer = function(userId){
   // $.ajax({
   //   type: 'GET',
-  //   url: 'http://photoyarnlazyloadtest.azurewebsites.net/user/' + userId,
+  //   url: 'http://photoyarn.azurewebsites.net/user/' + userId,
   //   success: function(res){
   //     console.log('Post to Server Success!', res);
   //        return res;
