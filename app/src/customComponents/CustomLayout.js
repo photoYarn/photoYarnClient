@@ -48,6 +48,7 @@ CustomLayout.DEFAULT_OPTIONS = {
   headerSize: 75,
   footerSize: 50,
   layoutHidden: false,
+  layoutHideListen: false,
   layoutShowListen: false,
   hideTransition: {
     curve: Easing.outExpo,
@@ -55,7 +56,7 @@ CustomLayout.DEFAULT_OPTIONS = {
   },
   showTransition: {
     curve: Easing.outExpo,
-    duration: 1000,
+    duration: 500,
   },
 };
 
@@ -193,24 +194,15 @@ function _setListeners() {
 
   // associate nav buttons to display actions
   this.buttonRefs.viewFeed.on('click', function() {
+    this._resetLayoutListeners();
+    this._showLayout();
     this._activateButton(this.buttonRefs.viewFeed);
     this.feedView.trigger('refreshFeed', this.options.serverRequests.data);
 
     // attaching events to newly created feedView.feed Scrollview
     this.feedView.feed._eventInput.on('start', function() {
-      // flag hidden state
-      this.options.layoutHidden = true;
-      this.options.layoutShowListen = false;
-
-      // animate hide
-      this.headerMod.halt();
-      this.footerMod.halt();
-      this.headerMod.setTransform(
-        Transform.translate(1, -this.options.headerSize, 1),
-        this.options.hideTransition);
-      this.footerMod.setTransform(
-        Transform.translate(1, this.options.footerSize, 1),
-        this.options.hideTransition);
+      // start listening on particle velocity
+      this.options.layoutHideListen = true;
     }.bind(this));
 
     this.feedView.feed._eventInput.on('end', function() {
@@ -219,21 +211,19 @@ function _setListeners() {
     }.bind(this));
 
     this.feedView.feed._particle.on('update', function() {
-      if (this.options.layoutHidden && this.options.layoutShowListen) {
-        if (Math.abs(this.feedView.feed._particle.getVelocity()[0]) < 0.25) {
-          this.options.layoutHidden = false;
-          this.options.layoutShowListen = false;
-
-          // animate show
-          this.headerMod.halt();
-          this.footerMod.halt();
-          this.headerMod.setTransform(Transform.identity);
-          this.footerMod.setTransform(Transform.identity);
-          this.headerMod.setOpacity(0);
-          this.footerMod.setOpacity(0);
-          this.headerMod.setOpacity(1, this.options.showTransition);
-          this.footerMod.setOpacity(1, this.options.showTransition);
-        }
+      // setting velocity threshold for hide animation
+      if (!this.options.layoutHidden &&
+          this.options.layoutHideListen &&
+          Math.abs(this.feedView.feed._particle.getVelocity()[0]) > 0.1) {
+        this.options.layoutHideListen = false;
+        this._hideLayout();
+      }
+      // setting velocity threshold for show animation
+      if (this.options.layoutHidden &&
+          this.options.layoutShowListen &&
+          Math.abs(this.feedView.feed._particle.getVelocity()[0]) < 0.25) {
+        this.options.layoutShowListen = false;
+        this._showLayout();
       }
     }.bind(this));
 
@@ -242,28 +232,33 @@ function _setListeners() {
 
   // associate nav buttons to display actions
   this.buttonRefs.createYarn.on('click', function() {
+    this._showLayout();
     this._activateButton(this.buttonRefs.createYarn);
     this.renderController.show(this.newYarnView);
   }.bind(this));
 
   this.buttonRefs.viewProfile.on('click', function() {
+    this._showLayout();
     this._activateButton(this.buttonRefs.viewProfile);
     this.renderController.show(this.profileView);
   }.bind(this));
 
   // TODO decouple event and child trigger to sync with this.feedView
   this.yarnView.on('showAddToYarn', function(data) {
+    this._showLayout();
     this.addToYarnView.trigger('initYarnData', data);
     this.renderController.show(this.addToYarnView)
   }.bind(this))
 
   this.feedView.on('showYarnDetail', function(data) {
+    this._showLayout();
     this.yarnView.trigger('initYarnData', data);
     this.renderController.show(this.yarnView);
   }.bind(this));
 
   // TODO decouple event and child trigger to sync with this.yarnView
   this.feedView.on('showAddToYarn', function(data) {
+    this._showLayout();
     this.addToYarnView.trigger('initYarnData', data);
     this.renderController.show(this.addToYarnView);
   }.bind(this));
@@ -283,6 +278,30 @@ function _setListeners() {
     this.renderController.show(this.feedView);
   }.bind(this))
 
+}
+
+// reset layout hide/show state variables
+CustomLayout.prototype._resetLayoutListeners = function() {
+  this.options.layoutHideListen = false;
+  this.options.layoutShowListen = false;
+}
+
+// animate hide
+CustomLayout.prototype._hideLayout = function() {
+  this.options.layoutHidden = true;
+  this.headerMod.halt();
+  this.footerMod.halt();
+  this.headerMod.setTransform(Transform.translate(1, -this.options.headerSize, 1), this.options.hideTransition);
+  this.footerMod.setTransform(Transform.translate(1, this.options.footerSize, 1), this.options.hideTransition);
+}
+
+// animate show
+CustomLayout.prototype._showLayout = function() {
+  this.options.layoutHidden = false;
+  this.headerMod.halt();
+  this.footerMod.halt();
+  this.headerMod.setTransform(Transform.identity, this.options.showTransition);
+  this.footerMod.setTransform(Transform.identity, this.options.showTransition);
 }
 
 // Activate given button and deactivate others
