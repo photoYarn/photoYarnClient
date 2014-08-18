@@ -26,18 +26,19 @@ Stores strings of _id in cache
 serverRequests.getData = function(){
   var getURL;
   if(serverRequests.user.id){
+    console.log('Getting your pictures!');
     getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.user.id + 
                                                                 '?token=' + window.localStorage.getItem('serverToken');
-    console.log(window.localStorage.getItem('serverToken'));
+    console.log(getURL);
   }
   else {
+    console.log('Getting all the pictures!');
     getURL = 'http://photoyarn.azurewebsites.net/getYarnsBrowser';
   }
   $.ajax({
     type: 'GET',
     url: getURL,
     success: function (data) {
-      console.log(data)
       for(var i = 0; i < data.length; i++){
         var cur = data[i];
         var id = data[i]._id;
@@ -58,10 +59,13 @@ Emits a 'Loaded' event when data is loaded.
 serverRequests.updateData = function(){
   var getURL;
   if(serverRequests.user.id){
+    console.log('Getting your pictures!');
     getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.user.id + 
                                                             '?token=' + window.localStorage.getItem('serverToken');
+    console.log(getURL);
   }
   else {
+    console.log('Getting all the pictures!');
     getURL = 'http://photoyarn.azurewebsites.net/getYarnsBrowser';
   }
   console.log('Updating Data');
@@ -100,8 +104,8 @@ serverRequests.postToImgur = function(data, route){
   var serverData = {};
   serverData.caption = data.caption;
   //serverData.creatorId is hard coded currently, as we do not have users implemented yet!
-  serverData.creatorId = serverRequests.user.id;
-  // console.log('server creator', serverData.creatorId)
+  serverData.creatorId = window.localStorage.getItem('facebookId');
+  console.log('server creator', serverData.creatorId)
   //updated due to success callback
   serverData.link;
   serverData.imgurId;
@@ -191,35 +195,44 @@ serverRequests.postPhotoToServerYarn = function(data){
 Logs in to Facebook, on success will get yarnData from server
 */
 serverRequests.loginToFacebook = function(response){
+  console.log('response', response);
   $.ajax({
-      type: "GET",
-      url: "https://graph.facebook.com/me?access_token=" + response.token,
-      success: function(data) {
-          var userData = {
-              id: data.id,
-              // gender: data.gender.charAt(0) // do we need this?,
-              name: data.name,
-              token: response.token
-          };
-          serverRequests.user = userData;
-          console.log(userData);
-          // request to /users
-          $.ajax({
-              type: 'POST',
-              url: 'http://photoyarn.azurewebsites.net/users',
-              data: userData,
-              success: function(data) {
-                  console.log(data);
-                  if (data.serverToken) {
-                    window.localStorage.setItem('serverToken', data.serverToken);
-                  }
-                  serverRequests.getData();
-              },
-              error: function(error) {
-                  console.log(error);
-              }
-          });
-      }
+    type: "GET",
+    url: "https://graph.facebook.com/me?access_token=" + response.token,
+    success: function(data) {
+      console.log('graph facebook success!');
+      var userData = {
+        id: data.id,
+        // gender: data.gender.charAt(0) // do we need this?,
+        name: data.name,
+        token: response.token
+      };
+      serverRequests.user = userData;
+      console.log(userData);
+      // request to /users
+      $.ajax({
+        type: 'POST',
+        url: 'http://photoyarn.azurewebsites.net/users',
+        data: userData,
+        success: function(data) {
+          console.log('data',data);
+          if (data.serverToken) {
+            window.localStorage.setItem('serverToken', data.serverToken);
+            window.localStorage.setItem('facebookId', data.user.id);
+            window.localStorage.setItem('facebookName', data.user.name);
+          }
+          serverRequests.getData();
+        },
+        error: function(error) {
+          console.log(error);
+        }
+      });
+    }, 
+    error: function(data1, data2){
+      console.log('facebook error!');
+      console.log('data1', data1);
+      console.log('data2', data2);
+    }
   });
 };
 
