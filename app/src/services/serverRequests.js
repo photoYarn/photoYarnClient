@@ -16,7 +16,7 @@ serverRequests.cache is a hash with keys that correspond to _id of each yarn and
 correspond to the index those yarns are stored in the serverRequests.data array.
 */
 serverRequests.cache = {};
-serverRequests.user = {};
+// serverRequests.user = {};
 
 /*
 getData fetches data from server and stores it in data array
@@ -25,10 +25,10 @@ Stores strings of _id in cache
 
 serverRequests.getData = function(){
   var getURL;
-  if(serverRequests.user.id){
+  if(window.localStorage.getItem('facebookId')) {
     console.log('Getting your pictures!');
-    getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.user.id + 
-                                                                '?token=' + window.localStorage.getItem('serverToken');
+    getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + window.localStorage.getItem('facebookId') + 
+                                                          '?token=' + window.localStorage.getItem('serverToken');
     console.log(getURL);
   }
   else {
@@ -58,9 +58,9 @@ Emits a 'Loaded' event when data is loaded.
 */
 serverRequests.updateData = function(){
   var getURL;
-  if(serverRequests.user.id){
+  if(window.localStorage.getItem('facebookId')){
     console.log('Getting your pictures!');
-    getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + serverRequests.user.id + 
+    getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + window.localStorage.getItem('facebookId') + 
                                                             '?token=' + window.localStorage.getItem('serverToken');
     console.log(getURL);
   }
@@ -207,7 +207,7 @@ serverRequests.loginToFacebook = function(response){
         name: data.name,
         token: response.token
       };
-      serverRequests.user = userData;
+      // serverRequests.user = userData;
       console.log(userData);
       // request to /users
       $.ajax({
@@ -216,11 +216,11 @@ serverRequests.loginToFacebook = function(response){
         data: userData,
         success: function(data) {
           console.log('data',data);
-          if (data.serverToken) {
-            window.localStorage.setItem('serverToken', data.serverToken);
-            window.localStorage.setItem('facebookId', data.user.id);
-            window.localStorage.setItem('facebookName', data.user.name);
-          }
+            // this should all probably be changed to userData.blah instead of data.blah
+            // i don't think there is a good reason for server to send back the user
+          window.localStorage.setItem('serverToken', data.serverToken);
+          window.localStorage.setItem('facebookId', data.user.id);
+          window.localStorage.setItem('facebookName', data.user.name);
           serverRequests.getData();
         },
         error: function(error) {

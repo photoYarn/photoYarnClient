@@ -26,6 +26,7 @@ document.addEventListener('deviceready', function() {
   console.log('facebookName', window.localStorage.getItem('facebookName'));
   console.log('facebookId', window.localStorage.getItem('facebookId'));
   if(!window.localStorage.getItem('serverToken')){
+    console.log('not logged in, so im logging in dude')
     oauth.login(function(response) {
       if (response.status === 'connected') {
         console.log('fb login success, received access token');
@@ -34,12 +35,14 @@ document.addEventListener('deviceready', function() {
         serverRequests.loginToFacebook(response);
       } else {
         console.log('login failed', response.error);
-        serverRequests.getData();
+        // why get data if login failed?
+        // serverRequests.getData();
       }
     });          
   } else {
-    serverRequests.user.id = window.localStorage.getItem('facebookId');
-    serverRequests.user.name = window.localStorage.getItem('facebookName');
+    console.log('already logged in')
+    // serverRequests.user.id = window.localStorage.getItem('facebookId');
+    // serverRequests.user.name = window.localStorage.getItem('facebookName');
     serverRequests.getData();
   }
 }, false);
