@@ -8,16 +8,31 @@ var Transform  = require('famous/core/Transform');
 var Scrollview = require('famous/views/Scrollview');
 var ViewSequence = require('famous/core/ViewSequence');
 
+var serverRequests = require('../services/serverRequests.js');
+
+var GenericSync = require('famous/inputs/GenericSync');
+var Engine = require('famous/core/Engine');
+
 // import views
 var FeedEntryView = require('./FeedEntryView');
 
 // initialize class variables
 var photoCache = {};
+var yarnsLoaded = 0;
 
 // FeedView constructor
 function FeedView(){
   View.apply(this, arguments);
   
+<<<<<<< HEAD
+=======
+  this.feedHeight = 0;
+  this.scrollHeight = 0;
+  this.maxScroll = 0;
+  this.loadingPictures = false;
+  this.doneLoading = false;
+  
+>>>>>>> feat/lazyLoad
   _createRootNode.call(this);
   _createBackground.call(this);
   _createButtonPanel.call(this);
@@ -132,30 +147,71 @@ function _setListeners() {
 }
 
 FeedView.prototype.createFeedEntriesFromServer = function(data) {
+  console.log('create feed entries called with ', data);
+
+  if (data === undefined) {
+    console.log('data is undefined');
+    return;
+  }
   this.feed = this.feed || new Scrollview({
     clipSize: (window.innerHeight - this.options.headerSize - this.options.footerSize - this.options.buttonPanelHeight),
     direction: 1,
     margin: 10000 // without this some entries would stop rendering on a hard scroll (fix from https://github.com/Famous/views/issues/11)
   });
 
-  this.entries = new ViewSequence();
-
-  this.feed.sequenceFrom(this.entries);   
+  this.entries = this.entries || new ViewSequence();
+  if (yarnsLoaded === 0) this.feed.sequenceFrom(this.entries);
+  
+  this.sync = new GenericSync(['scroll', 'touch'], {
+    direction: GenericSync.DIRECTION_Y
+  });
 
   for (var i = 0; i < data.length; i++) {
     var newEntryView = new FeedEntryView({eventTarget: this.options.eventTarget}, data[i]);
     newEntryView.pipe(this.feed);
+    
+    this.feedHeight += this.options.entryHeight;
+    
     newEntryView.pipe(this._eventOutput); 
     photoCache[data[i]._id] = newEntryView;
     this.entries.push(newEntryView);
+    yarnsLoaded++;
+  
+    newEntryView.pipe(this.sync);
   }
+<<<<<<< HEAD
+=======
+  
+  this.maxScroll = this.feedHeight - 
+                    window.innerHeight - 
+                    this.options.headerSize - 
+                    this.options.footerSize - 
+                    this.options.buttonPanelHeight;
+
+  this.sync.on('update', function (data) {
+    // upon scroll update scrollHeight 
+    this.scrollHeight -= data.delta;
+
+    // give scrollheight a floor and ceiling
+    if (this.scrollHeight < 0) this.scrollHeight = 0;
+    if (this.scrollHeight > this.maxScroll) this.scrollHeight = this.maxScroll;
+
+    // if we've scrolled halfway down the loaded feeds, load more yarns
+    // loadingPictures is set to true in serverRequests at the start
+    //  of the GET request and false upon success
+    if (this.scrollHeight > this.maxScroll / 2 && 
+        this.loadingPictures === false && 
+        this.doneLoading === false) {
+      serverRequests.getData(this.createFeedEntriesFromServer, this);      
+    }
+  }.bind(this));
+>>>>>>> feat/lazyLoad
 
   var feedModifier = new Modifier({
     transform: Transform.translate(0, 0, -10)
   });
   
   this.rootNode.add(feedModifier).add(this.feed);
-} 
-
+}
 
 module.exports = FeedView;

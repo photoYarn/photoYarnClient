@@ -1,18 +1,21 @@
 'use strict';
 
 // import famo.us dependencies
+var View = require('famous/core/View');
 var Modifier = require('famous/core/Modifier');
 var ImageSurface = require('famous/surfaces/ImageSurface');
 var Surface = require('famous/core/Surface');
 var HeaderFooterLayout = require('famous/views/HeaderFooterLayout');
 var GridLayout = require('famous/views/GridLayout');
 var RenderController = require('famous/views/RenderController');
+var Transform = require('famous/core/Transform');
+var Easing = require('famous/transitions/Easing');
 
 // import components/utilities
 var ButtonView = require('../views/ButtonView');
 var CustomButton = require('./CustomButton');
 var $ = require('jquery');
-var serverRequests = require('../services/serverRequests.js')
+var serverRequests = require('../services/serverRequests.js');
 
 // import views
 var NewYarnView = require('../views/NewYarnView');
@@ -23,11 +26,13 @@ var AddToYarnView = require('../views/AddToYarnView');
 var LoadingView = require('../views/LoadingView');
 
 // CustomLayout constructor
-function CustomLayout(){
-  HeaderFooterLayout.apply(this, arguments);
+function CustomLayout() {
+  View.apply(this, arguments);
 
   this.serverRequests = serverRequests;
+
   // adding elements
+  _createLayout.call(this);
   _createContent.call(this);
   _createHeader.call(this);
   _createFooter.call(this);
@@ -35,18 +40,34 @@ function CustomLayout(){
 }
 
 // set defaults
-CustomLayout.prototype = Object.create(HeaderFooterLayout.prototype);
+CustomLayout.prototype = Object.create(View.prototype);
 CustomLayout.prototype.constructor = CustomLayout;
 CustomLayout.DEFAULT_OPTIONS = {
   origin: [0, 0],
-  align: [0,0],
+  align: [0, 0],
   headerSize: 75,
-  footerSize: 50
+  footerSize: 50,
+  layoutHidden: false,
+  layoutShowListen: false,
+  hideTransition: {
+    curve: Easing.outExpo,
+    duration: 500,
+  },
+  showTransition: {
+    curve: Easing.outExpo,
+    duration: 1000,
+  },
 };
+
+// create layout template
+function _createLayout() {
+  this.layout = new HeaderFooterLayout(this.options);
+
+  this.add(this.layout);
+}
 
 // create content component
 function _createContent(){
-
   // famo.us logo because famo.us is cool!
   this.logo = new ImageSurface({
     size: [200, 200],
@@ -84,13 +105,16 @@ function _createContent(){
 
   // initialize and attach RenderController to content display
   this.renderController = new RenderController();
-  this.content.add(centerModifier).add(this.renderController);
+  this.layout.content.add(centerModifier).add(this.renderController);
   this.renderController.show(this.logo);
 }
 
 // create header component
 function _createHeader(){
-  // instantiate title
+  // create header mod
+  this.headerMod = new Modifier();
+
+  // create title bar
   this.title = new Surface({
     content: 'Photo Yarn',
     classes: ['header', 'primaryBGColor'],
@@ -101,12 +125,15 @@ function _createHeader(){
   });
 
   // add title to header display
-  this.header.add(this.title);
+  this.layout.header.add(this.headerMod).add(this.title);
 }
 
 // create footer component
 function _createFooter(){
-  // add footer background
+  // create footer modifier
+  this.footerMod = new Modifier();
+
+  // create footer background
   var footerBG = new Surface({
     classes: ['darkTopBorder', 'ltGrayBGColor'],
   });
@@ -150,9 +177,10 @@ function _createFooter(){
   });
   this.buttonGrid.sequenceFrom(this.buttons);
 
-  // add background and gridded buttons to footer
-  this.footer.add(footerBG);
-  this.footer.add(this.buttonGrid);
+  // add footer elements to footer
+  this.footerNode = this.layout.footer.add(this.footerMod);
+  this.footerNode.add(footerBG);
+  this.footerNode.add(this.buttonGrid);
 }
 
 // set listeners for buttons in footer nav and in content views
@@ -163,13 +191,56 @@ function _setListeners() {
     this.renderController.show(this.logo);
   }.bind(this));
 
-  // associate button clicks to display actions
+  // associate nav buttons to display actions
   this.buttonRefs.viewFeed.on('click', function() {
     this._activateButton(this.buttonRefs.viewFeed);
     this.feedView.trigger('refreshFeed', this.options.serverRequests.data);
+
+    // attaching events to newly created feedView.feed Scrollview
+    this.feedView.feed._eventInput.on('start', function() {
+      // flag hidden state
+      this.options.layoutHidden = true;
+      this.options.layoutShowListen = false;
+
+      // animate hide
+      this.headerMod.halt();
+      this.footerMod.halt();
+      this.headerMod.setTransform(
+        Transform.translate(1, -this.options.headerSize, 1),
+        this.options.hideTransition);
+      this.footerMod.setTransform(
+        Transform.translate(1, this.options.footerSize, 1),
+        this.options.hideTransition);
+    }.bind(this));
+
+    this.feedView.feed._eventInput.on('end', function() {
+      // start listening on particle velocity
+      this.options.layoutShowListen = true;
+    }.bind(this));
+
+    this.feedView.feed._particle.on('update', function() {
+      if (this.options.layoutHidden && this.options.layoutShowListen) {
+        if (Math.abs(this.feedView.feed._particle.getVelocity()[0]) < 0.25) {
+          this.options.layoutHidden = false;
+          this.options.layoutShowListen = false;
+
+          // animate show
+          this.headerMod.halt();
+          this.footerMod.halt();
+          this.headerMod.setTransform(Transform.identity);
+          this.footerMod.setTransform(Transform.identity);
+          this.headerMod.setOpacity(0);
+          this.footerMod.setOpacity(0);
+          this.headerMod.setOpacity(1, this.options.showTransition);
+          this.footerMod.setOpacity(1, this.options.showTransition);
+        }
+      }
+    }.bind(this));
+
     this.renderController.show(this.feedView);
   }.bind(this));
 
+  // associate nav buttons to display actions
   this.buttonRefs.createYarn.on('click', function() {
     this._activateButton(this.buttonRefs.createYarn);
     this.renderController.show(this.newYarnView);

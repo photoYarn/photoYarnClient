@@ -16,34 +16,32 @@ serverRequests.cache is a hash with keys that correspond to _id of each yarn and
 correspond to the index those yarns are stored in the serverRequests.data array.
 */
 serverRequests.cache = {};
-// serverRequests.user = {};
+serverRequests.user = {};
 
 /*
 getData fetches data from server and stores it in data array
 Stores strings of _id in cache 
 */
 
-serverRequests.getData = function(){
-  var getURL;
-  if(window.localStorage.getItem('facebookId')) {
-    console.log('Getting your pictures!');
-    getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + window.localStorage.getItem('facebookId') + 
-                                                          '?token=' + window.localStorage.getItem('serverToken');
-    console.log(getURL);
-  }
-  else {
-    console.log('Getting all the pictures!');
-    getURL = 'http://photoyarn.azurewebsites.net/getYarnsBrowser';
-  }
+serverRequests.getData = function(callback, feedInstance){
+  var getURL = 'http://photoyarn.azurewebsites.net/getYarnsBrowser';
+  if (feedInstance) feedInstance.loadingPictures = true;
   $.ajax({
     type: 'GET',
     url: getURL,
+    data: {yarnsLoaded: serverRequests.data.length},
     success: function (data) {
+      console.log(data);
       for(var i = 0; i < data.length; i++){
         var cur = data[i];
         var id = data[i]._id;
         this.cache[id] = this.data.length;
         this.data.push(cur);
+      }
+      if (callback) {
+        if (data.length === 0) feedInstance.doneLoading = true;
+        feedInstance.loadingPictures = false;
+        callback.call(feedInstance, data);
       }
     }.bind(this),
     error: function (error) {
@@ -57,17 +55,8 @@ Checks for updated data from server, updates cache and data array if new info fo
 Emits a 'Loaded' event when data is loaded.
 */
 serverRequests.updateData = function(){
-  var getURL;
-  if(window.localStorage.getItem('facebookId')){
-    console.log('Getting your pictures!');
-    getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + window.localStorage.getItem('facebookId') + 
-                                                            '?token=' + window.localStorage.getItem('serverToken');
-    console.log(getURL);
-  }
-  else {
-    console.log('Getting all the pictures!');
-    getURL = 'http://photoyarn.azurewebsites.net/getYarnsBrowser';
-  }
+  var getURL = 'http://photoyarn.azurewebsites.net/getYarnsBrowser';
+
   console.log('Updating Data');
   $.ajax({
     type: 'GET',
@@ -104,8 +93,8 @@ serverRequests.postToImgur = function(data, route){
   var serverData = {};
   serverData.caption = data.caption;
   //serverData.creatorId is hard coded currently, as we do not have users implemented yet!
-  serverData.creatorId = window.localStorage.getItem('facebookId');
-  console.log('server creator', serverData.creatorId)
+  serverData.creatorId = serverRequests.user.id;
+  // console.log('server creator', serverData.creatorId)
   //updated due to success callback
   serverData.link;
   serverData.imgurId;
@@ -149,7 +138,7 @@ Requires a data object with imgurId, link, caption, and creatorId properties
 serverRequests.postYarnToServer = function(data){
   $.ajax({
     type: 'POST',
-    url: 'http://photoyarn.azurewebsites.net/createNewYarn?token=' + window.localStorage.getItem('serverToken'),
+    url: 'http://photoyarn.azurewebsites.net/createNewYarn',
     data: {
       imgurId: data.imgurId,
       link: data.link,
@@ -176,7 +165,7 @@ serverRequests.postPhotoToServerYarn = function(data){
   console.log('posting Photo to Yarn', data);
   $.ajax({
     type: 'POST',
-    url: 'http://photoyarn.azurewebsites.net/addToYarn?token=' + window.localStorage.getItem('serverToken'),
+    url: 'http://photoyarn.azurewebsites.net/addToYarn',
     data: {
       yarnId: data.yarnId,
       link: data.link,
@@ -197,7 +186,6 @@ serverRequests.postPhotoToServerYarn = function(data){
 Logs in to Facebook, on success will get yarnData from server
 */
 serverRequests.loginToFacebook = function(response){
-  console.log('response', response);
   $.ajax({
       type: "GET",
       url: "https://graph.facebook.com/me?access_token=" + response.token,

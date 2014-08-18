@@ -48,7 +48,7 @@ function _createYarn(){
     size: [320, 443],
     align: [0.5,0],
     origin: [0.5,0],
-    transform: Transform.moveThen([-200,0,-15], Transform.rotateZ(Math.PI/2)),
+    transform: Transform.moveThen([window.innerWidth,-window.innerHeight,-10], Transform.rotateZ(3*Math.PI/2)),
   });
 
   this.add(this.focusImageModifier).add(this.focusImage);
@@ -95,10 +95,10 @@ YarnView.prototype.toggle = function(content){
     this.focusImage.setContent('');
     this.scrollModifier.setTransform(Transform.translate(0,0,-15), {duration: 500});
     if(this.toggleCount % 2){
-      this.focusImageModifier.setTransform(Transform.moveThen([200,-window.innerHeight,-10], 
+      this.focusImageModifier.setTransform(Transform.moveThen([window.innerWidth,-window.innerHeight,-10], 
         Transform.rotateZ(3*Math.PI/2)), {duration: 500});
     } else {
-      this.focusImageModifier.setTransform(Transform.moveThen([-200,-window.innerHeight,-10],
+      this.focusImageModifier.setTransform(Transform.moveThen([-window.innerWidth,-window.innerHeight,-10],
         Transform.rotateZ(Math.PI/2)), {duration: 500});
     }
     this.toggleCount++;
