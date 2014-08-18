@@ -15,9 +15,6 @@ function ProfileView(userId){
   _createBackground.call(this);
   _createProfileHeader.call(this, userData);
   
-  
-  _createStats.call(this, userData);
-  
 }
 
 ProfileView.prototype = Object.create(View.prototype);
@@ -126,60 +123,6 @@ function _createProfileHeader(userData) {
   });
   
   this.add(likesButtonModifier).add(likesButton);
-}
-
-function _createStats(userData) {
-  // Photos added
-  var photosAdded = new Surface({
-    size: [, 100],
-    content: 'Photos added: ' + userData.photosAdded,
-    classes: ['ProfileStat']
-  });
-  
-  var photosAddedModifier = new Modifier({
-    align: [0.5, 0.4],
-    origin: [0.5, 0.5],
-    properties: {
-      lineHeight: 100 + 'px'
-		}
-  });
-  
-  this.add(photosAddedModifier).add(photosAdded);
-  
-  // Feeds started
-  var feedsStarted = new Surface({
-    size: [, 100],
-    content: 'Feeds started: ' + userData.feeds.length,
-    classes: ['ProfileStat']
-  });
-  
-  var feedsStartedModifier = new Modifier({
-    align: [0.5, 0.6],
-    origin: [0.5, 0.5],
-    properties: {
-      lineHeight: 100 + 'px'
-		}
-  });
-  
-  this.add(feedsStartedModifier).add(feedsStarted);
-  
-  // Number of friends
-  var numFriends = new Surface({
-    size: [, 100],
-    content: 'Number of friends: ' + userData.friends.length,
-    classes: ['ProfileStat']
-  });
-  
-  var numFriendsModifier = new Modifier({
-    align: [0.5, 0.8],
-    origin: [0.5, 0.5],
-    properties: {
-      lineHeight: 100 + 'px'
-		}
-  });
-  
-  this.add(numFriendsModifier).add(numFriends);
-
 }
 
 module.exports = ProfileView;
