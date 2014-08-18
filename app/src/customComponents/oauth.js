@@ -166,12 +166,9 @@ var oauth = (function() {
     };
 
     var logout = function(callback) {
-        var access_token = tokenStore.getItem('access_token');
-        console.log('deleting access token')
-        tokenStore.removeItem('access_token');
-        if (callback) {
-            callback(access_token);
-        }
+      if (tokenStore.getItem('serverToken')) {
+        tokenStore.removeItem('serverToken');
+      }
     };
 
     var oauthCallback = function(url) {
