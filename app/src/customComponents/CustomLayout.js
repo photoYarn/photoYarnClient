@@ -8,6 +8,15 @@ var Surface = require('famous/core/Surface');
 var HeaderFooterLayout = require('famous/views/HeaderFooterLayout');
 var GridLayout = require('famous/views/GridLayout');
 var RenderController = require('famous/views/RenderController');
+var Transform = require('famous/core/Transform');
+var Easing = require('famous/transitions/Easing');
+var GenericSync = require('famous/inputs/GenericSync');
+var MouseSync = require('famous/inputs/MouseSync');
+var TouchSync = require('famous/inputs/TouchSync');
+GenericSync.register({
+    mouse: MouseSync,
+    touch: TouchSync,
+});
 
 // import components/utilities
 var ButtonView = require('../views/ButtonView');
@@ -35,6 +44,7 @@ function CustomLayout() {
   _createHeader.call(this);
   _createFooter.call(this);
   _setListeners.call(this);
+  _setHideLayoutListeners.call(this);
 }
 
 // set defaults
@@ -42,9 +52,17 @@ CustomLayout.prototype = Object.create(View.prototype);
 CustomLayout.prototype.constructor = CustomLayout;
 CustomLayout.DEFAULT_OPTIONS = {
   origin: [0, 0],
-  align: [0,0],
+  align: [0, 0],
   headerSize: 75,
   footerSize: 50,
+  hideTransition: {
+    curve: Easing.outExpo,
+    duration: 500,
+  },
+  showTransition: {
+    curve: Easing.outExpo,
+    duration: 500,
+  },
 };
 
 // create layout template
@@ -97,7 +115,10 @@ function _createContent(){
 
 // create header component
 function _createHeader(){
-  // instantiate title
+  // create header mod
+  this.headerMod = new Modifier();
+
+  // create title bar
   this.title = new Surface({
     content: 'Photo Yarn',
     classes: ['header', 'primaryBGColor'],
@@ -108,12 +129,15 @@ function _createHeader(){
   });
 
   // add title to header display
-  this.layout.header.add(this.title);
+  this.layout.header.add(this.headerMod).add(this.title);
 }
 
 // create footer component
 function _createFooter(){
-  // add footer background
+  // create footer modifier
+  this.footerMod = new Modifier();
+
+  // create footer background
   var footerBG = new Surface({
     classes: ['darkTopBorder', 'ltGrayBGColor'],
   });
@@ -157,9 +181,45 @@ function _createFooter(){
   });
   this.buttonGrid.sequenceFrom(this.buttons);
 
-  // add background and gridded buttons to footer
-  this.layout.footer.add(footerBG);
-  this.layout.footer.add(this.buttonGrid);
+  // add footer elements to footer
+  this.footerNode = this.layout.footer.add(this.footerMod);
+  this.footerNode.add(footerBG);
+  this.footerNode.add(this.buttonGrid);
+}
+
+// handle scroll events for header/footer hide
+function _setHideLayoutListeners() {
+  console.log("setting sync listeners");
+
+  // TODO use Scrollview sync object from FeedView to sync hide transition
+  var sync = new GenericSync(['mouse', 'touch'], {
+      direction: GenericSync.DIRECTION_Y,
+  });
+
+  // TODO change pipe source to feedView events for sync
+  sync.subscribe(this.logo);
+
+  sync.on('update', function(data) {
+    this.headerMod.halt();
+    this.headerMod.setTransform(
+      Transform.translate(1, -this.options.headerSize, 1),
+      this.options.hideTransition);
+    this.footerMod.halt();
+    this.footerMod.setTransform(
+      Transform.translate(1, this.options.footerSize, 1),
+      this.options.hideTransition);
+  }.bind(this));
+
+  sync.on('end', function(data) {
+    this.headerMod.halt();
+    this.headerMod.setTransform(
+      Transform.identity,
+      this.options.hideTransition);
+    this.footerMod.halt();
+    this.footerMod.setTransform(
+      Transform.identity,
+      this.options.hideTransition);
+  }.bind(this));
 }
 
 // set listeners for buttons in footer nav and in content views
@@ -170,13 +230,38 @@ function _setListeners() {
     this.renderController.show(this.logo);
   }.bind(this));
 
-  // associate button clicks to display actions
+  // associate nav buttons to display actions
   this.buttonRefs.viewFeed.on('click', function() {
     this._activateButton(this.buttonRefs.viewFeed);
     this.feedView.trigger('refreshFeed', this.options.serverRequests.data);
+
+    // attaching events to newly created feedView.feed Scrollview
+    this.feedView.feed._eventInput.on('start', function() {
+      this.headerMod.halt();
+      this.headerMod.setTransform(
+        Transform.translate(1, -this.options.headerSize, 1),
+        this.options.hideTransition);
+      this.footerMod.halt();
+      this.footerMod.setTransform(
+        Transform.translate(1, this.options.footerSize, 1),
+        this.options.hideTransition);
+    }.bind(this));
+
+    this.feedView.feed._eventInput.on('end', function() {
+      this.headerMod.halt();
+      this.headerMod.setTransform(
+        Transform.identity,
+        this.options.showTransition);
+      this.footerMod.halt();
+      this.footerMod.setTransform(
+        Transform.identity,
+        this.options.showTransition);
+    }.bind(this));
+
     this.renderController.show(this.feedView);
   }.bind(this));
 
+  // associate nav buttons to display actions
   this.buttonRefs.createYarn.on('click', function() {
     this._activateButton(this.buttonRefs.createYarn);
     this.renderController.show(this.newYarnView);
