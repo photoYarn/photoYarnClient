@@ -230,6 +230,51 @@ function _setListeners() {
     this.renderController.show(this.feedView);
   }.bind(this));
 
+
+//KIA START ----------------------------------------------------------------------------------------
+
+   this.yarnView.scrollView._eventInput.on('start', function() {
+      // flag hidden state
+      this.options.layoutHidden = true;
+      this.options.layoutShowListen = false;
+
+      // animate hide
+      this.headerMod.halt();
+      this.footerMod.halt();
+      this.headerMod.setTransform(
+        Transform.translate(1, -this.options.headerSize, 1),
+        this.options.hideTransition);
+      this.footerMod.setTransform(
+        Transform.translate(1, this.options.footerSize, 1),
+        this.options.hideTransition);
+    }.bind(this));
+
+    this.yarnView.scrollView._eventInput.on('end', function() {
+      // start listening on particle velocity
+      this.options.layoutShowListen = true;
+    }.bind(this));
+
+    this.yarnView.scrollView._particle.on('update', function() {
+      if (this.options.layoutHidden && this.options.layoutShowListen) {
+        if (Math.abs(this.yarnView.scrollView._particle.getVelocity()[0]) < 0.25) {
+          this.options.layoutHidden = false;
+          this.options.layoutShowListen = false;
+
+          // animate show
+          this.headerMod.halt();
+          this.footerMod.halt();
+          this.headerMod.setTransform(Transform.identity);
+          this.footerMod.setTransform(Transform.identity);
+          this.headerMod.setOpacity(0);
+          this.footerMod.setOpacity(0);
+          this.headerMod.setOpacity(1, this.options.showTransition);
+          this.footerMod.setOpacity(1, this.options.showTransition);
+        }
+      }
+    }.bind(this));
+
+//KIA END ------------------------------------------------------------------------------------------
+
   // associate nav buttons to display actions
   this.buttonRefs.createYarn.on('click', function() {
     this._showLayout();
