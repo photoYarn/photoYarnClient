@@ -37,7 +37,6 @@ serverRequests.getData = function(){
     type: 'GET',
     url: getURL,
     success: function (data) {
-      console.log(data)
       for(var i = 0; i < data.length; i++){
         var cur = data[i];
         var id = data[i]._id;

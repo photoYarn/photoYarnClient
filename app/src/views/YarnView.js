@@ -122,7 +122,6 @@ YarnView.prototype.createDetail = function(data){
     image.pipe(this.scrollView);
     //toggles in focused image with this images content as focusedImages content
     image.on('click', function(target){
-      console.log(target);
       var content = target.origin._imageUrl;
       this.toggle(content);
     }.bind(this));
