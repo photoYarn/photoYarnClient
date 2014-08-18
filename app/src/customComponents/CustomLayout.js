@@ -37,7 +37,6 @@ function CustomLayout() {
   _createHeader.call(this);
   _createFooter.call(this);
   _setListeners.call(this);
-  _setHideLayoutListeners.call(this);
 }
 
 // set defaults
@@ -56,7 +55,7 @@ CustomLayout.DEFAULT_OPTIONS = {
   },
   showTransition: {
     curve: Easing.outExpo,
-    duration: 5000,
+    duration: 1000,
   },
 };
 
@@ -219,7 +218,7 @@ function _setListeners() {
 
     this.feedView.feed._particle.on('update', function() {
       if (this.options.layoutHidden && this.options.layoutShowListen) {
-        if (Math.abs(this.feedView.feed._particle.getVelocity()[0]) < 0.1) {
+        if (Math.abs(this.feedView.feed._particle.getVelocity()[0]) < 0.25) {
           this.options.layoutHidden = false;
           this.options.layoutShowListen = false;
 
