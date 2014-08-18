@@ -8,7 +8,7 @@ var Transform  = require('famous/core/Transform');
 var Scrollview = require('famous/views/Scrollview');
 var ViewSequence = require('famous/core/ViewSequence');
 
-var serverRequests = require('../services/lazyLoadServerRequests.js');
+var serverRequests = require('../services/serverRequests.js');
 
 var GenericSync = require('famous/inputs/GenericSync');
 var Engine = require('famous/core/Engine');

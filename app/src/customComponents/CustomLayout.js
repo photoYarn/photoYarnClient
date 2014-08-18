@@ -15,7 +15,7 @@ var Easing = require('famous/transitions/Easing');
 var ButtonView = require('../views/ButtonView');
 var CustomButton = require('./CustomButton');
 var $ = require('jquery');
-var serverRequests = require('../services/lazyLoadServerRequests.js');
+var serverRequests = require('../services/serverRequests.js');
 
 // import views
 var NewYarnView = require('../views/NewYarnView');
