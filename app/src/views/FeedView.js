@@ -32,7 +32,6 @@ function FeedView(){
   
   _createRootNode.call(this);
   _createBackground.call(this);
-  _createButtonPanel.call(this);
   _setListeners.call(this);
 }
 
