@@ -55,7 +55,7 @@ CustomLayout.DEFAULT_OPTIONS = {
   },
   showTransition: {
     curve: Easing.outExpo,
-    duration: 1000,
+    duration: 500,
   },
 };
 
@@ -227,12 +227,8 @@ function _setListeners() {
           // animate show
           this.headerMod.halt();
           this.footerMod.halt();
-          this.headerMod.setTransform(Transform.identity);
-          this.footerMod.setTransform(Transform.identity);
-          this.headerMod.setOpacity(0);
-          this.footerMod.setOpacity(0);
-          this.headerMod.setOpacity(1, this.options.showTransition);
-          this.footerMod.setOpacity(1, this.options.showTransition);
+          this.headerMod.setTransform(Transform.identity, this.options.showTransition);
+          this.footerMod.setTransform(Transform.identity, this.options.showTransition);
         }
       }
     }.bind(this));
