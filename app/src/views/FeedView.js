@@ -84,7 +84,6 @@ FeedView.prototype.createFeedEntriesFromServer = function(data) {
     return;
   }
   this.feed = this.feed || new Scrollview({
-    clipSize: (window.innerHeight - this.options.headerSize - this.options.footerSize - this.options.buttonPanelHeight),
     direction: 1,
     margin: 10000 // without this some entries would stop rendering on a hard scroll (fix from https://github.com/Famous/views/issues/11)
   });
