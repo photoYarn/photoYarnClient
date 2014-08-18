@@ -10,13 +10,6 @@ var GridLayout = require('famous/views/GridLayout');
 var RenderController = require('famous/views/RenderController');
 var Transform = require('famous/core/Transform');
 var Easing = require('famous/transitions/Easing');
-var GenericSync = require('famous/inputs/GenericSync');
-var MouseSync = require('famous/inputs/MouseSync');
-var TouchSync = require('famous/inputs/TouchSync');
-GenericSync.register({
-    mouse: MouseSync,
-    touch: TouchSync,
-});
 
 // import components/utilities
 var ButtonView = require('../views/ButtonView');
@@ -55,13 +48,15 @@ CustomLayout.DEFAULT_OPTIONS = {
   align: [0, 0],
   headerSize: 75,
   footerSize: 50,
+  layoutHidden: false,
+  layoutShowListen: false,
   hideTransition: {
     curve: Easing.outExpo,
     duration: 500,
   },
   showTransition: {
     curve: Easing.outExpo,
-    duration: 500,
+    duration: 5000,
   },
 };
 
@@ -187,41 +182,6 @@ function _createFooter(){
   this.footerNode.add(this.buttonGrid);
 }
 
-// handle scroll events for header/footer hide
-function _setHideLayoutListeners() {
-  console.log("setting sync listeners");
-
-  // TODO use Scrollview sync object from FeedView to sync hide transition
-  var sync = new GenericSync(['mouse', 'touch'], {
-      direction: GenericSync.DIRECTION_Y,
-  });
-
-  // TODO change pipe source to feedView events for sync
-  sync.subscribe(this.logo);
-
-  sync.on('update', function(data) {
-    this.headerMod.halt();
-    this.headerMod.setTransform(
-      Transform.translate(1, -this.options.headerSize, 1),
-      this.options.hideTransition);
-    this.footerMod.halt();
-    this.footerMod.setTransform(
-      Transform.translate(1, this.options.footerSize, 1),
-      this.options.hideTransition);
-  }.bind(this));
-
-  sync.on('end', function(data) {
-    this.headerMod.halt();
-    this.headerMod.setTransform(
-      Transform.identity,
-      this.options.hideTransition);
-    this.footerMod.halt();
-    this.footerMod.setTransform(
-      Transform.identity,
-      this.options.hideTransition);
-  }.bind(this));
-}
-
 // set listeners for buttons in footer nav and in content views
 function _setListeners() {
   // bind header click event
@@ -237,25 +197,43 @@ function _setListeners() {
 
     // attaching events to newly created feedView.feed Scrollview
     this.feedView.feed._eventInput.on('start', function() {
+      // flag hidden state
+      this.options.layoutHidden = true;
+      this.options.layoutShowListen = false;
+
+      // animate hide
       this.headerMod.halt();
+      this.footerMod.halt();
       this.headerMod.setTransform(
         Transform.translate(1, -this.options.headerSize, 1),
         this.options.hideTransition);
-      this.footerMod.halt();
       this.footerMod.setTransform(
         Transform.translate(1, this.options.footerSize, 1),
         this.options.hideTransition);
     }.bind(this));
 
     this.feedView.feed._eventInput.on('end', function() {
-      this.headerMod.halt();
-      this.headerMod.setTransform(
-        Transform.identity,
-        this.options.showTransition);
-      this.footerMod.halt();
-      this.footerMod.setTransform(
-        Transform.identity,
-        this.options.showTransition);
+      // start listening on particle velocity
+      this.options.layoutShowListen = true;
+    }.bind(this));
+
+    this.feedView.feed._particle.on('update', function() {
+      if (this.options.layoutHidden && this.options.layoutShowListen) {
+        if (Math.abs(this.feedView.feed._particle.getVelocity()[0]) < 0.1) {
+          this.options.layoutHidden = false;
+          this.options.layoutShowListen = false;
+
+          // animate show
+          this.headerMod.halt();
+          this.footerMod.halt();
+          this.headerMod.setTransform(Transform.identity);
+          this.footerMod.setTransform(Transform.identity);
+          this.headerMod.setOpacity(0);
+          this.footerMod.setOpacity(0);
+          this.headerMod.setOpacity(1, this.options.showTransition);
+          this.footerMod.setOpacity(1, this.options.showTransition);
+        }
+      }
     }.bind(this));
 
     this.renderController.show(this.feedView);
