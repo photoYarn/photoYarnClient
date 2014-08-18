@@ -30,10 +30,10 @@ function _createYarn(){
 
   //scrollModifier that scrollview is added in
   this.scrollModifier = new StateModifier({
-    size: [320/2,443/2],
+    size: [160,221.5],
     align: [0.5, 0],
     origin: [0.5, 0],
-    transform: Transform.translate(0,15,-15),
+    transform: Transform.translate(0,0,-15),
   });
   //adding to yarnView
   this.add(this.scrollModifier).add(this.scrollView);
@@ -89,21 +89,22 @@ function _setListeners() {
 
 //toggle function brings in focused image/scrollview depending on toggle state
 YarnView.prototype.toggle = function(target){
-  console.log('SCROLLVIEW', this.scrollView._scroller._position);
-  console.log('target', target.origin);
   // console.log('Toggling!', target);
   if(!this.toggled){
     var yTargetLocation = target.origin._matrix[13] - this.scrollView._scroller._position;
     this.focusImage.setContent(target.origin._imageUrl);
     this.focusImageModifier.setOpacity(1);
-    this.scrollModifier.setOpacity(0);
-    this.focusImageModifier.setTransform(Transform.translate(0, yTargetLocation, -16));
+    this.scrollModifier.setOpacity(0, {duration: 500});
+    this.focusImageModifier.setTransform(Transform.translate(0, yTargetLocation, -10));
+    this.focusImageModifier.setSize([320,443], {duration: 500});
+    this.focusImageModifier.setTransform(Transform.translate(0, 0, -10), {duration: 500});
   } 
   else {
     this.focusImage.setContent('');
     this.focusImageModifier.setTransform(Transform.translate(0, 0, -16));
     this.focusImageModifier.setOpacity(0);
-    this.scrollModifier.setOpacity(1);
+    this.focusImageModifier.setSize([160, 221.5]);
+    this.scrollModifier.setOpacity(1, {duration: 500});
   }
   this.toggled = !this.toggled;
 };
