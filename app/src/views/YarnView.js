@@ -47,7 +47,7 @@ function _createYarn(){
   });
 
   this.focusImageModifier = new StateModifier({
-    size: [320/2, 443/2],
+    size: [160, 221.5],
     align: [0.5,0],
     origin: [0.5,0],
     transform: Transform.translate(0,0,-16)
@@ -90,10 +90,10 @@ function _setListeners() {
 //toggle function brings in focused image/scrollview depending on toggle state
 YarnView.prototype.toggle = function(target){
   console.log('SCROLLVIEW', this.scrollView._scroller._position);
-  console.log('target', target);
+  console.log('target', target.origin);
   // console.log('Toggling!', target);
   if(!this.toggled){
-    var yTargetLocation = target.origin._matrix[13];
+    var yTargetLocation = target.origin._matrix[13] - this.scrollView._scroller._position;
     this.focusImage.setContent(target.origin._imageUrl);
     this.focusImageModifier.setOpacity(1);
     this.scrollModifier.setOpacity(0);
@@ -112,17 +112,18 @@ YarnView.prototype.toggle = function(target){
 YarnView.prototype.createDetail = function(data){
   var imageLinks = data.links;
   this.sequence = [];
+  var count = 0;
   for(var i = 0; i < imageLinks.length; i++){
     var currentImage = imageLinks[i];
     var image = new ImageSurface({
       content: currentImage,
       classes: ['photoEntry'],
       properties: {
-        padding: '5px',
         'border-radius': '10px'
       }
     });
-
+    image.spotCount = count;
+    count++;
     //lets scroll view hear events on this image
     image.pipe(this.scrollView);
     //toggles in focused image with this images content as focusedImages content
