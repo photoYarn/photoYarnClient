@@ -71,75 +71,9 @@ function _createRootNode() {
   this.rootNode = this.add(this.rootModifier);
 }
 
-function _createButtonPanel() {
-  // network button
-  this.networkButton = new Surface({
-    size: [window.innerWidth / this.options.numSortButtons, this.options.buttonPanelHeight],
-    content: "Network",
-    classes: ['FeedViewSortButton'],
-    properties: {
-      lineHeight: this.options.buttonPanelHeight + 'px'
-    }
-  });
-  
-  var networkButtonModifier = new Modifier({
-    align: [0, 0],
-    origin: [0, 0]
-  });
-  
-  this.add(networkButtonModifier).add(this.networkButton);
-  
-  // popular button
-  this.popularButton = new Surface({
-    size: [window.innerWidth / this.options.numSortButtons, this.options.buttonPanelHeight],
-    content: "Popular",
-    classes: ['FeedViewSortButton'],
-    properties: {
-      lineHeight: this.options.buttonPanelHeight + 'px'
-    }
-  });
-
-  var popularButtonModifier = new Modifier({
-    align: [0.5, 0],
-    origin: [0.5, 0]
-  });
-  
-  this.add(popularButtonModifier).add(this.popularButton);
-  
-  // new button
-  this.newButton = new Surface({
-    size: [window.innerWidth / this.options.numSortButtons, this.options.buttonPanelHeight],
-    content: "New",
-    classes: ['FeedViewSortButton'],
-    properties: {
-      lineHeight: this.options.buttonPanelHeight + 'px'
-    }
-  });
-  
-  var newButtonModifier = new Modifier({
-    align: [1, 0],
-    origin: [1, 0]
-  });
-  
-  this.add(newButtonModifier).add(this.newButton);
-  
-}
-
 function _setListeners() {
   this._eventInput.on('refreshFeed', function(data) {
     this.createFeedEntriesFromServer(data);
-  }.bind(this));
-  
-  this.networkButton.on('click', function () {
-    // request feeds sorted by network from server
-  }.bind(this));
-  
-  this.popularButton.on('click', function () {
-    // request feeds sorted by popularity from server
-  }.bind(this));
-  
-  this.newButton.on('click', function () {
-    // request feeds sorted by creation date from server
   }.bind(this));
 }
 
