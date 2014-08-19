@@ -87,24 +87,27 @@ function _setListeners() {
   }.bind(this));
 }
 
+var yTargetLocation;
 //toggle function brings in focused image/scrollview depending on toggle state
 YarnView.prototype.toggle = function(target){
   // console.log('Toggling!', target);
+  if(target){
+    yTargetLocation = target.origin._matrix[13] - this.scrollView._scroller._position;
+  }
   if(!this.toggled){
-    var yTargetLocation = target.origin._matrix[13] - this.scrollView._scroller._position;
     this.focusImage.setContent(target.origin._imageUrl);
     this.focusImageModifier.setOpacity(1);
     this.scrollModifier.setOpacity(0, {duration: 500});
     this.focusImageModifier.setTransform(Transform.translate(0, yTargetLocation, -10));
     this.focusImageModifier.setSize([320,443], {duration: 500});
-    this.focusImageModifier.setTransform(Transform.translate(0, 0, -10), {duration: 500});
+    this.focusImageModifier.setTransform(Transform.translate(0, 0, -14), {duration: 500});
   } 
   else {
-    this.focusImage.setContent('');
-    this.focusImageModifier.setTransform(Transform.translate(0, 0, -16));
-    this.focusImageModifier.setOpacity(0);
-    this.focusImageModifier.setSize([160, 221.5]);
-    this.scrollModifier.setOpacity(1, {duration: 500});
+    this.focusImageModifier.setSize([160, 221.5], {duration: 500});
+    this.focusImageModifier.setTransform(Transform.translate(0, yTargetLocation, -16), {duration: 500}, function(){
+      this.focusImageModifier.setOpacity(0, {duration: 500});
+      this.scrollModifier.setOpacity(1);
+    }.bind(this));
   }
   this.toggled = !this.toggled;
 };
