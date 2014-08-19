@@ -81,7 +81,6 @@ html {
   border: 1px solid #662C00;
   background-color: #E0D7CE;
   font: 16px Georgia, sans-serif;
-  padding-left: 10px;
   padding-top: 5px;
 }
 
@@ -147,12 +146,10 @@ html {
   color: #777;
   font: 15px Georgia, sans-serif;
   font-weight:bold;
-  margin-left: 5px;
 }
 
-.FeedEntryPhoto {
+.photoEntry {
   border-radius: 5px;
-  margin-left: 10px;
 }
 
 .AddPhotoViewPicFrame {

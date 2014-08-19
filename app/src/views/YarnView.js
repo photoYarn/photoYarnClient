@@ -19,36 +19,38 @@ function YarnView(){
 YarnView.prototype = Object.create(View.prototype);
 YarnView.prototype.constructor = YarnView;
 YarnView.DEFAULT_OPTIONS = {
-  entryHeight: 175
 };
 
 function _createYarn(){
   //toggled and toggleCount used for animations
   this.toggled = false;
-  this.toggleCount = 0;
 
   //main scrollView that holds images
   this.scrollView = new Scrollview({});
 
   //scrollModifier that scrollview is added in
   this.scrollModifier = new StateModifier({
-    size: [320/2,443/2],
+    size: [160,221.5],
     align: [0.5, 0],
     origin: [0.5, 0],
-    transform: Transform.translate(0,15,-15),
+    transform: Transform.translate(0,0,-15),
   });
   //adding to yarnView
   this.add(this.scrollModifier).add(this.scrollView);
 
 
   //focusImage displays the selected image on click, should animate in!
-  this.focusImage = new ImageSurface({});
+  this.focusImage = new ImageSurface({
+    properties: {
+      'border-radius': '5px'
+    }
+  });
 
   this.focusImageModifier = new StateModifier({
-    size: [320, 443],
+    size: [160, 221.5],
     align: [0.5,0],
     origin: [0.5,0],
-    transform: Transform.moveThen([window.innerWidth,-window.innerHeight,-10], Transform.rotateZ(3*Math.PI/2)),
+    transform: Transform.translate(0,0,-16)
   });
 
   this.add(this.focusImageModifier).add(this.focusImage);
@@ -58,6 +60,7 @@ function _createAddPhotoButton() {
   this.addPhotoButton = new Surface({
       size: [320/2, 60],
       content: '+',
+      classes: ['photoEntry'],
       properties: {
         fontSize: '60px',
         backgroundColor: '#CCC',
@@ -85,23 +88,23 @@ function _setListeners() {
 }
 
 //toggle function brings in focused image/scrollview depending on toggle state
-YarnView.prototype.toggle = function(content){
+YarnView.prototype.toggle = function(target){
+  // console.log('Toggling!', target);
   if(!this.toggled){
-    this.focusImage.setContent(content);
-    this.scrollModifier.setTransform(Transform.translate(0,2*window.innerHeight,-15), {duration: 500});
-    this.focusImageModifier.setTransform(Transform.moveThen([0,0,-10], Transform.rotateX(0)), {duration: 500});
+    var yTargetLocation = target.origin._matrix[13] - this.scrollView._scroller._position;
+    this.focusImage.setContent(target.origin._imageUrl);
+    this.focusImageModifier.setOpacity(1);
+    this.scrollModifier.setOpacity(0, {duration: 500});
+    this.focusImageModifier.setTransform(Transform.translate(0, yTargetLocation, -10));
+    this.focusImageModifier.setSize([320,443], {duration: 500});
+    this.focusImageModifier.setTransform(Transform.translate(0, 0, -10), {duration: 500});
   } 
   else {
     this.focusImage.setContent('');
-    this.scrollModifier.setTransform(Transform.translate(0,0,-15), {duration: 500});
-    if(this.toggleCount % 2){
-      this.focusImageModifier.setTransform(Transform.moveThen([window.innerWidth,-window.innerHeight,-10], 
-        Transform.rotateZ(3*Math.PI/2)), {duration: 500});
-    } else {
-      this.focusImageModifier.setTransform(Transform.moveThen([-window.innerWidth,-window.innerHeight,-10],
-        Transform.rotateZ(Math.PI/2)), {duration: 500});
-    }
-    this.toggleCount++;
+    this.focusImageModifier.setTransform(Transform.translate(0, 0, -16));
+    this.focusImageModifier.setOpacity(0);
+    this.focusImageModifier.setSize([160, 221.5]);
+    this.scrollModifier.setOpacity(1, {duration: 500});
   }
   this.toggled = !this.toggled;
 };
@@ -110,20 +113,23 @@ YarnView.prototype.toggle = function(content){
 YarnView.prototype.createDetail = function(data){
   var imageLinks = data.links;
   this.sequence = [];
+  var count = 0;
   for(var i = 0; i < imageLinks.length; i++){
     var currentImage = imageLinks[i];
     var image = new ImageSurface({
       content: currentImage,
+      classes: ['photoEntry'],
       properties: {
-        padding: '5px'
+        'border-radius': '10px'
       }
     });
+    image.spotCount = count;
+    count++;
     //lets scroll view hear events on this image
     image.pipe(this.scrollView);
     //toggles in focused image with this images content as focusedImages content
     image.on('click', function(target){
-      var content = target.origin._imageUrl;
-      this.toggle(content);
+      this.toggle(target);
     }.bind(this));
 
     this.sequence.push(image);      

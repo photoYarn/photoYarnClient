@@ -22,7 +22,7 @@
                     "CoreGraphics.framework": [
                         {
                             "xml": "false",
-                            "count": 2
+                            "count": 3
                         }
                     ],
                     "AssetsLibrary.framework": [
