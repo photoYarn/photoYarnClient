@@ -24,12 +24,15 @@ Stores strings of _id in cache
 */
 
 serverRequests.getData = function(callback, feedInstance){
-  var getURL = 'http://photoyarn.azurewebsites.net/getYarnsBrowser';
+  var getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + ;
   if (feedInstance) feedInstance.loadingPictures = true;
   $.ajax({
     type: 'GET',
     url: getURL,
-    data: {yarnsLoaded: serverRequests.data.length},
+    data: {
+      yarnsLoaded: serverRequests.data.length,
+      numYarns: 8
+    },
     success: function (data) {
       console.log(data);
       for(var i = 0; i < data.length; i++){
