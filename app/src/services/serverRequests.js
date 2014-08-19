@@ -23,12 +23,12 @@ getData fetches data from server and stores it in data array
 Stores strings of _id in cache 
 */
 
-serverRequests.getData = function(){
+serverRequests.getData = function(callback, feedInstance){
   var getURL;
+  if (feedInstance) feedInstance.loadingPictures = true;
   if(window.localStorage.getItem('facebookId')) {
     console.log('Getting your pictures!');
-    getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + window.localStorage.getItem('facebookId') + 
-                                                          '?token=' + window.localStorage.getItem('serverToken');
+    getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + window.localStorage.getItem('facebookId');
     console.log(getURL);
   }
   else {
@@ -38,12 +38,23 @@ serverRequests.getData = function(){
   $.ajax({
     type: 'GET',
     url: getURL,
+    data: {
+      yarnsLoaded: serverRequests.data.length,
+      numYarns: 8,
+      token: window.localStorage.getItem('serverToken')
+    },
     success: function (data) {
+      console.log('served up ' + data.length + ' yarns');
       for(var i = 0; i < data.length; i++){
         var cur = data[i];
         var id = data[i]._id;
         this.cache[id] = this.data.length;
         this.data.push(cur);
+      }
+      if (callback) {
+        if (data.length === 0) feedInstance.doneLoading = true;
+        feedInstance.loadingPictures = false;
+        callback.call(feedInstance, data);
       }
     }.bind(this),
     error: function (error) {
