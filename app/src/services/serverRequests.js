@@ -25,6 +25,7 @@ Stores strings of _id in cache
 
 serverRequests.getData = function(callback, feedInstance){
   var getURL;
+  if (feedInstance) feedInstance.loadingPictures = true;
   if(window.localStorage.getItem('facebookId')) {
     console.log('Getting your pictures!');
     getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + window.localStorage.getItem('facebookId');
