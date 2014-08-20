@@ -269,6 +269,7 @@ function _setListeners() {
   // TODO decouple event and child trigger to sync with this.feedView
   this.yarnView.on('showAddToYarn', function(data) {
     this._showLayout();
+    this.title.setContent('Add to Yarn');
     this.addToYarnView.trigger('initYarnData', data);
     this.renderController.show(this.addToYarnView)
   }.bind(this))
