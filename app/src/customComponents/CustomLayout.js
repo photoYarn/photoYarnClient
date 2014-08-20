@@ -84,8 +84,8 @@ function _createContent(){
   });
 
   var centerModifier = new Modifier({
-    origin: [0.5, 0],
-    align: [0.5, 0]
+    origin: [0.5, 0.5],
+    align: [0.5, 0.5]
   });
 
   // initialize content views
