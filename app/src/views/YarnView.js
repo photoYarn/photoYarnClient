@@ -71,6 +71,8 @@ function _createAddPhotoButton() {
 }
 
 function _setListeners() {
+  this.scrollView.pipe(this._eventOutput);
+
   this._eventInput.on('initYarnData', function(data) {
     this.yarnData = data;
     this.createDetail(data);
@@ -130,6 +132,7 @@ YarnView.prototype.createDetail = function(data){
     count++;
     //lets scroll view hear events on this image
     image.pipe(this.scrollView);
+    image.pipe(this._eventOutput);
     //toggles in focused image with this images content as focusedImages content
     image.on('click', function(target){
       this.toggle(target);
