@@ -238,6 +238,7 @@ function _setListeners() {
   // associate nav button to display actions
   this.buttonRefs.viewFeed.on('click', function() {
     this._showLayout();
+    this.title.setContent('Photo Yarn');
     this._activateButton(this.buttonRefs.viewFeed);
     this.feedView.trigger('refreshFeed', this.options.serverRequests.data);
 
@@ -252,6 +253,7 @@ function _setListeners() {
   // associate nav button to display actions
   this.buttonRefs.createYarn.on('click', function() {
     this._showLayout();
+    this.title.setContent('Photo Yarn')
     this._activateButton(this.buttonRefs.createYarn);
     this.renderController.show(this.newYarnView);
   }.bind(this));
@@ -259,6 +261,7 @@ function _setListeners() {
   // associate nav button to display actions
   this.buttonRefs.viewProfile.on('click', function() {
     this._showLayout();
+    this.title.setContent('Photo Yarn')
     this._activateButton(this.buttonRefs.viewProfile);
     this.renderController.show(this.profileView);
   }.bind(this));
@@ -273,6 +276,8 @@ function _setListeners() {
   this.feedView.on('showYarnDetail', function(data) {
     this._showLayout();
     this.yarnView.trigger('initYarnData', data);
+    console.log(data);
+    this.title.setContent(data.caption)
     this.renderController.show(this.yarnView);
   }.bind(this));
 
