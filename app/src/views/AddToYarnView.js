@@ -90,9 +90,9 @@ function _createTakePictureButton() {
     origin: [0.5,1.5]
   });
 
-  this.takePicture = new Surface({
-    size: [95, 50],
-    content: this.options.takePictureMsg,
+  this.takePicture = new ImageSurface({
+    size: [50, 50],
+    content: './assets/slr1.png',
     classes: ['primaryBGColor', 'whiteTextColor', 'darkBorder'],
     properties: {
       borderRadius: '10px',
@@ -110,9 +110,9 @@ function _createGetPictureButton() {
     origin: [0.5, 1.5]
   });
 
-  this.getPicture = new Surface({
-    size: [95, 50],
-    content: this.options.getPictureMsg,
+  this.getPicture = new ImageSurface({
+    size: [50, 50],
+    content: './assets/stack21.png',
     classes: ['primaryBGColor', 'whiteTextColor', 'darkBorder'],
     properties: {
       borderRadius: '10px',
