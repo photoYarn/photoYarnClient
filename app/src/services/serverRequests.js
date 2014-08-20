@@ -28,7 +28,7 @@ serverRequests.getData = function(callback, feedInstance){
   if (feedInstance) feedInstance.loadingPictures = true;
   if(window.localStorage.getItem('facebookId')) {
     console.log('Getting your pictures!');
-    getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + window.localStorage.getItem('facebookId');
+    getURL = 'http://photoyarn.azurewebsites.net/getAllYarns';
     console.log(getURL);
   }
   else {
@@ -41,7 +41,8 @@ serverRequests.getData = function(callback, feedInstance){
     data: {
       yarnsLoaded: serverRequests.data.length,
       numYarns: 8,
-      token: window.localStorage.getItem('serverToken')
+      token: window.localStorage.getItem('serverToken'),
+      id: window.localStorage.getItem('facebookId')
     },
     success: function (data) {
       console.log('served up ' + data.length + ' yarns');
@@ -71,8 +72,7 @@ serverRequests.updateData = function(){
   var getURL;
   if(window.localStorage.getItem('facebookId')){
     console.log('Getting your pictures!');
-    getURL = 'http://photoyarn.azurewebsites.net/getAllYarns/' + window.localStorage.getItem('facebookId') + 
-                                                            '?token=' + window.localStorage.getItem('serverToken');
+    getURL = 'http://photoyarn.azurewebsites.net/getAllYarns';
     console.log(getURL);
   }
   else {
@@ -83,6 +83,12 @@ serverRequests.updateData = function(){
   $.ajax({
     type: 'GET',
     url: getURL,
+    data: {
+      yarnsLoaded: serverRequests.data.length,
+      numYarns: 8,
+      token: window.localStorage.getItem('serverToken'),
+      id: window.localStorage.getItem('facebookId')
+    },
     success: function (data) {
       for(var i = 0; i < data.length; i++){
         var cur = data[i];
