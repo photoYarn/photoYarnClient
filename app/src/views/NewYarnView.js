@@ -5,6 +5,7 @@ var StateModifier = require('famous/modifiers/StateModifier');
 var ImageSurface = require('famous/surfaces/ImageSurface');
 var InputSurface = require('famous/surfaces/InputSurface');
 var Transform = require('famous/core/Transform');
+var Animations = require('../customComponents/CustomAnimations');
 
 var serverRequests;
 var pictureFrame;
@@ -38,13 +39,16 @@ NewYarnView.DEFAULT_OPTIONS = {
 function _createCaption(){
   this.caption = new InputSurface({
     size: [this.options.picSize[0], true],
-    placeholder: 'Your caption here',
-    classes: ['CaptionInput']
+    placeholder: 'Enter Caption',
+    classes: ['CaptionInput'],
+    properties: {
+      textAlign: 'center',
+    }
   });
   
   this.captionModifier = new StateModifier({
     align: [0.5, 0],
-    origin: [0.5, -3]
+    origin: [0.5, -4]
   });
   
   this.captionButton = new Surface({
@@ -58,14 +62,14 @@ function _createCaption(){
     },
   });
   
-  var buttonModifier = new StateModifier({
+  this.captionButtonModifier = new StateModifier({
     align: [0.5,1],
     origin: [0.5,1.5]
   });
   
   var captionNode = this.add(this.captionModifier);
   captionNode.add(this.caption);
-  captionNode.add(buttonModifier).add(this.captionButton);
+  captionNode.add(this.captionButtonModifier).add(this.captionButton);
 }
 
 
@@ -75,12 +79,12 @@ function _createTakePictureButton() {
     origin: [0.5,1.5]
   });
 
-  this.takePicture = new Surface({
-    size: [95, 50],
-    content: this.options.takePictureMsg,
+  this.takePicture = new ImageSurface({
+    size: [50, 50],
+    content: './assets/slr1.png',
     classes: ['primaryBGColor', 'whiteTextColor', 'darkBorder'],
     properties: {
-      borderRadius: '10px',
+      borderRadius: '5px',
       textAlign: 'center',
       lineHeight: '50px',
     },
@@ -95,12 +99,12 @@ function _createGetPictureButton() {
     origin: [0.5, 1.5]
   });
 
-  this.getPicture = new Surface({
-    size: [95, 50],
-    content: this.options.getPictureMsg,
+  this.getPicture = new ImageSurface({
+    size: [50, 50],
+    content: './assets/stack21.png',
     classes: ['primaryBGColor', 'whiteTextColor', 'darkBorder'],
     properties: {
-      borderRadius: '10px',
+      borderRadius: '5px',
       lineHeight: '50px',
       textAlign: 'center',
     },
@@ -130,6 +134,7 @@ function _setListeners() {
   });
   
   this.captionButton.on('click', function(){
+    Animations.bounceBack(this.captionButtonModifier);
     if(this.caption.getValue() !== undefined && pictureFrame.getContent() !== catGif){
       this.yarnData.caption = this.caption.getValue();
       this.caption.setValue('');
@@ -140,6 +145,7 @@ function _setListeners() {
 
   this.takePicture.on('click', function(){
     var context = this;
+    Animations.bounceBack(this.takePictureModifier);
     navigator.camera.getPicture(function(data){
       onCameraSuccess(data, context)
     }, onCameraFail, {
@@ -154,6 +160,7 @@ function _setListeners() {
 
   this.getPicture.on('click', function(){
     var context = this;
+    Animations.bounceBack(this.getPictureModifier);
     navigator.camera.getPicture(function(data){
       onCameraSuccess(data, context)
     }, onCameraFail,
