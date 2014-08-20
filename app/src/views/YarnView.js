@@ -47,7 +47,7 @@ function _createYarn(){
   });
 
   this.focusImageModifier = new StateModifier({
-    size: [160, 221.5],
+    size: [5, 5],
     align: [0.5,0],
     origin: [0.5,0],
     transform: Transform.translate(0,0,-16)
@@ -58,15 +58,15 @@ function _createYarn(){
 
 function _createAddPhotoButton() {
   this.addPhotoButton = new Surface({
-      size: [320/2, 60],
-      content: '+',
-      classes: ['photoEntry'],
-      properties: {
-        fontSize: '60px',
-        backgroundColor: '#CCC',
-        textAlign: 'center',
-        lineHeight: '60px'
-      }
+    size: [320/2, 60],
+    content: '+',
+    classes: ['photoEntry'],
+    properties: {
+      fontSize: '60px',
+      backgroundColor: '#CCC',
+      textAlign: 'center',
+      lineHeight: '60px'
+    }
   });
 }
 
@@ -89,25 +89,35 @@ function _setListeners() {
   }.bind(this));
 }
 
+//yTarget location used to correctly place focusedImage when click occurs. 
 var yTargetLocation;
-//toggle function brings in focused image/scrollview depending on toggle state
+//Target surface used to modify it without a direct reference to it on click.
+var targetSurface
+//toggle function brings in focused image/scrollview depending on toggle state.
 YarnView.prototype.toggle = function(target){
   if(target){
     yTargetLocation = target.origin._matrix[13] - this.scrollView._scroller._position;
+    targetSurface = target.origin;
   }
   if(!this.toggled){
     this.focusImage.setContent(target.origin._imageUrl);
     this.focusImageModifier.setOpacity(1);
+    targetSurface.setSize([144, 200]);
+    this.focusImageModifier.setSize([144, 200]);
     this.scrollModifier.setOpacity(0, {duration: 500});
     this.focusImageModifier.setTransform(Transform.translate(0, yTargetLocation, -10));
     this.focusImageModifier.setSize([320,443], {duration: 500});
     this.focusImageModifier.setTransform(Transform.translate(0, 0, -14), {duration: 500});
   } 
   else {
+    targetSurface.setSize([160, 221.5]);
+    this.scrollModifier.setTransform(Transform.translate(0, 0, -20));
+    this.scrollModifier.setTransform(Transform.translate(0, 0, -15), {duration: 750});
+    this.scrollModifier.setOpacity(1, {duration: 500});
     this.focusImageModifier.setSize([160, 221.5], {duration: 500});
     this.focusImageModifier.setTransform(Transform.translate(0, yTargetLocation, -16), {duration: 500}, function(){
       this.focusImageModifier.setOpacity(0, {duration: 500});
-      this.scrollModifier.setOpacity(1);
+      this.focusImageModifier.setSize([5,5]);
     }.bind(this));
   }
   this.toggled = !this.toggled;
@@ -122,6 +132,8 @@ YarnView.prototype.createDetail = function(data){
     var currentImage = imageLinks[i];
     var image = new ImageSurface({
       content: currentImage,
+      align: [0.5, 0],
+      origin: [0.5, 0],
       classes: ['photoEntry'],
       properties: {
         'border-radius': '10px'
