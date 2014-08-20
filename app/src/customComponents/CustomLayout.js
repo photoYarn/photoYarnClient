@@ -10,6 +10,15 @@ var GridLayout = require('famous/views/GridLayout');
 var RenderController = require('famous/views/RenderController');
 var Transform = require('famous/core/Transform');
 var Easing = require('famous/transitions/Easing');
+var GenericSync = require('famous/inputs/GenericSync');
+var MouseSync = require('famous/inputs/MouseSync');
+var TouchSync = require('famous/inputs/TouchSync');
+GenericSync.register({
+    mouse: MouseSync,
+    touch: TouchSync,
+});
+var Transitionable = require('famous/transitions/Transitionable');
+
 
 // import components/utilities
 var ButtonView = require('../views/ButtonView');
@@ -30,6 +39,7 @@ function CustomLayout() {
   View.apply(this, arguments);
 
   this.serverRequests = serverRequests;
+  this.hideRatio = new Transitionable(0);
 
   // adding elements
   _createLayout.call(this);
@@ -37,6 +47,7 @@ function CustomLayout() {
   _createHeader.call(this);
   _createFooter.call(this);
   _setListeners.call(this);
+  _setHeaderFooterListeners.call(this);
 }
 
 // set defaults
@@ -47,9 +58,6 @@ CustomLayout.DEFAULT_OPTIONS = {
   align: [0, 0],
   headerSize: 75,
   footerSize: 50,
-  layoutHidden: false,
-  layoutHideListen: false,
-  layoutShowListen: false,
   hideTransition: {
     curve: Easing.outExpo,
     duration: 500,
@@ -184,6 +192,41 @@ function _createFooter(){
   this.footerNode.add(this.buttonGrid);
 }
 
+// set touch listeners for hiding/showing header/footer
+function _setHeaderFooterListeners() {
+  // attaching sync object to feedview
+  var sync = new GenericSync(['mouse', 'touch'], {
+      direction: GenericSync.DIRECTION_Y,
+  });
+  sync.subscribe(this.feedView);
+  sync.subscribe(this.yarnView);
+
+  // handling touch events
+  sync.on('update', function(data) {
+    var flip = -data.delta;
+    if (flip > 0) {
+      this.hideRatio.set(Math.min(100, this.hideRatio.get() + flip));
+    } else {
+      this.hideRatio.set(Math.max(0, this.hideRatio.get() + flip));
+    }
+
+    var headerPos = this.hideRatio.get() * this.options.headerSize / 100;
+    var footerPos = this.hideRatio.get() * this.options.footerSize / 100;
+    this.headerMod.setTransform(Transform.translate(1, -headerPos, 1));
+    this.footerMod.setTransform(Transform.translate(1, footerPos, 1));
+  }.bind(this));
+
+  // show/hide layout when touch ends based on threshold
+  sync.on('end', function(data) {
+    if (this.hideRatio.get() > 50) {
+      this._hideLayout();
+    } else {
+      this._showLayout();
+    }
+  }.bind(this));
+}
+
+
 // set listeners for buttons in footer nav and in content views
 function _setListeners() {
   // bind header click event
@@ -192,9 +235,8 @@ function _setListeners() {
     this.renderController.show(this.logo);
   }.bind(this));
 
-  // associate nav buttons to display actions
+  // associate nav button to display actions
   this.buttonRefs.viewFeed.on('click', function() {
-    this._resetLayoutListeners();
     this._showLayout();
     this._activateButton(this.buttonRefs.viewFeed);
     this.feedView.trigger('refreshFeed', this.options.serverRequests.data);
@@ -204,89 +246,17 @@ function _setListeners() {
       this.yarnView.toggle();
     }
 
-    // attaching events to newly created feedView.feed Scrollview
-    this.feedView.feed._eventInput.on('start', function() {
-      // start listening on particle velocity
-      this.options.layoutHideListen = true;
-    }.bind(this));
-
-    this.feedView.feed._eventInput.on('end', function() {
-      // start listening on particle velocity
-      this.options.layoutShowListen = true;
-    }.bind(this));
-
-    this.feedView.feed._particle.on('update', function() {
-      // setting velocity threshold for hide animation
-      if (!this.options.layoutHidden &&
-          this.options.layoutHideListen &&
-          Math.abs(this.feedView.feed._particle.getVelocity()[0]) > 0.1) {
-        this.options.layoutHideListen = false;
-        this._hideLayout();
-      }
-      // setting velocity threshold for show animation
-      if (this.options.layoutHidden &&
-          this.options.layoutShowListen &&
-          Math.abs(this.feedView.feed._particle.getVelocity()[0]) < 0.25) {
-        this.options.layoutShowListen = false;
-        this._showLayout();
-      }
-    }.bind(this));
-
     this.renderController.show(this.feedView);
   }.bind(this));
 
-
-//KIA START ----------------------------------------------------------------------------------------
-
-   this.yarnView.scrollView._eventInput.on('start', function() {
-      // flag hidden state
-      this.options.layoutHidden = true;
-      this.options.layoutShowListen = false;
-
-      // animate hide
-      this.headerMod.halt();
-      this.footerMod.halt();
-      this.headerMod.setTransform(
-        Transform.translate(1, -this.options.headerSize, 1),
-        this.options.hideTransition);
-      this.footerMod.setTransform(
-        Transform.translate(1, this.options.footerSize, 1),
-        this.options.hideTransition);
-    }.bind(this));
-
-    this.yarnView.scrollView._eventInput.on('end', function() {
-      // start listening on particle velocity
-      this.options.layoutShowListen = true;
-    }.bind(this));
-
-    this.yarnView.scrollView._particle.on('update', function() {
-      if (this.options.layoutHidden && this.options.layoutShowListen) {
-        if (Math.abs(this.yarnView.scrollView._particle.getVelocity()[0]) < 0.25) {
-          this.options.layoutHidden = false;
-          this.options.layoutShowListen = false;
-
-          // animate show
-          this.headerMod.halt();
-          this.footerMod.halt();
-          this.headerMod.setTransform(Transform.identity);
-          this.footerMod.setTransform(Transform.identity);
-          this.headerMod.setOpacity(0);
-          this.footerMod.setOpacity(0);
-          this.headerMod.setOpacity(1, this.options.showTransition);
-          this.footerMod.setOpacity(1, this.options.showTransition);
-        }
-      }
-    }.bind(this));
-
-//KIA END ------------------------------------------------------------------------------------------
-
-  // associate nav buttons to display actions
+  // associate nav button to display actions
   this.buttonRefs.createYarn.on('click', function() {
     this._showLayout();
     this._activateButton(this.buttonRefs.createYarn);
     this.renderController.show(this.newYarnView);
   }.bind(this));
 
+  // associate nav button to display actions
   this.buttonRefs.viewProfile.on('click', function() {
     this._showLayout();
     this._activateButton(this.buttonRefs.viewProfile);
@@ -330,15 +300,9 @@ function _setListeners() {
 
 }
 
-// reset layout hide/show state variables
-CustomLayout.prototype._resetLayoutListeners = function() {
-  this.options.layoutHideListen = false;
-  this.options.layoutShowListen = false;
-}
-
 // animate hide
 CustomLayout.prototype._hideLayout = function() {
-  this.options.layoutHidden = true;
+  this.hideRatio.set(100);
   this.headerMod.halt();
   this.footerMod.halt();
   this.headerMod.setTransform(Transform.translate(1, -this.options.headerSize, 1), this.options.hideTransition);
@@ -347,7 +311,7 @@ CustomLayout.prototype._hideLayout = function() {
 
 // animate show
 CustomLayout.prototype._showLayout = function() {
-  this.options.layoutHidden = false;
+  this.hideRatio.set(0);
   this.headerMod.halt();
   this.footerMod.halt();
   this.headerMod.setTransform(Transform.identity, this.options.showTransition);
