@@ -92,7 +92,6 @@ function _setListeners() {
 var yTargetLocation;
 //toggle function brings in focused image/scrollview depending on toggle state
 YarnView.prototype.toggle = function(target){
-  // console.log('Toggling!', target);
   if(target){
     yTargetLocation = target.origin._matrix[13] - this.scrollView._scroller._position;
   }
