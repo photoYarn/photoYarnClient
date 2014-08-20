@@ -4,6 +4,7 @@ var Surface = require('famous/core/Surface');
 var StateModifier = require('famous/modifiers/StateModifier');
 var ImageSurface = require('famous/surfaces/ImageSurface');
 var Transform = require('famous/core/Transform');
+var Animations = require('../customComponents/CustomAnimations');
 
 //placeholder image used in production
 var catGif = 'assets/catGif.gif';
@@ -78,11 +79,6 @@ function _createSendButton(){
     },
   });
 
-  var buttonModifier = new StateModifier({
-      // places the icon in the proper location
-      transform: Transform.translate(100, 0, 0)
-  });
-
   var sendButtonNode = this.add(this.sendButtonModifier);
   sendButtonNode.add(this.sendButton);
 }
@@ -94,9 +90,9 @@ function _createTakePictureButton() {
     origin: [0.5,1.5]
   });
 
-  this.takePicture = new Surface({
-    size: [95, 50],
-    content: this.options.takePictureMsg,
+  this.takePicture = new ImageSurface({
+    size: [50, 50],
+    content: './assets/slr1.png',
     classes: ['primaryBGColor', 'whiteTextColor', 'darkBorder'],
     properties: {
       borderRadius: '10px',
@@ -114,9 +110,9 @@ function _createGetPictureButton() {
     origin: [0.5, 1.5]
   });
 
-  this.getPicture = new Surface({
-    size: [95, 50],
-    content: this.options.getPictureMsg,
+  this.getPicture = new ImageSurface({
+    size: [50, 50],
+    content: './assets/stack21.png',
     classes: ['primaryBGColor', 'whiteTextColor', 'darkBorder'],
     properties: {
       borderRadius: '10px',
@@ -150,12 +146,14 @@ function _setListeners() {
   }.bind(this));
 
   this.sendButton.on('click', function() {
+    Animations.bounceBack(this.sendButtonModifier);
     pictureFrame.setContent(catGif);
     serverRequests.postToImgur(this.yarnData, 'add');
   }.bind(this));
 
   this.takePicture.on('click', function() {
     var context = this;
+    Animations.bounceBack(this.takePictureModifier);
     navigator.camera.getPicture(function(data) {
       onCameraSuccess(data, context)
     }, onCameraFail, 
@@ -170,6 +168,7 @@ function _setListeners() {
   }.bind(this));
 
   this.getPicture.on('click', function() {
+    Animations.bounceBack(this.getPictureModifier);
     var context = this;
     navigator.camera.getPicture(function(data){
       onCameraSuccess(data, context)
