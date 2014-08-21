@@ -40,7 +40,7 @@ FeedView.DEFAULT_OPTIONS = {
   entryCount: 4,
   entryHeight: 175,
   buttonPanelHeight: 40,
-  numSortButtons: 3
+  numSortButtons: 3,
 };
 
 function _createBackground() {

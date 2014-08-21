@@ -124,7 +124,7 @@ serverRequests.updateData = function(feedInstance){
 
           // this should be refactored
           serverRequests.data.push(cur);
-          // feedInstance.createNewFeedEntry(cur);  
+          feedInstance.createNewFeedEntry(cur);  
         } else if (serverRequests.data[this.cache[index]].links.length !== cur.links.length) {
           console.log('Updated An Entry: ', cur);
 
@@ -205,13 +205,13 @@ serverRequests.postYarnToServer = function(data, feedInstance){
       caption: data.caption,
       creatorId: data.creatorId
     },
-    success: function(res, feedInstance){
+    success: function(res){
       console.log('Post to Server Success: ', res);
       serverRequests.updateData(feedInstance);
     },
     error: function(error, res){
       console.log('Post to Server Error: ', error);
-      console.log('Post Error Response: ', res);
+      console.log('Post to Server Error Response: ', res);
     }
   });
 };
