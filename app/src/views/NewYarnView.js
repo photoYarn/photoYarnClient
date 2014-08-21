@@ -6,6 +6,7 @@ var ImageSurface = require('famous/surfaces/ImageSurface');
 var InputSurface = require('famous/surfaces/InputSurface');
 var Transform = require('famous/core/Transform');
 var Animations = require('../customComponents/CustomAnimations');
+var ButtonView = require('../views/ButtonView');
 
 var serverRequests;
 var pictureFrame;
@@ -51,17 +52,14 @@ function _createCaption(){
     origin: [0.5, -4]
   });
   
-  this.captionButton = new Surface({
-    size: [60, 50],
-    content: 'Submit',
-    classes: ['CaptionSubmitButton', 'focusBGColor', 'whiteTextColor', 'darkBorder'],
+  this.captionButton = new ButtonView({
+    size: [50, 50],
+    classes: ['navButton', 'ion-checkmark'],
     properties: {
-      borderRadius: '10px',
-      textAlign: 'center',
-      lineHeight: '50px',
+      fontSize: 50 * 0.9 + 'px',
     },
   });
-  
+
   this.captionButtonModifier = new StateModifier({
     align: [0.5,1],
     origin: [0.5,1.5]
@@ -79,14 +77,11 @@ function _createTakePictureButton() {
     origin: [0.5,1.5]
   });
 
-  this.takePicture = new ImageSurface({
+  this.takePicture = new ButtonView({
     size: [50, 50],
-    content: './assets/slr1.png',
-    classes: ['primaryBGColor', 'whiteTextColor', 'darkBorder'],
+    classes: ['navButton', 'ion-camera'],
     properties: {
-      borderRadius: '5px',
-      textAlign: 'center',
-      lineHeight: '50px',
+      fontSize: 50 * 0.9 + 'px',
     },
   });
 
@@ -99,14 +94,11 @@ function _createGetPictureButton() {
     origin: [0.5, 1.5]
   });
 
-  this.getPicture = new ImageSurface({
+  this.getPicture = new ButtonView({
     size: [50, 50],
-    content: './assets/stack21.png',
-    classes: ['primaryBGColor', 'whiteTextColor', 'darkBorder'],
+    classes: ['navButton', 'ion-image'],
     properties: {
-      borderRadius: '5px',
-      lineHeight: '50px',
-      textAlign: 'center',
+      fontSize: 50 * 0.9 + 'px',
     },
   });
 

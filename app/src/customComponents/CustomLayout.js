@@ -155,7 +155,7 @@ function _createFooter(){
       size: [this.options.footerSize, this.options.footerSize],
       origin: [0.5, 0.5],
       align: [0.5, 0.5],
-      classes: ['navButton', 'ion-ios7-photos'],
+      classes: ['navButton', 'ion-images'],
       properties: {
         fontSize: this.options.footerSize * 0.9 + 'px',
       },
