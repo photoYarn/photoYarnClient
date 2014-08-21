@@ -11,6 +11,18 @@ serverRequests.loademitter = new EventEmitter();
 //serverRequests.data stores yarn data from server
 serverRequests.data = [];
 
+serverRequests.profileData = {
+    profilePicUrl: 'assets/catTied.png',
+    username: 'exampleUserName',
+    userLocation: 'San Francisco',
+    numFollowers: 12,
+    numFollowing: 33,
+    feeds: [1,2,3,4,5,6,7,8,9], 
+    friends: ['adam', 'bob', 'carl', 'doug', 'emily'],
+    photosAdded: 15,
+    likes: 11
+};
+
 /*
 serverRequests.cache is a hash with keys that correspond to _id of each yarn and values that
 correspond to the index those yarns are stored in the serverRequests.data array.
@@ -278,31 +290,25 @@ serverRequests.loginToFacebook = function(response){
 };
 
 serverRequests.getUserDataFromServer = function(userId){
-  // $.ajax({
-  //   type: 'GET',
-  //   url: 'http://photoyarn.azurewebsites.net/user/' + userId,
-  //   success: function(res){
-  //     console.log('Post to Server Success!', res);
-  //        return res;
-  //   },
-  //   error: function(error, res){
-  //     console.log('Get user data from server error', error, res);
-  //   }
-  // });
-  
-  // for now I'm returning data before we set up the db to actually handle
-  //  the real GET request commented out above - Kyle
-  return {
-    profilePicUrl: 'assets/catTied.png',
-    username: 'exampleUserName',
-    userLocation: 'San Francisco',
-    numFollowers: 12,
-    numFollowing: 33,
-    feeds: [1,2,3,4,5,6,7,8,9], 
-    friends: ['adam', 'bob', 'carl', 'doug', 'emily'],
-    photosAdded: 42,
-    likes: 11
-  };
+  $.ajax({
+    type: 'GET',
+    url: 'http://photoyarn.azurewebsites.net/userInfo',
+    data: {
+      id: window.localStorage.getItem('facebookId')
+    },
+    success: function(data){
+      if(data.user !== null){
+        serverRequests.profileData.username = data.user.name;
+        serverRequests.profileData.numFollowers = serverRequests.profileData.numFollowing = data.user.yarnIds.length;
+        serverRequests.profileData.feeds = data.user.yarnIds.length;
+        serverRequests.profileData.friends = data.user.friendIds.length;
+      }
+      console.log('profileData', serverRequests.profileData);        
+    },
+    error: function(error, res){
+      console.log('Get user data from server error', error, res);
+    }
+  });
 };
 
 module.exports = serverRequests;

@@ -24,7 +24,7 @@ document.addEventListener('deviceready', function() {
   console.log('device ready!');
   var runningInCordova = true;
   if(!window.localStorage.getItem('serverToken')){
-    console.log('LOGGING IN')
+    console.log('LOGGING IN');
     oauth.login(function(response) {
       if (response.status === 'connected') {
         console.log('fb login success, received access token');
@@ -58,4 +58,4 @@ mainContext.add(layout);
 
 // Uncomment below get method to enable on computer testing
 // serverRequests.getData();
-
+serverRequests.getUserDataFromServer();
