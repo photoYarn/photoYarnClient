@@ -10,8 +10,6 @@ var serverRequests = require('../services/serverRequests');
 
 
 
-
-
 function ProfileView(userId){
   View.apply(this, arguments);
 
@@ -25,13 +23,6 @@ ProfileView.prototype.constructor = ProfileView;
 ProfileView.DEFAULT_OPTIONS = {
   profilePicSize: [75, 75]
   
-};
-
-ProfileView.prototype.update = function(){
-  console.log("UPDATE CALLED!");
-  console.log(serverRequests.profileData);
-  this.username.content = serverRequests.profileData.username;
-  return 'FUCK';
 };
 
 function _createBackground() {
@@ -71,7 +62,7 @@ function _createProfileHeader() {
   this.add(usernameModifier).add(this.username);
   
   // user location
-  var userLocation = new Surface({
+  this.userLocation = new Surface({
     size: [window.innerWidth - this.options.profilePicSize[0], this.options.profilePicSize[1] / 4],
     content: serverRequests.profileData.userLocation,
     classes: ['ProfileUserLocation'],
@@ -83,10 +74,10 @@ function _createProfileHeader() {
   });
   
   
-  this.add(userLocationModifier).add(userLocation);
+  this.add(userLocationModifier).add(this.userLocation);
   
   // followers, following, likes button panel
-  var followersButton = new Surface({
+  this.followersButton = new Surface({
     size: [(window.innerWidth - this.options.profilePicSize[0]) / 3, this.options.profilePicSize[1] / 2],
     content: serverRequests.profileData.numFollowers + ' Followers',
     classes: ['ProfileHeaderButton', 'secondaryBGColor', 'whiteTextColor'],
@@ -100,9 +91,9 @@ function _createProfileHeader() {
     origin: [3, -1]
   });
   
-  this.add(followersButtonModifier).add(followersButton);
+  this.add(followersButtonModifier).add(this.followersButton);
   
-  var followingButton = new Surface({
+  this.followingButton = new Surface({
     size: [(window.innerWidth - this.options.profilePicSize[0]) / 3, this.options.profilePicSize[1] / 2],
     content: serverRequests.profileData.numFollowing + ' Following',
     classes: ['ProfileHeaderButton', 'secondaryBGColor', 'whiteTextColor'],
@@ -116,7 +107,7 @@ function _createProfileHeader() {
     origin: [2, -1]
   });
   
-  this.add(followingButtonModifier).add(followingButton);
+  this.add(followingButtonModifier).add(this.followingButton);
   
   var likesButton = new Surface({
     size: [(window.innerWidth - this.options.profilePicSize[0]) / 3, this.options.profilePicSize[1] / 2],
@@ -136,7 +127,14 @@ function _createProfileHeader() {
 }
 
 
-ProfileView.prototype.update = function(){};
+ProfileView.prototype.update = function(){
+  console.log('PROFILE VIEW UPDATING!');
+  console.log(serverRequests.profileData);
+  this.username.setContent(serverRequests.profileData.username);
+  this.userLocation.setContent(serverRequests.profileData.userLocation);
+  this.followersButton.setContent(serverRequests.profileData.numFollowers + ' Followers');
+  this.followingButton.setContent(serverRequests.profileData.numFollowing + ' Following');
+};
 
 function _createStats() {
   // Photos added

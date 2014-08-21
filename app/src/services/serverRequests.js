@@ -297,11 +297,13 @@ serverRequests.getUserDataFromServer = function(userId){
       id: window.localStorage.getItem('facebookId')
     },
     success: function(data){
-      serverRequests.profileData.username = data.user.name;
-      serverRequests.profileData.numFollowers = serverRequests.profileData.numFollowing = data.user.yarnIds.length;
-      serverRequests.profileData.feeds = data.user.yarnIds.length;
-      serverRequests.profileData.friends = data.user.friendIds.length;
-      console.log(serverRequests.profileData);
+      if(data.user !== null){
+        serverRequests.profileData.username = data.user.name;
+        serverRequests.profileData.numFollowers = serverRequests.profileData.numFollowing = data.user.yarnIds.length;
+        serverRequests.profileData.feeds = data.user.yarnIds.length;
+        serverRequests.profileData.friends = data.user.friendIds.length;
+      }
+      console.log('profileData', serverRequests.profileData);        
     },
     error: function(error, res){
       console.log('Get user data from server error', error, res);
