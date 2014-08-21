@@ -19,7 +19,7 @@ serverRequests.profileData = {
     numFollowing: 33,
     feeds: [1,2,3,4,5,6,7,8,9], 
     friends: ['adam', 'bob', 'carl', 'doug', 'emily'],
-    photosAdded: 42,
+    photosAdded: 15,
     likes: 11
 };
 

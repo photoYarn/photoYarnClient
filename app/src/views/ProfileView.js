@@ -25,6 +25,16 @@ ProfileView.DEFAULT_OPTIONS = {
   
 };
 
+ProfileView.prototype.update = function(){
+  console.log('PROFILE VIEW UPDATING!');
+  console.log(serverRequests.profileData);
+  this.username.setContent(serverRequests.profileData.username);
+  this.userLocation.setContent(serverRequests.profileData.userLocation);
+  this.followersButton.setContent('Followers: ' + serverRequests.profileData.numFollowers);
+  this.followingButton.setContent('Following: ' + serverRequests.profileData.numFollowing);
+  this.feedsStarted.setContent('Feeds Started: ' + serverRequests.profileData.feeds);
+};
+
 function _createBackground() {
   // this.add(bgModifier).add(background);
 }
@@ -126,16 +136,6 @@ function _createProfileHeader() {
   this.add(likesButtonModifier).add(likesButton);
 }
 
-
-ProfileView.prototype.update = function(){
-  console.log('PROFILE VIEW UPDATING!');
-  console.log(serverRequests.profileData);
-  this.username.setContent(serverRequests.profileData.username);
-  this.userLocation.setContent(serverRequests.profileData.userLocation);
-  this.followersButton.setContent(serverRequests.profileData.numFollowers + ' Followers');
-  this.followingButton.setContent(serverRequests.profileData.numFollowing + ' Following');
-};
-
 function _createStats() {
   // Photos added
   var photosAdded = new Surface({
@@ -155,7 +155,7 @@ function _createStats() {
   this.add(photosAddedModifier).add(photosAdded);
   
   // Feeds started
-  var feedsStarted = new Surface({
+  this.feedsStarted = new Surface({
     size: [, 100],
     content: 'Feeds started: ' + serverRequests.profileData.feeds.length,
     classes: ['ProfileStat']
@@ -169,7 +169,7 @@ function _createStats() {
     }
   });
   
-  this.add(feedsStartedModifier).add(feedsStarted);
+  this.add(feedsStartedModifier).add(this.feedsStarted);
   
   // Number of friends
   var numFriends = new Surface({
