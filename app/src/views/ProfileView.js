@@ -8,13 +8,16 @@ var ImageSurface = require('famous/surfaces/ImageSurface');
 //import serverRequests
 var serverRequests = require('../services/serverRequests');
 
+
+
+
+
 function ProfileView(userId){
   View.apply(this, arguments);
-  var userData = serverRequests.getUserDataFromServer(userId);
 
   _createBackground.call(this);
-  _createProfileHeader.call(this, userData);
-  _createStats.call(this, userData);
+  _createProfileHeader.call(this);
+  _createStats.call(this);
 }
 
 ProfileView.prototype = Object.create(View.prototype);
@@ -24,15 +27,22 @@ ProfileView.DEFAULT_OPTIONS = {
   
 };
 
+ProfileView.prototype.update = function(){
+  console.log("UPDATE CALLED!");
+  console.log(serverRequests.profileData);
+  this.username.content = serverRequests.profileData.username;
+  return 'FUCK';
+};
+
 function _createBackground() {
   // this.add(bgModifier).add(background);
 }
 
-function _createProfileHeader(userData) {
+function _createProfileHeader() {
   // profile pic
   var profilePic = new ImageSurface({
     size: [this.options.profilePicSize[0], this.options.profilePicSize[1]],
-    content: userData.profilePicUrl,
+    content: serverRequests.profileData.profilePicUrl,
     classes: ['ProfilePic']
   });
   
@@ -47,9 +57,9 @@ function _createProfileHeader(userData) {
   this.add(profilePicModifier).add(profilePic);
   
   // username
-  var username = new Surface({
+  this.username = new Surface({
     size: [window.innerWidth - this.options.profilePicSize[0], this.options.profilePicSize[1] / 4],
-    content: userData.username,
+    content: serverRequests.profileData.username,
     classes: ['ProfileUsername', 'primaryTextColor'],
   });
   
@@ -58,12 +68,12 @@ function _createProfileHeader(userData) {
     origin: [1, 0]
   });
   
-  this.add(usernameModifier).add(username);
+  this.add(usernameModifier).add(this.username);
   
   // user location
   var userLocation = new Surface({
     size: [window.innerWidth - this.options.profilePicSize[0], this.options.profilePicSize[1] / 4],
-    content: userData.userLocation,
+    content: serverRequests.profileData.userLocation,
     classes: ['ProfileUserLocation'],
   });
   
@@ -78,7 +88,7 @@ function _createProfileHeader(userData) {
   // followers, following, likes button panel
   var followersButton = new Surface({
     size: [(window.innerWidth - this.options.profilePicSize[0]) / 3, this.options.profilePicSize[1] / 2],
-    content: userData.numFollowers + ' Followers',
+    content: serverRequests.profileData.numFollowers + ' Followers',
     classes: ['ProfileHeaderButton', 'secondaryBGColor', 'whiteTextColor'],
     properties: {
       textAlign: 'center'
@@ -94,7 +104,7 @@ function _createProfileHeader(userData) {
   
   var followingButton = new Surface({
     size: [(window.innerWidth - this.options.profilePicSize[0]) / 3, this.options.profilePicSize[1] / 2],
-    content: userData.numFollowing + ' Following',
+    content: serverRequests.profileData.numFollowing + ' Following',
     classes: ['ProfileHeaderButton', 'secondaryBGColor', 'whiteTextColor'],
     properties: {
       textAlign: 'center'
@@ -110,7 +120,7 @@ function _createProfileHeader(userData) {
   
   var likesButton = new Surface({
     size: [(window.innerWidth - this.options.profilePicSize[0]) / 3, this.options.profilePicSize[1] / 2],
-    content: userData.likes + ' Likes',
+    content: serverRequests.profileData.likes + ' Likes',
     classes: ['ProfileHeaderButton', 'secondaryBGColor', 'whiteTextColor'],
     properties: {
       textAlign: 'center'
@@ -125,11 +135,14 @@ function _createProfileHeader(userData) {
   this.add(likesButtonModifier).add(likesButton);
 }
 
-function _createStats(userData) {
+
+ProfileView.prototype.update = function(){};
+
+function _createStats() {
   // Photos added
   var photosAdded = new Surface({
     size: [, 100],
-    content: 'Photos added: ' + userData.photosAdded,
+    content: 'Photos added: ' + serverRequests.profileData.photosAdded,
     classes: ['ProfileStat']
   });
   
@@ -146,7 +159,7 @@ function _createStats(userData) {
   // Feeds started
   var feedsStarted = new Surface({
     size: [, 100],
-    content: 'Feeds started: ' + userData.feeds.length,
+    content: 'Feeds started: ' + serverRequests.profileData.feeds.length,
     classes: ['ProfileStat']
   });
   
@@ -163,7 +176,7 @@ function _createStats(userData) {
   // Number of friends
   var numFriends = new Surface({
     size: [, 100],
-    content: 'Number of friends: ' + userData.friends.length,
+    content: 'Number of friends: ' + serverRequests.profileData.friends.length,
     classes: ['ProfileStat']
   });
   

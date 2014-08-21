@@ -265,8 +265,10 @@ function _setListeners() {
 
   // associate nav button to display actions
   this.buttonRefs.viewProfile.on('click', function() {
+    console.log(this.profileView.update());
     this._showLayout();
     this.title.setContent('Photo Yarn')
+    this.profileView.update();
     this._activateButton(this.buttonRefs.viewProfile);
     this.renderController.show(this.profileView);
   }.bind(this));
