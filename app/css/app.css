@@ -1,5 +1,6 @@
 /*
 orange: #EA8100
+orange against grey: #EA5500
 faded orange: #E0D7CE
 dk brown: #662C00
 lt orange: #FAA970
@@ -56,9 +57,14 @@ html {
   border-top: 1px solid #662C00;
 }
 
-.navButton {
+/*.navButton {
   text-shadow: #662C00 1px 1px 0px;
   border-top: 1px solid #662C00;
+}
+*/
+
+.navButton.active {
+  color: #EA5500;
 }
 
 .header {
