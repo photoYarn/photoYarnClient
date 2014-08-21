@@ -65,12 +65,12 @@ Button.prototype.isActive = function() {
 
 Button.prototype.toggleOn = function() {
     this.options.active = true;
-    this.surface.addClass('active');
+    this.surface.addClass('primaryBGColor');
 };
 
 Button.prototype.toggleOff = function() {
     this.options.active = false;
-    this.surface.removeClass('active');
+    this.surface.removeClass('primaryBGColor');
 };
 
 Button.prototype.toggle = function(cb) {

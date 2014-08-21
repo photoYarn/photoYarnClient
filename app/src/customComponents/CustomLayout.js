@@ -150,31 +150,28 @@ function _createFooter(){
   // create buttons
   this.buttonRefs = {
     viewFeed: new ButtonView({
-      size: [this.options.footerSize, this.options.footerSize],
+      type: 'image',
+      content: 'assets/feedIcon.png',
+      size: [true,],
       origin: [0.5, 0.5],
       align: [0.5, 0.5],
-      classes: ['navButton', 'ion-ios7-photos'],
-      properties: {
-        fontSize: this.options.footerSize * 0.9 + 'px',
-      },
+      classes: ['navButton', 'whiteTextColor'],
     }),
     createYarn: new ButtonView({
-      size: [this.options.footerSize, this.options.footerSize],
+      type: 'image',
+      content: 'assets/newYarnIcon.png',
+      size: [true,],
       origin: [0.5, 0.5],
       align: [0.5, 0.5],
-      classes: ['navButton', 'ion-camera'],
-      properties: {
-        fontSize: this.options.footerSize * 0.9 + 'px',
-      },
+      classes: ['navButton', 'whiteTextColor'],
     }),
     viewProfile: new ButtonView({
-      size: [this.options.footerSize, this.options.footerSize],
+      type: 'image',
+      content: 'assets/profileIcon.png',
+      size: [true,],
       origin: [0.5, 0.5],
       align: [0.5, 0.5],
-      classes: ['navButton', 'ion-person'],
-      properties: {
-        fontSize: this.options.footerSize * 0.9 + 'px',
-      },
+      classes: ['navButton', 'whiteTextColor'],
     }),
   };
 
