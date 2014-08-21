@@ -56,9 +56,15 @@ html {
   border-top: 1px solid #662C00;
 }
 
+/*
 .navButton {
   text-shadow: #662C00 1px 1px 0px;
   border-top: 1px solid #662C00;
+}
+*/
+
+.navButton.active {
+  color: #EA8100;
 }
 
 .header {
