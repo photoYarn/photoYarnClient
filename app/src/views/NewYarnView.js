@@ -5,6 +5,8 @@ var StateModifier = require('famous/modifiers/StateModifier');
 var ImageSurface = require('famous/surfaces/ImageSurface');
 var InputSurface = require('famous/surfaces/InputSurface');
 var Transform = require('famous/core/Transform');
+var Animations = require('../customComponents/CustomAnimations');
+var ButtonView = require('../views/ButtonView');
 
 var serverRequests;
 var pictureFrame;
@@ -15,14 +17,16 @@ var catGif = './assets/catGif.gif';
 function NewYarnView(){
   View.apply(this, arguments);
 
+  // initialize class variables
   this.yarnData = {};
+  serverRequests = this.options.serverRequests;
 
+  // add elements
   _createTakePictureButton.call(this);
   _createGetPictureButton.call(this);
   _createCaption.call(this);
   _createPictureFrame.call(this);
-  serverRequests = this.options.serverRequests;
-
+  _setListeners.call(this);
 }
 
 NewYarnView.prototype = Object.create(View.prototype);
@@ -36,127 +40,76 @@ NewYarnView.DEFAULT_OPTIONS = {
 function _createCaption(){
   this.caption = new InputSurface({
     size: [this.options.picSize[0], true],
-    placeholder: 'Your caption here'
+    placeholder: 'Enter Caption',
+    classes: ['CaptionInput'],
+    properties: {
+      textAlign: 'center',
+    }
   });
-
+  
   this.captionModifier = new StateModifier({
     align: [0.5, 0],
     origin: [0.5, -4]
   });
-
-  this.captionButton = new Surface({
+  
+  this.captionButton = new ButtonView({
     size: [50, 50],
-    content: 'Submit',
-    classes: ['CaptionSubmitButton'],
+    classes: ['navButton', 'ion-checkmark'],
     properties: {
-      borderRadius: '10px',
-      fontWeight: 'bold',
-      textAlign: 'center',
-      lineHeight: '50px',
-      backgroundColor: '#FF6138',
-      color: 'white',
+      fontSize: 50 * 0.9 + 'px',
     },
   });
 
-  var buttonModifier = new StateModifier({
+  this.captionButtonModifier = new StateModifier({
     align: [0.5,1],
     origin: [0.5,1.5]
   });
-
+  
   var captionNode = this.add(this.captionModifier);
   captionNode.add(this.caption);
-  captionNode.add(buttonModifier).add(this.captionButton);
-
-  this.captionButton.on('click', function(){
-    if(this.caption.getValue() !== undefined && pictureFrame.getContent() !== catGif){
-      this.yarnData.caption = this.caption.getValue();
-      this.caption.setValue('');
-      pictureFrame.setContent(catGif);
-      this.options.serverRequests.postToImgur(this.yarnData, 'new');
-    }
-  }.bind(this));
-
+  captionNode.add(this.captionButtonModifier).add(this.captionButton);
 }
 
 
 function _createTakePictureButton() {
-
   this.takePictureModifier = new StateModifier({
-    align: [0.25,1],
+    align: [0.22,1],
     origin: [0.5,1.5]
   });
 
-  this.takePicture = new Surface({
-    size: [100, 50],
-    content: this.options.takePictureMsg,
+  this.takePicture = new ButtonView({
+    size: [50, 50],
+    classes: ['navButton', 'ion-camera'],
     properties: {
-      borderRadius: '10px',
-      fontWeight: 'bold',
-      textAlign: 'center',
-      lineHeight: '50px',
-      backgroundColor: '#79BD8F',
-      color: 'white',
+      fontSize: 50 * 0.9 + 'px',
     },
   });
 
   this.add(this.takePictureModifier).add(this.takePicture);
-
-  this.takePicture.on('click', function(){
-    var context = this;
-    navigator.camera.getPicture(function(data){
-      onCameraSuccess(data, context)
-    }, onCameraFail, {
-      destinationType : Camera.DestinationType.DATA_URL,
-      sourceType : Camera.PictureSourceType.CAMERA,
-      correctOrientation: true,
-      saveToPhotoAlbum: true,
-      encodingType: Camera.EncodingType.JPEG,
-      quality: 25
-  });
-    }.bind(this));
 }
 
 function _createGetPictureButton() {
   this.getPictureModifier = new StateModifier({
-    origin: [0.5, 1.5],
-    align: [0.75, 1]
+    align: [0.78, 1],
+    origin: [0.5, 1.5]
   });
 
-  this.getPicture = new Surface({
-    size: [100, 50],
-    content: this.options.getPictureMsg,
+  this.getPicture = new ButtonView({
+    size: [50, 50],
+    classes: ['navButton', 'ion-image'],
     properties: {
-      borderRadius: '10px',
-      lineHeight: '50px',
-      fontWeight: 'bold',
-      textAlign: 'center',
-      backgroundColor: '#79BD8F',
-      color: 'white',
+      fontSize: 50 * 0.9 + 'px',
     },
   });
 
   this.add(this.getPictureModifier).add(this.getPicture);
-
-  this.getPicture.on('click', function(){
-    var context = this;
-    navigator.camera.getPicture(function(data){
-      onCameraSuccess(data, context)
-    }, onCameraFail, 
-    {
-      destinationType : Camera.DestinationType.DATA_URL,
-      sourceType : Camera.PictureSourceType.PHOTOLIBRARY,
-      correctOrientation: true,
-      encodingType: Camera.EncodingType.JPEG,
-      quality: 25
-  });
-    }.bind(this));
 }
 
 function _createPictureFrame() {
   pictureFrame = new ImageSurface({
     content: catGif,
     size: [this.options.picSize[0], this.options.picSize[1]],
-    classes: ['AddPicViewPic']
+    classes: ['AddPhotoViewPicFrame'],
   });
   
   var pictureFrameModifier = new StateModifier({
@@ -167,6 +120,51 @@ function _createPictureFrame() {
   this.add(pictureFrameModifier).add(pictureFrame);
 }
 
+function _setListeners() {
+  this.caption.on('click', function () {
+    document.getElementsByClassName('CaptionInput')[0].maxLength = 30;
+  });
+  
+  this.captionButton.on('click', function(){
+    Animations.bounceBack(this.captionButtonModifier);
+    if(this.caption.getValue() !== undefined && pictureFrame.getContent() !== catGif){
+      this.yarnData.caption = this.caption.getValue();
+      this.caption.setValue('');
+      pictureFrame.setContent(catGif);
+      this.options.serverRequests.postToImgur(this.yarnData, 'new', this.options.feedView);
+    }
+  }.bind(this));
+
+  this.takePicture.on('click', function(){
+    var context = this;
+    Animations.bounceBack(this.takePictureModifier);
+    navigator.camera.getPicture(function(data){
+      onCameraSuccess(data, context)
+    }, onCameraFail, {
+      destinationType : Camera.DestinationType.DATA_URL,
+      sourceType : Camera.PictureSourceType.CAMERA,
+      correctOrientation: true,
+      saveToPhotoAlbum: true,
+      encodingType: Camera.EncodingType.JPEG,
+      quality: 25
+    });
+  }.bind(this));
+
+  this.getPicture.on('click', function(){
+    var context = this;
+    Animations.bounceBack(this.getPictureModifier);
+    navigator.camera.getPicture(function(data){
+      onCameraSuccess(data, context)
+    }, onCameraFail,
+    {
+      destinationType : Camera.DestinationType.DATA_URL,
+      sourceType : Camera.PictureSourceType.PHOTOLIBRARY,
+      correctOrientation: true,
+      encodingType: Camera.EncodingType.JPEG,
+      quality: 25
+    });
+  }.bind(this));
+}
 
 function onCameraSuccess(data, context){
   pictureFrame.setContent('data:image/jpeg;base64,' + data);
@@ -178,4 +176,3 @@ function onCameraFail(error){
 }
 
 module.exports = NewYarnView;
-

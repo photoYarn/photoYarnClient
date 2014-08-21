@@ -1,85 +1,160 @@
 'use strict';
+
+//import famo.us dependencies
 var View = require('famous/core/View');
 var StateModifier = require('famous/modifiers/StateModifier');
 var ImageSurface = require('famous/surfaces/ImageSurface');
 var Scrollview = require('famous/views/Scrollview');
-var ViewSequence = require('famous/core/ViewSequence');
 var Transform = require('famous/core/Transform');
 var Surface = require('famous/core/Surface');
 
-var serverRequests = require('../services/serverRequests');
-var dummyTarget = "53e5499be71a74d003372cc1";
-
+//YarnView constructor function
 function YarnView(){
   View.apply(this, arguments);
-  console.log(serverRequests.data);
-  console.log('Yarn Data', this.yarnData);
-
   _createYarn.call(this);
+  _createAddPhotoButton.call(this);
+  _setListeners.call(this);
 }
-
 
 YarnView.prototype = Object.create(View.prototype);
 YarnView.prototype.constructor = YarnView;
 YarnView.DEFAULT_OPTIONS = {
-  entryHeight: 175
-}
-
-
+};
 
 function _createYarn(){
+  //toggled and toggleCount used for animations
+  this.toggled = false;
 
-  this.scrollView = new Scrollview({
-    align: [0.5, 0],
-    origin: [0.5, 0],
-    margin: 10000
-  })
+  //main scrollView that holds images
+  this.scrollView = new Scrollview({});
+
+  //scrollModifier that scrollview is added in
   this.scrollModifier = new StateModifier({
-    size: [100,],
+    size: [160,221.5],
     align: [0.5, 0],
     origin: [0.5, 0],
-    transform: Transform.translate(0,15,-10)
+    transform: Transform.translate(0,0,-15),
   });
+  //adding to yarnView
   this.add(this.scrollModifier).add(this.scrollView);
 
+
+  //focusImage displays the selected image on click, should animate in!
+  this.focusImage = new ImageSurface({
+    properties: {
+      'border-radius': '5px'
+    }
+  });
+
+  this.focusImageModifier = new StateModifier({
+    size: [5, 5],
+    align: [0.5,0],
+    origin: [0.5,0],
+    transform: Transform.translate(0,0,-16)
+  });
+
+  this.add(this.focusImageModifier).add(this.focusImage);
 }
 
-YarnView.prototype.createDetail = function(data){
+function _createAddPhotoButton() {
+  this.addPhotoButton = new Surface({
+    size: [320/2, 60],
+    content: '+',
+    classes: ['photoEntry'],
+    properties: {
+      fontSize: '60px',
+      backgroundColor: '#CCC',
+      textAlign: 'center',
+      lineHeight: '60px'
+    }
+  });
+}
 
-  var targetArray = data.links;
-  console.log(targetArray)
-  this.sequence = [];
-  for(var i = 0; i < targetArray.length; i++){
-    var cur = targetArray[i];
-    console.log(cur);
-    var image = new ImageSurface({
-      size: [100,125],
-      content: cur
-    })
-    image.pipe(this.scrollView);
-    this.sequence.push(image);      
-    console.log(this.sequence);
+function _setListeners() {
+  this.scrollView.pipe(this._eventOutput);
+
+  this._eventInput.on('initYarnData', function(data) {
+    this.yarnData = data;
+    this.createDetail(data);
+  }.bind(this));
+
+  this.addPhotoButton.on('click', function(){
+    if(this.toggled === false){
+      this._eventOutput.emit('showAddToYarn', this.yarnData);
+    }
+  }.bind(this));
+
+  this.focusImage.on('click', function(){
+    this.toggle();
+  }.bind(this));
+}
+
+//yTarget location used to correctly place focusedImage when click occurs. 
+var yTargetLocation;
+//Target surface used to modify it without a direct reference to it on click.
+var targetSurface
+//toggle function brings in focused image/scrollview depending on toggle state.
+YarnView.prototype.toggle = function(target){
+  if(target){
+    yTargetLocation = target.origin._matrix[13] - this.scrollView._scroller._position;
+    targetSurface = target.origin;
   }
+  if(!this.toggled){
+    this.focusImage.setContent(target.origin._imageUrl);
+    this.focusImageModifier.setOpacity(1);
+    targetSurface.setSize([144, 200]);
+    this.focusImageModifier.setSize([144, 200]);
+    this.scrollModifier.setOpacity(0, {duration: 500});
+    this.focusImageModifier.setTransform(Transform.translate(0, yTargetLocation, -10));
+    this.focusImageModifier.setSize([320,443], {duration: 500});
+    this.focusImageModifier.setTransform(Transform.translate(0, 0, -14), {duration: 500});
+  } 
+  else {
+    targetSurface.setSize([160, 221.5]);
+    this.scrollModifier.setTransform(Transform.translate(0, 0, -20));
+    this.scrollModifier.setTransform(Transform.translate(0, 0, -15), {duration: 750});
+    this.scrollModifier.setOpacity(1, {duration: 500});
+    this.focusImageModifier.setSize([160, 221.5], {duration: 500});
+    this.focusImageModifier.setTransform(Transform.translate(0, yTargetLocation, -16), {duration: 500}, function(){
+      this.focusImageModifier.setOpacity(0, {duration: 500});
+      this.focusImageModifier.setSize([5,5]);
+    }.bind(this));
+  }
+  this.toggled = !this.toggled;
+};
 
-  // imageSurface.setContent('assets/catgif.gif')
-
-  var addPhotoButton = new Surface({
-      size: [100, 30],
-      content: '+',
+//populates the yarnView with the specific 
+YarnView.prototype.createDetail = function(data){
+  var imageLinks = data.links;
+  this.sequence = [];
+  var count = 0;
+  for(var i = 0; i < imageLinks.length; i++){
+    var currentImage = imageLinks[i];
+    var image = new ImageSurface({
+      content: currentImage,
+      align: [0.5, 0],
+      origin: [0.5, 0],
+      classes: ['photoEntry'],
       properties: {
-        textSize: 30 + 'px',
-        backgroundColor: '#CCC',
-        textAlign: 'center',
+        'border-radius': '10px'
       }
     });
+    image.spotCount = count;
+    count++;
+    //lets scroll view hear events on this image
+    image.pipe(this.scrollView);
+    image.pipe(this._eventOutput);
+    //toggles in focused image with this images content as focusedImages content
+    image.on('click', function(target){
+      this.toggle(target);
+    }.bind(this));
 
-  this.sequence.push(addPhotoButton);
+    this.sequence.push(image);      
+  }
 
-  addPhotoButton.on('click', function(){
-    this._eventOutput.emit('showAddToYarn', this.yarnData);
-  }.bind(this))
+  this.sequence.push(this.addPhotoButton);
 
   this.scrollView.sequenceFrom(this.sequence);
-}
+};
 
 module.exports = YarnView;

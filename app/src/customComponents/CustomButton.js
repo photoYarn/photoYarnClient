@@ -4,6 +4,7 @@
 var View = require('famous/core/View');
 var Modifier = require('famous/core/Modifier');
 var Surface = require('famous/core/Surface');
+var Animations = require('../customComponents/CustomAnimations');
 
 // CustomButton constructor
 function CustomButton(){
@@ -49,10 +50,9 @@ function _createButton(){
   this.rootNode.add(this.button);
 }
 
-// set listener to bubble up button events
 function _setListeners() {
-  // only explicitly bubbling up click event
   this.button.on('click', function() {
+    Animations.bounceBack(this.rootModifier);
     this._eventOutput.emit('click');
   }.bind(this));
 }

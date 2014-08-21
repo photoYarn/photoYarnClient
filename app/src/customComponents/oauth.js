@@ -113,18 +113,8 @@ var oauth = (function() {
 
     var oauthRedirectURL = 'http://localhost:8100/oauthcallback.html';
 
-    // i don't think this is necessary
-    // var init = function(params) {
-    //     if (params.appId) {
-    //         appId = params.appId;
-    //         console.log('init called, appId', appId)
-    //     } else {
-    //         throw 'appId param not set';
-    //     }
-    // };
-
     var isLoggedIn = function() {
-        return tokenStore.hasOwnProperty('access_token');
+        return tokenStore.getItem('access_token') !== null;
     }
 
     var login = function(callback) {
@@ -137,12 +127,14 @@ var oauth = (function() {
         var loginWindowLoadHandler = function(event) {
             var url = event.url;
             console.log('im running in cordova, im in loginWindowHandler, here is url', url);
-            if (url.indexOf('access_token') !== -1 || url.indexOf('error') !== -1) {
+            if (url.indexOf('access_token') !== -1) {
                 var timeout = 600 - (new Date().getTime() - startTime);
                 setTimeout(function () {
-                    loginWindow.close();
+                  loginWindow.close();
                 }, timeout > 0 ? timeout : 0);
                 oauthCallback(url);
+            } else if (url.indexOf('error') !== -1) {
+                console.log('there is an error')
             }
         };
 
@@ -162,10 +154,11 @@ var oauth = (function() {
 
         startTime = new Date().getTime(); 
         loginWindow = window.open(FB_LOGIN_URL + '?client_id=' + appId + '&redirect_uri=' + oauthRedirectURL +
-                    '&response_type=token&scope=public_profile', '_blank', 'location=no');
+                    '&response_type=token&scope=public_profile,user_friends', '_blank', 'location=no');
 
         if (runningInCordova) {
-            tokenStore = window.LocalStorage;
+            tokenStore = window.localStorage;
+            console.log(tokenStore);
             loginWindow.addEventListener('loadstart', loginWindowLoadHandler);
             loginWindow.addEventListener('exit', loginWindowExitHandler);
         }
@@ -173,11 +166,9 @@ var oauth = (function() {
     };
 
     var logout = function(callback) {
-        var access_token = tokenStore['access_token']
-        delete tokenStore['access_token'];
-        if (callback) {
-            callback(access_token);
-        }
+      if (tokenStore.getItem('serverToken')) {
+        tokenStore.removeItem('serverToken');
+      }
     };
 
     var oauthCallback = function(url) {
@@ -190,8 +181,7 @@ var oauth = (function() {
         if (url.indexOf("access_token=") !== -1) {
             queryString = url.substr(url.indexOf('#') + 1);
             queryObj = $.deparam(queryString)
-            console.log(queryObj)
-            tokenStore.access_token = queryObj.access_token;
+            tokenStore.setItem('access_token', queryObj['access_token']);
             console.log(tokenStore)
             if (loginCallback) {
                 loginCallback({
@@ -221,10 +211,10 @@ var oauth = (function() {
         login: login,
         logout: logout,
         isLoggedIn: isLoggedIn,
-        // init: init,
         oauthCallback: oauthCallback,
     }
 
 })();
 
 module.exports = oauth;
+
