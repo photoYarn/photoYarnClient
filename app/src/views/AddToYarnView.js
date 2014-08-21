@@ -148,7 +148,7 @@ function _setListeners() {
   this.sendButton.on('click', function() {
     Animations.bounceBack(this.sendButtonModifier);
     pictureFrame.setContent(catGif);
-    serverRequests.postToImgur(this.yarnData, 'add');
+    serverRequests.postToImgur(this.yarnData, 'add', this.options.feedView);
   }.bind(this));
 
   this.takePicture.on('click', function() {

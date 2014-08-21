@@ -97,7 +97,8 @@ function _createContent(){
    });
   this.newYarnView = new NewYarnView({
     message: 'custom new yarn view',
-    serverRequests: this.options.serverRequests
+    serverRequests: this.options.serverRequests,
+    feedView: this.feedView
   });
 
   this.profileView = new ProfileView({
@@ -108,7 +109,8 @@ function _createContent(){
     serverRequests: this.options.serverRequests
   });
   this.addToYarnView = new AddToYarnView({
-    serverRequests: this.options.serverRequests
+    serverRequests: this.options.serverRequests,
+    feedView: this.feedView
   });
   this.loadingView = new LoadingView();
 
