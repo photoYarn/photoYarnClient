@@ -16,6 +16,10 @@ var Engine = require('famous/core/Engine');
 // import views
 var FeedEntryView = require('./FeedEntryView');
 
+// initialize class variables
+var photoCache = {};
+var yarnsLoaded = 0;
+
 // FeedView constructor
 function FeedView(){
   View.apply(this, arguments);
@@ -75,7 +79,6 @@ function _setListeners() {
     } else {
       serverRequests.updateData(this);
     }
-
   }.bind(this));
 }
 
@@ -93,10 +96,8 @@ FeedView.prototype.createFeedEntriesFromServer = function(data) {
     margin: 10000 // without this some entries would stop rendering on a hard scroll (fix from https://github.com/Famous/views/issues/11)
   });
 
-  if (this.entries === undefined) {
-    this.entries = [];
-    this.feed.sequenceFrom(this.entries);
-  }
+  this.entries = this.entries || new ViewSequence();
+  if (yarnsLoaded === 0) this.feed.sequenceFrom(this.entries);
   
   this.sync = new GenericSync(['scroll', 'touch'], {
     direction: GenericSync.DIRECTION_Y
@@ -109,7 +110,9 @@ FeedView.prototype.createFeedEntriesFromServer = function(data) {
     this.feedHeight += this.options.entryHeight;
     
     newEntryView.pipe(this._eventOutput); 
+    photoCache[data[i]._id] = newEntryView;
     this.entries.push(newEntryView);
+    yarnsLoaded++;
   
     newEntryView.pipe(this.sync);
   }
@@ -143,20 +146,7 @@ FeedView.prototype.createFeedEntriesFromServer = function(data) {
   });
   
   this.rootNode.add(feedModifier).add(this.feed);
-};
-
-FeedView.prototype.replaceFeedEntry = function(oldYarnIndex, newYarnData) {
-  var newEntryView = new FeedEntryView({eventTarget: this.options.eventTarget}, newYarnData);
-  newEntryView.pipe(this.feed);
-  newEntryView.pipe(this._eventOutput); 
-
-  console.log('this.entries');
-  console.log(this.entries);
-
-  this.entries[oldYarnIndex] = newEntryView;
-
-  newEntryView.pipe(this.sync);
-};
+}
 
 FeedView.prototype.createNewFeedEntry = function(newYarnData) {
   var newEntryView = new FeedEntryView({eventTarget: this.options.eventTarget}, newYarnData);
