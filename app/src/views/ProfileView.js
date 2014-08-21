@@ -15,7 +15,7 @@ function ProfileView(userId){
 
   _createBackground.call(this);
   _createProfileHeader.call(this);
-  _createStats.call(this);
+  _createStats.call(this); 
 }
 
 ProfileView.prototype = Object.create(View.prototype);
@@ -30,8 +30,8 @@ ProfileView.prototype.update = function(){
   console.log(serverRequests.profileData);
   this.username.setContent(serverRequests.profileData.username);
   this.userLocation.setContent(serverRequests.profileData.userLocation);
-  this.followersButton.setContent('Followers: ' + serverRequests.profileData.numFollowers);
-  this.followingButton.setContent('Following: ' + serverRequests.profileData.numFollowing);
+  this.followersButton.setContent('Followers: ' + 5);
+  this.followingButton.setContent('Following: ' + 5);
   this.feedsStarted.setContent('Feeds Started: ' + serverRequests.profileData.feeds);
 };
 
