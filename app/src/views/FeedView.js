@@ -25,6 +25,7 @@ function FeedView(){
   this.maxScroll = 0;
   this.loadingPictures = false;
   this.doneLoading = false;
+  this.refreshFeedCount = 0;
   
   _createRootNode.call(this);
   _createBackground.call(this);
@@ -68,16 +69,20 @@ function _createRootNode() {
 
 function _setListeners() {
   this._eventInput.on('refreshFeed', function(data) {
-    // if (serverRequests.data.length === 0) {
+    if (this.refreshFeedCount === 0) {
       this.createFeedEntriesFromServer(data);
-    // } else {
-    //   serverRequests.updateData(this);
-    // }
+      this.refreshFeedCount++;
+    } else {
+      serverRequests.updateData(this);
+    }
+
   }.bind(this));
 }
 
 FeedView.prototype.createFeedEntriesFromServer = function(data) {
   console.log('create feed entries called with ', data);
+
+  //
 
   if (data === undefined) {
     console.log('data is undefined');
@@ -152,5 +157,19 @@ FeedView.prototype.replaceFeedEntry = function(oldYarnIndex, newYarnData) {
 
   newEntryView.pipe(this.sync);
 };
+
+FeedView.prototype.createNewFeedEntry = function(newYarnData) {
+  var newEntryView = new FeedEntryView({eventTarget: this.options.eventTarget}, newYarnData);
+  newEntryView.pipe(this.feed);
+  newEntryView.pipe(this._eventOutput); 
+
+  console.log('this.entries');
+  console.log(this.entries);
+
+  this.entries.push(newEntryView);
+
+  newEntryView.pipe(this.sync);
+};
+
 
 module.exports = FeedView;

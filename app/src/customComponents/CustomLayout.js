@@ -302,7 +302,7 @@ function _setListeners() {
   this.serverRequests.emitter.on('Loaded', function(){
     console.log('LOADING HAPPENED!');
     this._activateButton(this.buttonRefs.viewFeed);
-    this.feedView.trigger('refreshFeed', this.options.serverRequests.data);
+    // this.feedView.trigger('refreshFeed');
     this.renderController.show(this.feedView);
   }.bind(this))
 

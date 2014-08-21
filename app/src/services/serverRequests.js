@@ -79,8 +79,10 @@ Checks for updated data from server, updates cache and data array if new info fo
 Emits a 'Loaded' event when data is loaded.
 */
 serverRequests.updateData = function(feedInstance){
+  console.log('update data called and feedInstance is ' + feedInstance);
+
   var getURL;
-  if(window.localStorage.getItem('facebookId')){
+  if (window.localStorage.getItem('facebookId')) {
     console.log('Getting your pictures!');
     getURL = 'http://photoyarn.azurewebsites.net/getAllYarns';
     console.log(getURL);
@@ -107,10 +109,13 @@ serverRequests.updateData = function(feedInstance){
         if (serverRequests.cache[index] === undefined) {
           console.log('New Entry Found: ', cur);
           serverRequests.cache[index] = serverRequests.data.length;
+
+          // this should be refactored
           serverRequests.data.push(cur);
+          // feedInstance.createNewFeedEntry(cur);  
         } else if (serverRequests.data[this.cache[index]].links.length !== cur.links.length) {
           console.log('Updated An Entry: ', cur);
-          // this doesn't automatically update the feed view
+
           serverRequests.data.splice(serverRequests.cache[index], 1, cur);
           feedInstance.replaceFeedEntry(serverRequests.cache[index], cur);
         }
@@ -130,6 +135,8 @@ Requires a b64 string of the image to post to imgur, data.b64image.
 Triggers loading event that will show loading screen
 */
 serverRequests.postToImgur = function(data, route, feedInstance){
+  console.log('in postToImgur feedInstance is ' + feedInstance);
+
   serverRequests.emitter.emit('Loading');
   var serverData = {};
   serverData.caption = data.caption;
@@ -203,6 +210,8 @@ On success, will invoke the update function
 Requires a data object with yarnId and link properties.
 */
 serverRequests.postPhotoToServerYarn = function(data, feedInstance){
+  console.log('in postPhotoToServerYarn feedInstance is ' + feedInstance);
+
   console.log('posting Photo to Yarn', data);
   $.ajax({
     type: 'POST',
