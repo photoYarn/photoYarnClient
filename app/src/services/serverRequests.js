@@ -92,7 +92,6 @@ Emits a 'Loaded' event when data is loaded.
 */
 serverRequests.updateData = function(feedInstance){
   console.log('update data called and feedInstance is ' + feedInstance);
-  console.log('update data params are ' + arguments);
 
   var getURL;
   if (window.localStorage.getItem('facebookId')) {
@@ -197,7 +196,6 @@ On success will invoke the update function
 Requires a data object with imgurId, link, caption, and creatorId properties
 */
 serverRequests.postYarnToServer = function(data, feedInstance){
-  console.log('in postYarnToServer feedInstance is ' + feedInstance);
   $.ajax({
     type: 'POST',
     url: 'http://photoyarn.azurewebsites.net/createNewYarn?token=' + window.localStorage.getItem('serverToken'),
