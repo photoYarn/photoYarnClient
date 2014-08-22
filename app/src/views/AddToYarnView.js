@@ -141,6 +141,7 @@ function _setListeners() {
     Animations.bounceBack(this.sendButtonModifier);
     pictureFrame.setContent(catGif);
     serverRequests.postToImgur(this.yarnData, 'add', this.options.feedView);
+    console.log('on the click of send in AddToYarnView feedView is ' + this.options.feedView);
   }.bind(this));
 
   this.takePicture.on('click', function() {

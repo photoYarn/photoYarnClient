@@ -131,7 +131,7 @@ function _setListeners() {
       this.yarnData.caption = this.caption.getValue();
       this.caption.setValue('');
       pictureFrame.setContent(catGif);
-      this.options.serverRequests.postToImgur(this.yarnData, 'new');
+      this.options.serverRequests.postToImgur(this.yarnData, 'new', this.options.feedView);
     }
   }.bind(this));
 

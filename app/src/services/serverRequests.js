@@ -29,6 +29,7 @@ correspond to the index those yarns are stored in the serverRequests.data array.
 */
 serverRequests.cache = {};
 // serverRequests.user = {};
+var numYarnsToLoad = 6;
 
 /*
 getData fetches data from server and stores it in data array
@@ -37,13 +38,15 @@ Stores strings of _id in cache
 
 serverRequests.getData = function(callback, feedInstance){
   var getURL;
-  if (feedInstance) feedInstance.loadingPictures = true;
-  if(window.localStorage.getItem('facebookId')) {
+  if (feedInstance) {
+    feedInstance.loadingPictures = true;
+    serverRequests.feedInstance = feedInstance;
+  }
+  if (window.localStorage.getItem('facebookId')) {
     console.log('Getting your pictures!');
     getURL = 'http://photoyarn.azurewebsites.net/getAllYarns';
     console.log(getURL);
-  }
-  else {
+  } else {
     console.log('Getting all the pictures!');
     getURL = 'http://photoyarn.azurewebsites.net/getYarnsBrowser';
   }
@@ -52,20 +55,27 @@ serverRequests.getData = function(callback, feedInstance){
     url: getURL,
     data: {
       yarnsLoaded: serverRequests.data.length,
-      numYarns: 8,
+      numYarns: numYarnsToLoad,
       token: window.localStorage.getItem('serverToken'),
       id: window.localStorage.getItem('facebookId')
     },
     success: function (data) {
-      console.log('served up ' + data.length + ' yarns');
-      for(var i = 0; i < data.length; i++){
-        var cur = data[i];
+      console.log('got ' + data.length + ' yarns from server:', data);
+
+      for (var i = 0; i < data.length; i++) {
         var id = data[i]._id;
-        this.cache[id] = this.data.length;
-        this.data.push(cur);
+        if (this.cache[id] === undefined) {
+          this.cache[id] = this.data.length;
+          this.data.push(data[i]);
+        } else {
+          console.log('server served up yarn that has already been cached', data[i]);
+          // remove yarn from data array so we don't load duplicates
+          data = data.splice(i, 1);
+          i--;
+        }
       }
       if (callback) {
-        if (data.length === 0) feedInstance.doneLoading = true;
+        if (data.length < numYarnsToLoad) feedInstance.doneLoading = true;
         feedInstance.loadingPictures = false;
         callback.call(feedInstance, data);
       }
@@ -81,13 +91,15 @@ Checks for updated data from server, updates cache and data array if new info fo
 Emits a 'Loaded' event when data is loaded.
 */
 serverRequests.updateData = function(feedInstance){
+  console.log('update data called and feedInstance is ' + feedInstance);
+  console.log('update data params are ' + arguments);
+
   var getURL;
   if (window.localStorage.getItem('facebookId')) {
     console.log('Getting your pictures!');
     getURL = 'http://photoyarn.azurewebsites.net/getAllYarns';
     console.log(getURL);
-  }
-  else {
+  } else {
     console.log('Getting all the pictures!');
     getURL = 'http://photoyarn.azurewebsites.net/getYarnsBrowser';
   }
@@ -96,16 +108,18 @@ serverRequests.updateData = function(feedInstance){
     type: 'GET',
     url: getURL,
     data: {
-      yarnsLoaded: serverRequests.data.length,
-      numYarns: 8,
+      yarnsLoaded: 0,
+      numYarns: serverRequests.data.length,
       token: window.localStorage.getItem('serverToken'),
       id: window.localStorage.getItem('facebookId')
     },
     success: function (data) {
-      for(var i = 0; i < data.length; i++){
+      console.log('Update data success', data);
+      for (var i = 0; i < data.length; i++){
         var cur = data[i];
-        var id = data[i]._id;
-        if(this.cache[id] === undefined){
+        var index = data[i]._id;
+
+        if (serverRequests.cache[index] === undefined) {
           console.log('New Entry Found: ', cur);
           serverRequests.cache[index] = serverRequests.data.length;
 
@@ -134,6 +148,8 @@ Requires a b64 string of the image to post to imgur, data.b64image.
 Triggers loading event that will show loading screen
 */
 serverRequests.postToImgur = function(data, route, feedInstance){
+  console.log('in postToImgur feedInstance is ' + feedInstance);
+
   serverRequests.emitter.emit('Loading');
   var serverData = {};
   serverData.caption = data.caption;
@@ -162,10 +178,10 @@ serverRequests.postToImgur = function(data, route, feedInstance){
       serverData.link = res.data.link;
       serverData.imgurId = res.data.id;
       console.log('Server data', serverData);
-      if(route === 'add'){
-        serverRequests.postPhotoToServerYarn(serverData);
-      }else if(route === 'new'){
-        serverRequests.postYarnToServer(serverData);
+      if (route === 'add') {
+        serverRequests.postPhotoToServerYarn(serverData, feedInstance);
+      } else if (route === 'new') {
+        serverRequests.postYarnToServer(serverData, feedInstance);
       }
     },
     error: function (error, res) {
@@ -181,6 +197,7 @@ On success will invoke the update function
 Requires a data object with imgurId, link, caption, and creatorId properties
 */
 serverRequests.postYarnToServer = function(data, feedInstance){
+  console.log('in postYarnToServer feedInstance is ' + feedInstance);
   $.ajax({
     type: 'POST',
     url: 'http://photoyarn.azurewebsites.net/createNewYarn?token=' + window.localStorage.getItem('serverToken'),
@@ -192,7 +209,7 @@ serverRequests.postYarnToServer = function(data, feedInstance){
     },
     success: function(res){
       console.log('Post to Server Success: ', res);
-      serverRequests.updateData();
+      serverRequests.updateData(feedInstance);
     },
     error: function(error, res){
       console.log('Post to Server Error: ', error);
@@ -207,6 +224,8 @@ On success, will invoke the update function
 Requires a data object with yarnId and link properties.
 */
 serverRequests.postPhotoToServerYarn = function(data, feedInstance){
+  console.log('in postPhotoToServerYarn feedInstance is ' + feedInstance);
+
   console.log('posting Photo to Yarn', data);
   $.ajax({
     type: 'POST',
@@ -218,7 +237,7 @@ serverRequests.postPhotoToServerYarn = function(data, feedInstance){
     },
     success: function(res){
       console.log('Post to Server Success: ', res);
-      serverRequests.updateData();
+      serverRequests.updateData(feedInstance);
     },
     error: function(error, res){
       console.log('Post to Server Error: ', error);
