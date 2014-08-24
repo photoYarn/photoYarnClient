@@ -124,7 +124,7 @@ serverRequests.updateData = function(feedInstance){
 
           // this should be refactored
           serverRequests.data.push(cur);
-          feedInstance.createNewFeedEntry(cur);  
+          feedInstance.createNewFeedEntry(cur, serverRequests.data.length);  
         } else if (serverRequests.data[this.cache[index]].links.length !== cur.links.length) {
           console.log('Updated An Entry: ', cur);
 
@@ -164,6 +164,7 @@ serverRequests.postToImgur = function(data, route, feedInstance){
  $.ajax({
     type: 'POST',
     url: 'https://api.imgur.com/3/upload',
+    // don't include Client-ID on GitHub
     headers: {
       Authorization: 'Client-ID ' + 'ef774ae96ae304c',
     },

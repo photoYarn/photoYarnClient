@@ -8,16 +8,13 @@ var ImageSurface = require('famous/surfaces/ImageSurface');
 var Transform = require('famous/core/Transform');
 
 // FeedEntryView constructor
-function FeedEntryView(options, yarnData){
+function FeedEntryView(options, yarnData, feedCount){
   View.apply(this, arguments);
-
-  // initialize class variables
-  this.photoCount = 0;
 
   // adding elements
   _createRootNode.call(this);
   _createBackground.call(this, yarnData);
-  _createHeaders.call(this, yarnData);
+  _createHeaders.call(this, yarnData, feedCount);
   _createPhotos.call(this, yarnData);
   _setListeners.call(this, yarnData);
 }
@@ -53,7 +50,7 @@ function _createRootNode() {
 // create background
 function _createBackground(yarnData) {
   this.background = new Surface({
-    content: yarnData.caption,
+    content: '<span class="caption">' + yarnData.caption + '</span>',
     size: [this.options.entrySize[0], this.options.entrySize[1]],
     classes: ['FeedEntryBackground']
   });
@@ -62,17 +59,16 @@ function _createBackground(yarnData) {
 }
 
 // create header
-function _createHeaders(yarnData) {
+function _createHeaders(yarnData, feedCount) {
+  console.log('feedCount', feedCount);
   this.yarnDetailButton = new Surface({
     size: [this.options.entryButtonSize[0], this.options.entryButtonSize[1]],
     content: yarnData.links.length + ' pics ' + '\u2794',
+    classes: ['FeedEntryYarnDetailButton', 'altColor' + feedCount % 4],
     properties: {
-      backgroundColor: '#FF6138',
       lineHeight: this.options.entryButtonSize[1] + 'px',
       textAlign: this.options.textAlign,
-      borderRadius: '5px',
-      cursor: 'pointer',
-      font: '16px Georgia, sans-serif'
+      borderRadius: '5px'
     }
   });
 

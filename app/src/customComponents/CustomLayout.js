@@ -58,6 +58,10 @@ CustomLayout.DEFAULT_OPTIONS = {
   align: [0, 0],
   headerSize: 75,
   footerSize: 50,
+  appTitle: 'Photo<span class="textColor0">Y</span>' + 
+                                '<span class="textColor1">a</span>' + 
+                                '<span class="textColor2">r</span>' + 
+                                '<span class="textColor3">n</span>',
   hideTransition: {
     curve: Easing.outExpo,
     duration: 500,
@@ -127,7 +131,7 @@ function _createHeader(){
 
   // create title bar
   this.title = new Surface({
-    content: 'Photo Yarn',
+    content: this.options.appTitle,
     classes: ['header', 'primaryBGColor'],
     properties: {
       lineHeight: this.options.headerSize + 'px',
@@ -155,7 +159,7 @@ function _createFooter(){
       size: [this.options.footerSize, this.options.footerSize],
       origin: [0.5, 0.5],
       align: [0.5, 0.5],
-      classes: ['navButton', 'ion-images'],
+      classes: ['navButton1', 'ion-images'],
       properties: {
         fontSize: this.options.footerSize * 0.9 + 'px',
       },
@@ -164,7 +168,7 @@ function _createFooter(){
       size: [this.options.footerSize, this.options.footerSize],
       origin: [0.5, 0.5],
       align: [0.5, 0.5],
-      classes: ['navButton', 'ion-camera'],
+      classes: ['navButton2', 'ion-camera'],
       properties: {
         fontSize: this.options.footerSize * 0.9 + 'px',
       },
@@ -173,7 +177,7 @@ function _createFooter(){
       size: [this.options.footerSize, this.options.footerSize],
       origin: [0.5, 0.5],
       align: [0.5, 0.5],
-      classes: ['navButton', 'ion-person'],
+      classes: ['navButton3', 'ion-person'],
       properties: {
         fontSize: this.options.footerSize * 0.9 + 'px',
       },
@@ -243,7 +247,7 @@ function _setListeners() {
   // associate nav button to display actions
   this.buttonRefs.viewFeed.on('click', function() {
     this._showLayout();
-    this.title.setContent('Photo Yarn');
+    this.title.setContent(this.options.appTitle);
     this._activateButton(this.buttonRefs.viewFeed);
     this.feedView.trigger('refreshFeed', this.options.serverRequests.data);
 
@@ -258,7 +262,7 @@ function _setListeners() {
   // associate nav button to display actions
   this.buttonRefs.createYarn.on('click', function() {
     this._showLayout();
-    this.title.setContent('Photo Yarn')
+    this.title.setContent(this.options.appTitle);
     this._activateButton(this.buttonRefs.createYarn);
     this.renderController.show(this.newYarnView);
   }.bind(this));
@@ -267,7 +271,7 @@ function _setListeners() {
   this.buttonRefs.viewProfile.on('click', function() {
     console.log(this.profileView.update());
     this._showLayout();
-    this.title.setContent('Photo Yarn')
+    this.title.setContent(this.options.appTitle);
     this.profileView.update();
     this._activateButton(this.buttonRefs.viewProfile);
     this.renderController.show(this.profileView);
