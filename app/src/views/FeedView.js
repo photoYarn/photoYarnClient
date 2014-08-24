@@ -103,7 +103,8 @@ FeedView.prototype.createFeedEntriesFromServer = function(data) {
   });
 
   for (var i = 0; i < data.length; i++) {
-    var newEntryView = new FeedEntryView({eventTarget: this.options.eventTarget}, data[i]);
+    console.log('this.entries.length is ', this.entries.length);
+    var newEntryView = new FeedEntryView({eventTarget: this.options.eventTarget}, data[i], this.entries.length);
     newEntryView.pipe(this.feed);
     
     this.feedHeight += this.options.entryHeight;
@@ -158,8 +159,8 @@ FeedView.prototype.replaceFeedEntry = function(oldYarnIndex, newYarnData) {
   newEntryView.pipe(this.sync);
 };
 
-FeedView.prototype.createNewFeedEntry = function(newYarnData) {
-  var newEntryView = new FeedEntryView({eventTarget: this.options.eventTarget}, newYarnData);
+FeedView.prototype.createNewFeedEntry = function(newYarnData, feedCount) {
+  var newEntryView = new FeedEntryView({eventTarget: this.options.eventTarget}, newYarnData, feedCount);
   newEntryView.pipe(this.feed);
   newEntryView.pipe(this._eventOutput); 
 
