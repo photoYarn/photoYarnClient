@@ -118,18 +118,19 @@ serverRequests.updateData = function(feedInstance){
         var cur = data[i];
         var index = data[i]._id;
 
+        console.log('serverRequests.data[this.cache[index]]', serverRequests.data[this.cache[index]]); 
         if (serverRequests.cache[index] === undefined) {
           console.log('New Entry Found: ', cur);
           serverRequests.cache[index] = serverRequests.data.length;
 
           // this should be refactored
           serverRequests.data.push(cur);
-          feedInstance.createNewFeedEntry(cur, serverRequests.data.length);  
-        } else if (serverRequests.data[this.cache[index]].links.length !== cur.links.length) {
+          feedInstance.createNewFeedEntry(cur, serverRequests.data.length); 
+        } else if (serverRequests.data[this.cache[index]] !== cur.links.length) {
           console.log('Updated An Entry: ', cur);
 
-          serverRequests.data.splice(serverRequests.cache[index], 1, cur);
-          feedInstance.replaceFeedEntry(serverRequests.cache[index], cur);
+          serverRequests.data.splice(serverRequests.cache[index], 1, cur, serverRequests.data.length);
+          feedInstance.replaceFeedEntry(serverRequests.cache[index], cur, serverRequests.data.length);
         }
       }
       serverRequests.emitter.emit('Loaded');
