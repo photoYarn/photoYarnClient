@@ -163,12 +163,7 @@ FeedView.prototype.createNewFeedEntry = function(newYarnData, feedCount) {
   var newEntryView = new FeedEntryView({eventTarget: this.options.eventTarget}, newYarnData, feedCount);
   newEntryView.pipe(this.feed);
   newEntryView.pipe(this._eventOutput); 
-
-  console.log('this.entries');
-  console.log(this.entries);
-
   this.entries.push(newEntryView);
-
   newEntryView.pipe(this.sync);
 };
 
