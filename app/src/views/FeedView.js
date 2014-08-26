@@ -146,8 +146,8 @@ FeedView.prototype.createFeedEntriesFromServer = function(data) {
   this.rootNode.add(feedModifier).add(this.feed);
 };
 
-FeedView.prototype.replaceFeedEntry = function(oldYarnIndex, newYarnData) {
-  var newEntryView = new FeedEntryView({eventTarget: this.options.eventTarget}, newYarnData);
+FeedView.prototype.replaceFeedEntry = function(oldYarnIndex, newYarnData, feedCount) {
+  var newEntryView = new FeedEntryView({eventTarget: this.options.eventTarget}, newYarnData, feedCount);
   newEntryView.pipe(this.feed);
   newEntryView.pipe(this._eventOutput); 
 
