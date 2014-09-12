@@ -1,0 +1,222 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/opt/local/bin/node',
+1 verbose cli   '/opt/local/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   '-g',
+1 verbose cli   'ios-deploy' ]
+2 info using npm@1.3.11
+3 info using node@v0.10.20
+4 verbose cache add [ 'ios-deploy', null ]
+5 verbose cache add name=undefined spec="ios-deploy" args=["ios-deploy",null]
+6 verbose parsed url { protocol: null,
+6 verbose parsed url   slashes: null,
+6 verbose parsed url   auth: null,
+6 verbose parsed url   host: null,
+6 verbose parsed url   port: null,
+6 verbose parsed url   hostname: null,
+6 verbose parsed url   hash: null,
+6 verbose parsed url   search: null,
+6 verbose parsed url   query: null,
+6 verbose parsed url   pathname: 'ios-deploy',
+6 verbose parsed url   path: 'ios-deploy',
+6 verbose parsed url   href: 'ios-deploy' }
+7 silly lockFile 69149c11-ios-deploy ios-deploy
+8 verbose lock ios-deploy /Users/kylecraft/.npm/69149c11-ios-deploy.lock
+9 silly lockFile 69149c11-ios-deploy ios-deploy
+10 silly lockFile 69149c11-ios-deploy ios-deploy
+11 verbose addNamed [ 'ios-deploy', '' ]
+12 verbose addNamed [ null, '*' ]
+13 silly lockFile 9c508a6b-ios-deploy ios-deploy@
+14 verbose lock ios-deploy@ /Users/kylecraft/.npm/9c508a6b-ios-deploy.lock
+15 silly addNameRange { name: 'ios-deploy', range: '*', hasData: false }
+16 verbose url raw ios-deploy
+17 verbose url resolving [ 'https://registry.npmjs.org/', './ios-deploy' ]
+18 verbose url resolved https://registry.npmjs.org/ios-deploy
+19 info trying registry request attempt 1 at 09:26:09
+20 http GET https://registry.npmjs.org/ios-deploy
+21 http 200 https://registry.npmjs.org/ios-deploy
+22 silly registry.get cb [ 200,
+22 silly registry.get   { date: 'Tue, 26 Aug 2014 16:26:09 GMT',
+22 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+22 silly registry.get     etag: '"AJ2DV454H180CAOQ4IK7SAF6L"',
+22 silly registry.get     'content-type': 'application/json',
+22 silly registry.get     'cache-control': 'max-age=60',
+22 silly registry.get     'content-length': '12806',
+22 silly registry.get     'accept-ranges': 'bytes',
+22 silly registry.get     via: '1.1 varnish',
+22 silly registry.get     age: '379',
+22 silly registry.get     'x-served-by': 'cache-sjc3133-SJC',
+22 silly registry.get     'x-cache': 'MISS',
+22 silly registry.get     'x-cache-hits': '0',
+22 silly registry.get     'x-timer': 'S1409070369.232045,VS0,VE47',
+22 silly registry.get     vary: 'Accept',
+22 silly registry.get     'keep-alive': 'timeout=10, max=50',
+22 silly registry.get     connection: 'Keep-Alive' } ]
+23 silly addNameRange number 2 { name: 'ios-deploy', range: '*', hasData: true }
+24 silly addNameRange versions [ 'ios-deploy',
+24 silly addNameRange   [ '1.0.1',
+24 silly addNameRange     '1.0.2',
+24 silly addNameRange     '1.0.3',
+24 silly addNameRange     '1.0.4',
+24 silly addNameRange     '1.0.5',
+24 silly addNameRange     '1.0.6',
+24 silly addNameRange     '1.0.7',
+24 silly addNameRange     '1.0.8',
+24 silly addNameRange     '1.0.9',
+24 silly addNameRange     '1.1.0' ] ]
+25 verbose addNamed [ 'ios-deploy', '1.1.0' ]
+26 verbose addNamed [ '1.1.0', '1.1.0' ]
+27 silly lockFile 322bbb98-ios-deploy-1-1-0 ios-deploy@1.1.0
+28 verbose lock ios-deploy@1.1.0 /Users/kylecraft/.npm/322bbb98-ios-deploy-1-1-0.lock
+29 silly lockFile 88ea9948--ios-deploy-ios-deploy-1-1-0-tgz https://registry.npmjs.org/ios-deploy/-/ios-deploy-1.1.0.tgz
+30 verbose lock https://registry.npmjs.org/ios-deploy/-/ios-deploy-1.1.0.tgz /Users/kylecraft/.npm/88ea9948--ios-deploy-ios-deploy-1-1-0-tgz.lock
+31 verbose addRemoteTarball [ 'https://registry.npmjs.org/ios-deploy/-/ios-deploy-1.1.0.tgz',
+31 verbose addRemoteTarball   'fc2bbd3b6bf9f5ea2a8b2e90df5d8bad4da09b9e' ]
+32 info retry fetch attempt 1 at 09:26:09
+33 verbose fetch to= /Users/kylecraft/tmp/npm-1650-BqrgDCON/1409070369865-0.4798588091507554/tmp.tgz
+34 http GET https://registry.npmjs.org/ios-deploy/-/ios-deploy-1.1.0.tgz
+35 http 200 https://registry.npmjs.org/ios-deploy/-/ios-deploy-1.1.0.tgz
+36 verbose tar unpack /Users/kylecraft/tmp/npm-1650-BqrgDCON/1409070369865-0.4798588091507554/tmp.tgz
+37 silly lockFile b8b6054f-69865-0-4798588091507554-package tar:///Users/kylecraft/tmp/npm-1650-BqrgDCON/1409070369865-0.4798588091507554/package
+38 verbose lock tar:///Users/kylecraft/tmp/npm-1650-BqrgDCON/1409070369865-0.4798588091507554/package /Users/kylecraft/.npm/b8b6054f-69865-0-4798588091507554-package.lock
+39 silly lockFile 00151160-69865-0-4798588091507554-tmp-tgz tar:///Users/kylecraft/tmp/npm-1650-BqrgDCON/1409070369865-0.4798588091507554/tmp.tgz
+40 verbose lock tar:///Users/kylecraft/tmp/npm-1650-BqrgDCON/1409070369865-0.4798588091507554/tmp.tgz /Users/kylecraft/.npm/00151160-69865-0-4798588091507554-tmp-tgz.lock
+41 silly gunzTarPerm modes [ '755', '644' ]
+42 silly gunzTarPerm extractEntry package.json
+43 silly gunzTarPerm extractEntry .npmignore
+44 silly gunzTarPerm extractEntry README.md
+45 silly gunzTarPerm extractEntry LICENSE
+46 silly gunzTarPerm extractEntry Entitlements.plist
+47 silly gunzTarPerm extractEntry Info.plist
+48 silly gunzTarPerm extractEntry Makefile
+49 silly gunzTarPerm extractEntry CONTRIBUTING.md
+50 silly gunzTarPerm extractEntry ResourceRules.plist
+51 silly gunzTarPerm extractEntry demo.c
+52 silly gunzTarPerm extractEntry ios-deploy.c
+53 silly gunzTarPerm extractEntry MobileDevice.h
+54 silly lockFile b8b6054f-69865-0-4798588091507554-package tar:///Users/kylecraft/tmp/npm-1650-BqrgDCON/1409070369865-0.4798588091507554/package
+55 silly lockFile b8b6054f-69865-0-4798588091507554-package tar:///Users/kylecraft/tmp/npm-1650-BqrgDCON/1409070369865-0.4798588091507554/package
+56 silly lockFile 00151160-69865-0-4798588091507554-tmp-tgz tar:///Users/kylecraft/tmp/npm-1650-BqrgDCON/1409070369865-0.4798588091507554/tmp.tgz
+57 silly lockFile 00151160-69865-0-4798588091507554-tmp-tgz tar:///Users/kylecraft/tmp/npm-1650-BqrgDCON/1409070369865-0.4798588091507554/tmp.tgz
+58 verbose tar pack [ '/Users/kylecraft/.npm/ios-deploy/1.1.0/package.tgz',
+58 verbose tar pack   '/Users/kylecraft/tmp/npm-1650-BqrgDCON/1409070369865-0.4798588091507554/package' ]
+59 verbose tarball /Users/kylecraft/.npm/ios-deploy/1.1.0/package.tgz
+60 verbose folder /Users/kylecraft/tmp/npm-1650-BqrgDCON/1409070369865-0.4798588091507554/package
+61 silly lockFile b8b6054f-69865-0-4798588091507554-package tar:///Users/kylecraft/tmp/npm-1650-BqrgDCON/1409070369865-0.4798588091507554/package
+62 verbose lock tar:///Users/kylecraft/tmp/npm-1650-BqrgDCON/1409070369865-0.4798588091507554/package /Users/kylecraft/.npm/b8b6054f-69865-0-4798588091507554-package.lock
+63 silly lockFile 51def8cf-npm-ios-deploy-1-1-0-package-tgz tar:///Users/kylecraft/.npm/ios-deploy/1.1.0/package.tgz
+64 verbose lock tar:///Users/kylecraft/.npm/ios-deploy/1.1.0/package.tgz /Users/kylecraft/.npm/51def8cf-npm-ios-deploy-1-1-0-package-tgz.lock
+65 silly lockFile b8b6054f-69865-0-4798588091507554-package tar:///Users/kylecraft/tmp/npm-1650-BqrgDCON/1409070369865-0.4798588091507554/package
+66 silly lockFile b8b6054f-69865-0-4798588091507554-package tar:///Users/kylecraft/tmp/npm-1650-BqrgDCON/1409070369865-0.4798588091507554/package
+67 silly lockFile 51def8cf-npm-ios-deploy-1-1-0-package-tgz tar:///Users/kylecraft/.npm/ios-deploy/1.1.0/package.tgz
+68 silly lockFile 51def8cf-npm-ios-deploy-1-1-0-package-tgz tar:///Users/kylecraft/.npm/ios-deploy/1.1.0/package.tgz
+69 silly lockFile cce86043-aft-npm-ios-deploy-1-1-0-package /Users/kylecraft/.npm/ios-deploy/1.1.0/package
+70 verbose lock /Users/kylecraft/.npm/ios-deploy/1.1.0/package /Users/kylecraft/.npm/cce86043-aft-npm-ios-deploy-1-1-0-package.lock
+71 silly lockFile cce86043-aft-npm-ios-deploy-1-1-0-package /Users/kylecraft/.npm/ios-deploy/1.1.0/package
+72 silly lockFile cce86043-aft-npm-ios-deploy-1-1-0-package /Users/kylecraft/.npm/ios-deploy/1.1.0/package
+73 verbose tar unpack /Users/kylecraft/.npm/ios-deploy/1.1.0/package.tgz
+74 silly lockFile 53886646-aft-npm-ios-deploy-1-1-0-package tar:///Users/kylecraft/.npm/ios-deploy/1.1.0/package
+75 verbose lock tar:///Users/kylecraft/.npm/ios-deploy/1.1.0/package /Users/kylecraft/.npm/53886646-aft-npm-ios-deploy-1-1-0-package.lock
+76 silly lockFile 51def8cf-npm-ios-deploy-1-1-0-package-tgz tar:///Users/kylecraft/.npm/ios-deploy/1.1.0/package.tgz
+77 verbose lock tar:///Users/kylecraft/.npm/ios-deploy/1.1.0/package.tgz /Users/kylecraft/.npm/51def8cf-npm-ios-deploy-1-1-0-package-tgz.lock
+78 silly gunzTarPerm modes [ '755', '644' ]
+79 silly gunzTarPerm extractEntry package.json
+80 silly gunzTarPerm extractEntry .npmignore
+81 silly gunzTarPerm extractEntry README.md
+82 silly gunzTarPerm extractEntry LICENSE
+83 silly gunzTarPerm extractEntry Entitlements.plist
+84 silly gunzTarPerm extractEntry Info.plist
+85 silly gunzTarPerm extractEntry Makefile
+86 silly gunzTarPerm extractEntry CONTRIBUTING.md
+87 silly gunzTarPerm extractEntry ResourceRules.plist
+88 silly gunzTarPerm extractEntry demo.c
+89 silly gunzTarPerm extractEntry ios-deploy.c
+90 silly gunzTarPerm extractEntry MobileDevice.h
+91 silly lockFile 53886646-aft-npm-ios-deploy-1-1-0-package tar:///Users/kylecraft/.npm/ios-deploy/1.1.0/package
+92 silly lockFile 53886646-aft-npm-ios-deploy-1-1-0-package tar:///Users/kylecraft/.npm/ios-deploy/1.1.0/package
+93 silly lockFile 51def8cf-npm-ios-deploy-1-1-0-package-tgz tar:///Users/kylecraft/.npm/ios-deploy/1.1.0/package.tgz
+94 silly lockFile 51def8cf-npm-ios-deploy-1-1-0-package-tgz tar:///Users/kylecraft/.npm/ios-deploy/1.1.0/package.tgz
+95 verbose chmod /Users/kylecraft/.npm/ios-deploy/1.1.0/package.tgz 644
+96 verbose chown /Users/kylecraft/.npm/ios-deploy/1.1.0/package.tgz [ 501, 20 ]
+97 silly lockFile 88ea9948--ios-deploy-ios-deploy-1-1-0-tgz https://registry.npmjs.org/ios-deploy/-/ios-deploy-1.1.0.tgz
+98 silly lockFile 88ea9948--ios-deploy-ios-deploy-1-1-0-tgz https://registry.npmjs.org/ios-deploy/-/ios-deploy-1.1.0.tgz
+99 silly lockFile 322bbb98-ios-deploy-1-1-0 ios-deploy@1.1.0
+100 silly lockFile 322bbb98-ios-deploy-1-1-0 ios-deploy@1.1.0
+101 silly lockFile 9c508a6b-ios-deploy ios-deploy@
+102 silly lockFile 9c508a6b-ios-deploy ios-deploy@
+103 silly resolved [ { name: 'ios-deploy',
+103 silly resolved     version: '1.1.0',
+103 silly resolved     description: 'launch iOS apps iOS devices from the command line (Xcode 5)',
+103 silly resolved     main: 'ios-deploy',
+103 silly resolved     scripts: { preinstall: 'make ios-deploy' },
+103 silly resolved     bin: { 'ios-deploy': './ios-deploy' },
+103 silly resolved     repository: { type: 'git', url: 'https://github.com/phonegap/ios-deploy' },
+103 silly resolved     keywords: [ 'ios-deploy', 'deploy to iOS device' ],
+103 silly resolved     author: { name: 'Greg Hughes' },
+103 silly resolved     license: 'GPLv3',
+103 silly resolved     readme: 'ios-deploy\n==========\nInstall and debug iPhone apps without using Xcode. Designed to work on unjailbroken devices.\n\n## Requirements\n\n* Mac OS X. Tested on Snow Leopard only.\n* You need to have a valid iPhone development certificate installed.\n* Xcode must be installed, along with the SDK for your iOS version.\n\n## Usage\n\n\tUsage: ./ios-deploy [OPTION]...\n\t  -d, --debug                  launch the app in GDB after installation\n\t  -i, --id <device_id>         the id of the device to connect to\n\t  -c, --detect                 only detect if the device is connected\n\t  -b, --bundle <bundle.app>    the path to the app bundle to be installed\n\t  -a, --args <args>            command line arguments to pass to the app when launching it\n\t  -t, --timeout <timeout>      number of seconds to wait for a device to be connected\n\t  -u, --unbuffered             don\'t buffer stdout\n\t  -g, --gdbargs <args>         extra arguments to pass to GDB when starting the debugger\n\t  -x, --gdbexec <file>         GDB commands script file\n\t  -n, --nostart                do not start the app when debugging\n\t  -I, --noninteractive         start in non interactive mode (quit when app crashes or exits)\n\t  -L, --justlaunch             just launch the app and exit lldb\n\t  -v, --verbose                enable verbose output\n\t  -m, --noinstall              directly start debugging without app install (-d not required)\n\t  -p, --port <number>          port used for device, default: 12345 \n\t  -r, --uninstall              uninstall the app before install (do not use with -m; app cache and data are cleared) \n\t  -1, --bundle_id <bundle id>  specify bundle id for list and upload\n\t  -l, --list                   list files\n\t  -o, --upload <file>          upload file\n\t  -2, --to <target pathname>\tuse together with upload file. specify target for upload\n\t  -V, --version                print the executable version\n\t  \n## Demo\n\n* The included demo.app represents the minimum required to get code running on iOS.\n* `make install` will install demo.app to the device.\n* `make debug` will install demo.app and launch a GDB session.\n\n## Notes\n\n* With some modifications, it may be possible to use this without Xcode installed; however, you would need a copy of the relevant DeveloperDiskImage.dmg (included with Xcode). GDB would also run slower as symbols would be downloaded from the device on-the-fly.\n\n\n## Listing Device Ids\n\nDevice Ids are the UDIDs of the iOS devices. From the command line, you can list device ids [this way](http://javierhz.blogspot.com/2012/06/how-to-get-udid-of-iphone-using-shell.html):\n\n        system_profiler SPUSBDataType | sed -n -e \'/iPad/,/Serial/p\' -e \'/iPhone/,/Serial/p\' | grep "Serial Number:" | awk -F ": " \'{print $2}\'\n',
+103 silly resolved     readmeFilename: 'README.md',
+103 silly resolved     bugs: { url: 'https://github.com/phonegap/ios-deploy/issues' },
+103 silly resolved     _id: 'ios-deploy@1.1.0',
+103 silly resolved     dist: { shasum: 'c21b48807095c67d84ead98dc59f19edb6c1b7e2' },
+103 silly resolved     _from: 'ios-deploy@',
+103 silly resolved     _resolved: 'https://registry.npmjs.org/ios-deploy/-/ios-deploy-1.1.0.tgz' } ]
+104 info install ios-deploy@1.1.0 into /opt/local/lib
+105 info installOne ios-deploy@1.1.0
+106 info /opt/local/lib/node_modules/ios-deploy unbuild
+107 verbose tar unpack /Users/kylecraft/.npm/ios-deploy/1.1.0/package.tgz
+108 silly lockFile 3a886f2b-ocal-lib-node-modules-ios-deploy tar:///opt/local/lib/node_modules/ios-deploy
+109 verbose lock tar:///opt/local/lib/node_modules/ios-deploy /Users/kylecraft/.npm/3a886f2b-ocal-lib-node-modules-ios-deploy.lock
+110 silly lockFile 51def8cf-npm-ios-deploy-1-1-0-package-tgz tar:///Users/kylecraft/.npm/ios-deploy/1.1.0/package.tgz
+111 verbose lock tar:///Users/kylecraft/.npm/ios-deploy/1.1.0/package.tgz /Users/kylecraft/.npm/51def8cf-npm-ios-deploy-1-1-0-package-tgz.lock
+112 silly gunzTarPerm modes [ '755', '644' ]
+113 silly gunzTarPerm extractEntry package.json
+114 silly gunzTarPerm extractEntry .npmignore
+115 silly gunzTarPerm extractEntry README.md
+116 silly gunzTarPerm extractEntry LICENSE
+117 silly gunzTarPerm extractEntry Entitlements.plist
+118 silly gunzTarPerm extractEntry Info.plist
+119 silly gunzTarPerm extractEntry Makefile
+120 silly gunzTarPerm extractEntry CONTRIBUTING.md
+121 silly gunzTarPerm extractEntry ResourceRules.plist
+122 silly gunzTarPerm extractEntry demo.c
+123 silly gunzTarPerm extractEntry ios-deploy.c
+124 silly gunzTarPerm extractEntry MobileDevice.h
+125 silly lockFile 3a886f2b-ocal-lib-node-modules-ios-deploy tar:///opt/local/lib/node_modules/ios-deploy
+126 silly lockFile 3a886f2b-ocal-lib-node-modules-ios-deploy tar:///opt/local/lib/node_modules/ios-deploy
+127 silly lockFile 51def8cf-npm-ios-deploy-1-1-0-package-tgz tar:///Users/kylecraft/.npm/ios-deploy/1.1.0/package.tgz
+128 silly lockFile 51def8cf-npm-ios-deploy-1-1-0-package-tgz tar:///Users/kylecraft/.npm/ios-deploy/1.1.0/package.tgz
+129 info preinstall ios-deploy@1.1.0
+130 verbose unsafe-perm in lifecycle false
+131 verbose readDependencies using package.json deps
+132 verbose readDependencies using package.json deps
+133 silly resolved []
+134 verbose about to build /opt/local/lib/node_modules/ios-deploy
+135 info build /opt/local/lib/node_modules/ios-deploy
+136 verbose linkStuff [ true,
+136 verbose linkStuff   '/opt/local/lib/node_modules',
+136 verbose linkStuff   true,
+136 verbose linkStuff   '/opt/local/lib/node_modules' ]
+137 info linkStuff ios-deploy@1.1.0
+138 verbose linkBins ios-deploy@1.1.0
+139 verbose link bins [ { 'ios-deploy': './ios-deploy' }, '/opt/local/bin', true ]
+140 verbose linkMans ios-deploy@1.1.0
+141 verbose rebuildBundles ios-deploy@1.1.0
+142 info install ios-deploy@1.1.0
+143 info postinstall ios-deploy@1.1.0
+144 error peerinvalid The package yo does not satisfy its siblings' peerDependencies requirements!
+144 error peerinvalid Peer generator-angular@0.9.2 wants yo@>=1.0.0
+144 error peerinvalid Peer generator-angular-fullstack@2.0.3 wants yo@>=1.2.0
+144 error peerinvalid Peer generator-backbone@0.3.0 wants yo@>=1.1.2
+144 error peerinvalid Peer generator-backbone-mocha@0.0.3 wants yo@>=1.1.2
+144 error peerinvalid Peer generator-famous@0.3.2 wants yo@>=1.0.0
+144 error peerinvalid Peer generator-karma@0.8.3 wants yo@>=1.0.0
+144 error peerinvalid Peer generator-mocha@0.1.3 wants yo@>=1.0.0-rc.1.1
+144 error peerinvalid Peer generator-webapp@0.4.9 wants yo@>=1.0.0
+145 error System Darwin 13.3.0
+146 error command "/opt/local/bin/node" "/opt/local/bin/npm" "install" "-g" "ios-deploy"
+147 error cwd /Users/kylecraft/Desktop/PhotoYarn/photoYarnClient
+148 error node -v v0.10.20
+149 error npm -v 1.3.11
+150 error code EPEERINVALID
+151 verbose exit [ 1, true ]
