@@ -4,10 +4,8 @@
 
 ## Screenshots
 
-  - Splash page
-![Splash page](/screenshots/PhotoYarn-splash_page.png?raw=true "Splash page")
+![Splash page](/screenshots/PhotoYarn-splash_page.png?raw=true "Splash page")  
 
-  - Photo feed
 ![Photo feed](/screenshots/PhotoYarn-feed_view.png?raw=true "Photo feed")
 
 ## Team
