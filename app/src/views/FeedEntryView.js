@@ -60,7 +60,6 @@ function _createBackground(yarnData) {
 
 // create header
 function _createHeaders(yarnData, feedCount) {
-  console.log('feedCount', feedCount);
   this.yarnDetailButton = new Surface({
     size: [this.options.entryButtonSize[0], this.options.entryButtonSize[1]],
     content: yarnData.links.length + ' pics ' + '\u2794',

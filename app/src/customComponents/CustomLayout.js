@@ -282,13 +282,12 @@ function _setListeners() {
     this._showLayout();
     this.title.setContent('Add to Yarn');
     this.addToYarnView.trigger('initYarnData', data);
-    this.renderController.show(this.addToYarnView)
+    this.renderController.show(this.addToYarnView);
   }.bind(this))
 
   this.feedView.on('showYarnDetail', function(data) {
     this._showLayout();
     this.yarnView.trigger('initYarnData', data);
-    console.log(data);
     this.title.setContent(data.caption)
     this.renderController.show(this.yarnView);
   }.bind(this));
@@ -304,14 +303,13 @@ function _setListeners() {
   this.serverRequests.emitter.on('Loading', function(){
     console.log('LOADING IS HAPPENING!');
     this.renderController.show(this.loadingView);
-    console.log(this.renderController);
   }.bind(this))
 
   //Event triggered by serverRequests to transition from loading view to feedview
   this.serverRequests.emitter.on('Loaded', function(){
     console.log('LOADING HAPPENED!');
     this._activateButton(this.buttonRefs.viewFeed);
-    // this.feedView.trigger('refreshFeed');
+    this.title.setContent(this.options.appTitle);
     this.renderController.show(this.feedView);
   }.bind(this))
 

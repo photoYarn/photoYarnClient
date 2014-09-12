@@ -97,7 +97,6 @@ serverRequests.updateData = function(feedInstance){
   if (window.localStorage.getItem('facebookId')) {
     console.log('Getting your pictures!');
     getURL = 'http://photoyarn.azurewebsites.net/getAllYarns';
-    console.log(getURL);
   } else {
     console.log('Getting all the pictures!');
     getURL = 'http://photoyarn.azurewebsites.net/getYarnsBrowser';
@@ -118,18 +117,17 @@ serverRequests.updateData = function(feedInstance){
         var cur = data[i];
         var index = data[i]._id;
 
+        console.log('serverRequests.data[this.cache[index]]', serverRequests.data[this.cache[index]]); 
         if (serverRequests.cache[index] === undefined) {
           console.log('New Entry Found: ', cur);
           serverRequests.cache[index] = serverRequests.data.length;
-
-          // this should be refactored
           serverRequests.data.push(cur);
-          feedInstance.createNewFeedEntry(cur, serverRequests.data.length);  
-        } else if (serverRequests.data[this.cache[index]].links.length !== cur.links.length) {
-          console.log('Updated An Entry: ', cur);
 
-          serverRequests.data.splice(serverRequests.cache[index], 1, cur);
-          feedInstance.replaceFeedEntry(serverRequests.cache[index], cur);
+          feedInstance.createNewFeedEntry(cur, serverRequests.data.length); 
+        } else if (serverRequests.data[this.cache[index]] !== cur.links.length) {
+          console.log('Updated An Entry: ', cur);
+          serverRequests.data.splice(serverRequests.cache[index], 1, cur, serverRequests.data.length);
+          feedInstance.replaceFeedEntry(serverRequests.cache[index], cur, serverRequests.data.length);
         }
       }
       serverRequests.emitter.emit('Loaded');
@@ -147,19 +145,15 @@ Requires a b64 string of the image to post to imgur, data.b64image.
 Triggers loading event that will show loading screen
 */
 serverRequests.postToImgur = function(data, route, feedInstance){
-  console.log('in postToImgur feedInstance is ' + feedInstance);
-
   serverRequests.emitter.emit('Loading');
   var serverData = {};
   serverData.caption = data.caption;
-  //serverData.creatorId is hard coded currently, as we do not have users implemented yet!
   serverData.creatorId = window.localStorage.getItem('facebookId');
-  console.log('server creator', serverData.creatorId)
+
   //updated due to success callback
   serverData.link;
   serverData.imgurId;
   serverData.yarnId = data._id;
-  console.log(data);
   
  $.ajax({
     type: 'POST',
@@ -177,7 +171,7 @@ serverRequests.postToImgur = function(data, route, feedInstance){
       console.log('Post to Imgur Success: ', res.data);
       serverData.link = res.data.link;
       serverData.imgurId = res.data.id;
-      console.log('Server data', serverData);
+
       if (route === 'add') {
         serverRequests.postPhotoToServerYarn(serverData, feedInstance);
       } else if (route === 'new') {
@@ -185,7 +179,7 @@ serverRequests.postToImgur = function(data, route, feedInstance){
       }
     },
     error: function (error, res) {
-      console.log('Post to Imgur Error: ', error);
+      console.log('Post to Imgur Error: ', error, res);
       console.log('Post to Imgur Error Response: ', res);
     }
   });
@@ -223,8 +217,6 @@ On success, will invoke the update function
 Requires a data object with yarnId and link properties.
 */
 serverRequests.postPhotoToServerYarn = function(data, feedInstance){
-  console.log('in postPhotoToServerYarn feedInstance is ' + feedInstance);
-
   console.log('posting Photo to Yarn', data);
   $.ajax({
     type: 'POST',
@@ -249,7 +241,6 @@ serverRequests.postPhotoToServerYarn = function(data, feedInstance){
 Logs in to Facebook, on success will get yarnData from server
 */
 serverRequests.loginToFacebook = function(response){
-  console.log('response', response);
   $.ajax({
     type: "GET",
     url: "https://graph.facebook.com/me?access_token=" + response.token,
@@ -261,17 +252,14 @@ serverRequests.loginToFacebook = function(response){
         name: data.name,
         token: response.token
       };
-      // serverRequests.user = userData;
-      console.log(userData);
+
       // request to /users
       $.ajax({
         type: 'POST',
         url: 'http://photoyarn.azurewebsites.net/users',
         data: userData,
         success: function(data) {
-          console.log('data',data);
-            // this should all probably be changed to userData.blah instead of data.blah
-            // i don't think there is a good reason for server to send back the user
+          // this should all probably be changed to userData.blah instead of data.blah
           window.localStorage.setItem('serverToken', data.serverToken);
           window.localStorage.setItem('facebookId', data.user.id);
           window.localStorage.setItem('facebookName', data.user.name);
@@ -282,10 +270,8 @@ serverRequests.loginToFacebook = function(response){
         }
       });
     }, 
-    error: function(data1, data2){
-      console.log('facebook error!');
-      console.log('data1', data1);
-      console.log('data2', data2);
+    error: function(err, res){
+      console.log('facebook error!', err, res);
     }
   });
 };
@@ -304,7 +290,6 @@ serverRequests.getUserDataFromServer = function(userId){
         serverRequests.profileData.feeds = data.user.yarnIds.length;
         serverRequests.profileData.friends = data.user.friendIds.length;
       }
-      console.log('profileData', serverRequests.profileData);        
     },
     error: function(error, res){
       console.log('Get user data from server error', error, res);

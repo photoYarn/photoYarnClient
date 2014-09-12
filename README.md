@@ -2,10 +2,16 @@
 
 > Spin a yarn of photos with your friends
 
+## Screenshots
+
+![Splash page](/screenshots/PhotoYarn-splash_page.png?raw=true "Splash page")  
+
+![Photo feed](/screenshots/PhotoYarn-feed_view.png?raw=true "Photo feed")
+
 ## Team
 
   - [Justin Cheung] (https://github.com/Jygsaw)
-  - [Kyle Kraft](https://github.com/craftjk)
+  - [Kyle Craft](https://github.com/craftjk)
   - [Kia Fathi] (https://github.com/KiaFathi)
   - [Paul Yi] (https://github.com/paulyi326)
 
@@ -27,7 +33,6 @@ After installing dependencies, enter the following in the root directory:
 npm run watch
 cordova run <platform>
 ```
-
 
 
 ## Requirements
